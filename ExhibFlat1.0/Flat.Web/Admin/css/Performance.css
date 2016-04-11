@@ -1,0 +1,35 @@
+body,h1,ul,li{
+    margin: 0;
+    padding: 0;
+}
+ul,li{
+    list-style: none;
+}
+.perform-box{
+    width: 100%;
+}
+.perform-ct{
+    overflow: hidden;
+    border-bottom: 1px solid #dddddd;
+}
+.perform-ct li{
+    width: 16.6%;
+    float: left;
+}
+.perform-ct p{
+    font-size: 14px;
+    text-indent: 2em;
+    color: #515151;
+}
+.perform-ct h1{
+    font-size: 30px;
+    line-height: 100px;
+    border-left: 1px solid #dddddd;
+    color: #fc8f00;
+    text-align: center;
+    margin-bottom: 10px;
+
+}
+ul li .perform-ct-cunt{
+    border: none;
+}

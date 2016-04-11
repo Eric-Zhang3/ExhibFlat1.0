@@ -1,0 +1,33 @@
+﻿.validate-succeed {
+    border: 1px solid #356635;
+}
+.validate-succeed:focus {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px #7ABA7B;
+    outline: 0 none;
+}
+.validate-error {
+      border: 1px solid #953B39;
+}
+.validate-error:focus {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px #D59392;
+    outline: 0 none;
+}
+
+.validate-info:focus {
+    border-color: #66AFE9;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+    outline: 0 none;
+}
+.validate-loser {
+      border-color: #d59392;
+}
+.validate-loser:focus {
+  
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #d59999;
+    outline: 0 none;
+}
+span.validate-error {
+    color: #B94A48;
+    background: url('./error.jpg') no-repeat 0px 5px;
+    padding-left: 12px;
+}

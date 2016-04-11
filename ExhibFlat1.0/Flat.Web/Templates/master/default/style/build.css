@@ -1,0 +1,281 @@
+#content {
+    width:980px;
+    overflow: hidden;
+    margin: 0px auto;
+    min-height: 630px;
+}
+ #right {
+    float: right;
+    width: 220px;
+    border:1px solid #cdcdcd;
+    margin: 35px 13px 0 0;
+    min-height: 350px;
+}
+ #right li {
+    list-style-type: none;
+}
+ .contentDiv  li {
+    height: 50px;
+    width: 50px;
+    float:left;
+    cursor:pointer;
+    margin:3px;
+    border:2px solid #ffffff;
+    position: relative;
+}
+#left {
+    float: left;
+    width: 745px;     
+}
+.t1{
+    width: 35px;
+    float:left;
+    border-right:1px solid #cdcdcd;
+    min-height: 350px;
+}
+.t1 ul li{
+    height:31px;
+    width:33px;
+    background: url(../images/dingzhi/icon.png) -6px -282px no-repeat;
+    position: relative;
+}
+.t1 ul .selected{
+    background-position: -6px -250px;
+    width: 43px;
+}
+.box_relative {
+  position: absolute; 
+}
+.display{
+    display:block;
+}
+.undisplay{
+    display:none;
+}
+.contentDiv {
+    float: left;
+    background: #fff;
+    padding: 20px 4px 0 10px;
+    min-height: 330px;
+    min-width: 170px;
+}
+.contentDiv ul li.selected cite{
+    background: url(../images/dingzhi/icon.png) 0 -168px no-repeat;
+    width: 30px;
+    height: 30px;
+    display: block;
+    position: absolute;
+    top: 22%;
+    left: 20%;
+    z-index: 5;
+}    
+.contentDiv ul li img.selected{
+    border:2px solid #FC0505;
+}   
+.contentDiv ul li img:hover{
+    border:2px solid #FC0505;
+}
+.point{
+    width: 200px;
+    height: 50px;
+    background: #f00;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.translate{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+}
+.translate ul{
+    width: 380px;
+    margin: 0px auto;
+    overflow: hidden;
+    padding-bottom: 20px;
+}
+.translate ul li{
+    margin: 0 5px;
+    cursor: pointer;
+    font-size: 12px;
+    float: left;
+    color: #989898;
+}
+.translate ul li cite{
+    background: url(../images/dingzhi/icon.png) no-repeat;
+    width: 30px;
+    height: 30px;
+    display: block;
+}
+.translate ul li .turnL{
+    background-position: 0 -33px;
+}
+.translate ul li .turnR{
+    background-position: -40px -33px;
+}
+.translate ul li .reset{
+    background-position: -81px -33px;
+}
+.translate ul li .share{
+    background-position: -118px -33px;
+}
+.translate ul li .turnL:hover{
+    background-position: 0 -69px;
+}
+.translate ul li .turnR:hover{
+    background-position: -40px -69px;
+}
+.translate ul li .reset:hover{
+    background-position: -81px -69px;
+}
+.translate ul li .share:hover{
+    background-position: -118px -69px;
+}
+.translate ul .car{
+    width: 195px;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    color: #fff;
+    font-size: 12px;
+    background: #ff6162;
+}
+.translate ul .car em{
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    *display: inline;
+    *zoom:1;
+    background: url(../images/dingzhi/icon.png) -1px -106px no-repeat;
+    margin-right: 10px;
+    vertical-align: -6px;
+}
+.main{
+    position: relative; 
+}
+.madeWp{
+    background: #f3f3f3;
+    overflow: hidden;
+}
+.over{
+    opacity: 0.5;
+    filter:alpha(opacity=50);
+}
+.out{
+    opacity: 1;
+    filter:alpha(opacity=100);
+}
+.contentDiv ul{
+    width: 125px;
+    overflow: hidden;
+    margin: 0px auto;
+}
+.content ul li{
+    *margin: 0px;
+}
+.choice{
+    width: 117px;
+    height: 31px;
+    text-align: center;
+    line-height: 31px;
+    color: #fff;
+    background: #989898;
+    font-size: 14px;
+}
+.goodsName{
+    float: right;
+    width: 340px;
+    height: 55px;
+    background: #ff6162 url(../images/dingzhi/line.jpg) repeat;
+    margin-right: 13px;
+    overflow: hidden;
+}
+.goodsName dt{
+    float: left;
+    width: 120px;
+    padding: 0 15px;
+    border-right: 1px solid #ec7273;  
+    margin-top: 5px;  
+}
+.goodsName h3{
+    color: #fff;
+    opacity: 0.6;
+    filter:alpha(opacity=60);
+    font-size: 13px;
+    white-space: nowrap;
+}
+.goodsName p{
+    color: #fff;
+    font-size: 13px;
+}
+.goodsName dd{
+    float: left;  
+    width: 160px;
+    margin: 16px 0 0 10px;  
+}
+.goodsName dd p{
+    background: url(../images/dingzhi/icon.png) 0 0 no-repeat;
+    padding-left: 30px;
+    float: left;
+    font-size: 13px;
+    color: #fff;
+}
+.goodsName dd i{
+    float: left;
+    font-style: normal;
+    color: #f7fa00;
+    margin-left: 10px;
+}
+.angle{
+    background: url(../images/dingzhi/icon.png) 0 -207px no-repeat;
+    position: absolute;
+    top: -25px;
+    left: 3px;
+    height: 35px;
+    width: 35px;
+}
+.angleType{
+    background: #ff6162;
+    height: 20px;
+    line-height: 20px;
+    color: #fff;
+    font-size: 12px;
+    position: absolute;
+    left: -63px;
+    top: -21px;
+    width: 70px;
+    text-align: center;
+}
+.angleType i{
+    font-style: normal;
+}
+.corner{
+    display: none;
+}
+.t1 ul .selected .corner{
+    display: block;
+}
+.safe{
+    position: absolute;
+    bottom: 30px;
+    right: 15px;
+    background: #ff6162;
+    width: 116px;
+    height: 42px;
+    text-align: center;
+    line-height: 42px;
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+}
+.safe i{
+    background: url(../images/dingzhi/icon.png) 0 -137px no-repeat;
+    display: inline-block;
+    *display: inline;
+    *zoom:1;
+    width: 23px;
+    height: 23px;
+    vertical-align: middle;
+    margin-right: 5px;
+}

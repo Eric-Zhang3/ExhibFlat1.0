@@ -1,0 +1,11 @@
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.SiteSet\bin\Debug\ExhibFlat.SiteSet.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.SiteSet\bin\Debug\ExhibFlat.SiteSet.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.SiteSet\bin\Debug\ExhibFlat.Components.Validation.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.SiteSet\bin\Debug\ExhibFlat.Core.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.SiteSet\bin\Debug\ExhibFlat.Entities.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.SiteSet\bin\Debug\ExhibFlat.Components.Validation.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.SiteSet\bin\Debug\ExhibFlat.Core.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.SiteSet\bin\Debug\ExhibFlat.Entities.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.SiteSet\obj\x86\Debug\ExhibFlat.SiteSet.csprojResolveAssemblyReference.cache
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.SiteSet\obj\x86\Debug\ExhibFlat.SiteSet.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.SiteSet\obj\x86\Debug\ExhibFlat.SiteSet.pdb

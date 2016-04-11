@@ -1,0 +1,430 @@
+/*注册、登录*/
+.regBody{
+	/*background: #f2f2f2;*/
+}
+.regBody .head{
+	border-bottom: 1px solid #fff;
+}
+.header {
+    min-width: 1000px;
+    margin: 80px auto 60px 120px;
+}
+.lgWp{
+    width:100%;
+    background:url(../images/add/loginBg.jpg) no-repeat;
+    min-height:530px;
+}
+.lgWp .main{
+    padding-top: 132px;
+}
+.trationbj{
+	background:#f2f2f2;
+	position:relative;
+	margin:20px auto;
+	padding: 5px 0 20px;
+}
+.tration{
+	width:950px;
+	padding:0 20px;
+	border:1px #e1e1e1 solid;
+	background:#fff;
+	margin-left: 4px;
+}
+.tration h1{
+	font-weight:normal;
+	border-bottom:1px #efefef solid;
+	padding:18px 0;
+	font-size:24px;
+}
+.fomeinput{
+	padding-top:6px;
+	font-size:14px;
+	color:#666;
+}
+.fomeinput table td{
+	height:50px;
+}
+.fomeinput table a{
+	font-size:12px;
+	color:#ee0000;
+}
+.fomeinput table li{
+	font-size:12px;
+	display:block;
+	line-height:30px;
+}
+.fomeinput .dotted{
+	border-bottom:1px #ddd dotted;
+	padding-bottom:10px;
+}
+.register_btn{
+	width:180px;
+	text-align:center;
+}
+.register_btn2{
+	width:80px;
+	text-align:center;
+}
+.register_save_ts{
+	height:24px;
+	line-height:24px;
+	color:#666;
+	padding-top:8px;
+}
+.register_save_ts a{
+	color:#cc0000;
+}
+
+.trationbj2{
+	background:#f2f2f2;
+	position:relative;
+	width:980px;
+	margin:20px auto;
+	height:760px;
+}
+.tration2{
+	width:932px;
+	height:760px;
+	padding:0 20px;
+	border:1px #e1e1e1 solid;
+	position:absolute;
+	top:-6px;
+	right:4px;
+	background:#fff;
+}
+
+/*--------- 注册协议 --------*/
+.registeragreement{
+	width:930px;
+	margin:0 auto;
+	overflow:hidden;
+	border:1px solid #ccc;
+}
+.registeragreement_c{
+	width:890px;
+	margin:0 auto;
+	overflow:hidden;
+	padding:20px;
+	color:#666;
+	line-height:30px;
+}
+.RegisterAgreement_tit{
+	background:#f5f5f5;
+	border-bottom:1px solid #e4e4e4;
+	line-height:40px;
+	height:40px;
+	text-align:center;
+	color:#666;
+	font-size:14px;
+	font-weight:bold;
+}
+.registeragreement_back{
+	text-align:right;
+}
+.registeragreement_back a{
+	color:#cc1100;
+}
+.logingfome .inputbj,
+.fomeinput .inputbj{
+	border:1px #ddd solid;
+	background:url(../images/process/inputbj.gif) no-repeat;
+	padding-left:5px;
+	line-height:25px;
+	height:25px;
+}
+.logingfome .btncss,
+.fomeinput .btncss{
+	border:1px #ff5500 solid;
+	background:#ff5500;
+	font-size:14px;
+	font-weight:700;
+	height:30px;
+	line-height:33px;
+	color:#fff;
+	border:0;
+	text-align:center;
+	cursor:pointer;
+}
+.logingfome .btncss{
+	display:inline-block;
+	margin-right:10px;
+	width:100px;
+}
+.logingbj{
+    width:250px;
+    padding: 25px 0;
+    float: right;
+    margin-right: 5px;
+    background: url(../images/add/boxBg.png) left center no-repeat;
+    height: 197px;
+    position: relative;
+}
+.logingbj input{
+    width: 185px;
+    font-size: 15px;
+    color: #3a3a3a;
+    background: #fff;
+    height: 33px;
+    line-height: 33px;
+    border: 1px solid #afafaf;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    padding-left: 25px;
+    font-weight: bold;
+    margin: 0 0 15px 22px;
+}
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+#login_txtUserName{
+    background: #fff url("../images/add/user.jpg") 8px no-repeat;
+    margin-top:10px;
+}
+#login_txtPassword{
+    background: #fff url("../images/add/pwd.jpg") 8px no-repeat;
+}
+#login_btnLogin{
+    background: url("../images/add/lBtn.png") no-repeat;
+    width: 95px;
+    height: 35px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin:0px;
+}
+#login_btnLogin:hover{
+    background: url("../images/add/lBtnh.png") no-repeat;
+}
+.logingbj p{
+    text-align:center;
+}
+.logingbj .tips{
+    text-align:right;
+    margin:0 20px 10px 0;
+}
+.logingbj .tips a{
+    margin: 0 8px;
+    color: #6c7d8b;
+    vertical-align: 8px;
+}
+.MessageError nobr{
+    white-space:normal;
+}
+.footWp{
+    clear: both;
+    margin: 0px auto;
+    width: 1000px;
+    padding-top: 43px;
+    text-align: center;
+}
+.footWp p{
+    color: #3b4867;
+    font-size: 14px;
+    margin-top: 15px;
+}
+.footWp p span{
+    font-size:12px;
+}
+
+/* 分销商注册 */
+ .registeragreement_fx{ width:860px; border:1px solid #e1e1e1; margin:0 auto; padding:20px; margin-top:15px;}
+.registeragreement_fx h4.martb{ font-size:14px; font-weight:bold; margin-top:10px;}
+.agreement_bd{  width:820px; margin:10px auto; overflow:hidden; word-break:break-all;}
+.Skin_RegisterInfo_w{ width:100%; margin-top:10px;}
+.Skin_RegisterInfo_row{ font-size:14px; line-height:30px; color:#666; }
+.Skin_RegisterInfo_row li{ float:left; }
+.Skin_RegisterInfo_row .title{ width:120px; padding-left:20px;}
+.Skin_RegisterInfo_row input{ border:1px #ddd solid; background:url(../images/process/inputbj.gif) no-repeat; padding-left:5px; line-height:25px; height:25px; width:240px;}
+#registerAgreement_div_Common_Register_Clause{ width:700px; margin:0 auto;}
+.regstepalert{ color:#f30; margin-top:15px; padding-left:20px;}
+.regimgDiv,.registerAgreement_step3 { float:left; font-size:14px; padding-left:30px;}
+.regimgDiv,.registerAgreement_step3 div{ font-weight:700;font-size:16px; color:#ff3300; margin-bottom:20px;}
+.message_nav{ color:#606060; border-bottom:1px solid #dad6d7; height:30px; line-height:30px; padding-left:8px;}
+.message_nav a{ color:#379300; font-weight:bold;}
+.btncss_next{ border:1px #ff5500 solid; background:#ff5500; font-size:14px; font-weight:700; height:30px; line-height:30px; color:#fff; border:0; text-align:center; cursor:pointer; width:80px; display:block;}
+.btncss_next:hover{ color:#fff;} 
+
+.regLogo{
+	width: 1200px;
+	margin: 0px auto;
+	padding-top: 12px;
+}
+.regLogo h1{
+	color: #2b2b2b;
+	font-size: 24px;
+	overflow: hidden;
+}
+.regLogo span{
+	border-left: 1px solid #e0e0e0;
+	padding-left: 15px;
+}
+.regLogo img{
+	padding:0 15px 0 20px;
+	vertical-align: middle;
+}
+.wrap{
+	width: 1200px;
+	margin: 25px auto;
+	padding: 10px;
+	border: 1px solid #dcdcdc;	
+	position: relative;
+	background: #fff;
+}
+.regTab{
+	text-align: center;
+	position: absolute;
+	left: 40%;
+	top: -31px;
+}
+.regTab li{
+	float: left;
+	background: #f7f7f7;
+	border: 1px solid #dcdcdc;
+	border-bottom: none;
+	line-height: 28px;
+	padding:0 14px;
+	margin-right: 5px;
+}
+.regTab .active{
+	background: #fff;
+	line-height: 32px;
+	margin-top: -3px;
+}
+.regTab .active a{
+	color: #e81250;
+	font-weight: bold;
+}
+.regTab li a{
+	font-size: 14px;
+	color: #666;
+}
+.regTab li a:hover{
+	text-decoration: none;
+}
+.wrap h2{
+	color: #333;
+    margin-bottom:15px;
+    font-size: 15px;
+    font-weight: bold;
+}
+.innerWp{
+	margin: 0px 30px;
+}
+.innerWp tr td input{
+	padding:5px; 
+	border: 1px solid #dcdcdc;
+	font-size: 14px;
+	min-width: 220px;
+	font-family: "Microsoft YaHei";
+    margin:0 5px 0 20px;
+}
+.innerWp .autoW input{
+	min-width: 20px;
+}
+.innerWp tr td{
+    font-size: 14px;
+    padding: 6px 0;
+}
+.innerWp tr td label input{
+    height:auto;
+}
+.innerWp .Skin_RegisterInput1{
+    width:390px;
+    border: 1px solid #dcdcdc;
+    margin-top: 10px;
+}
+.innerWp  i{
+	font-style: normal;
+	color: #e23e40;
+	margin-right: 8px;
+}
+.innerWp ul li p{
+	margin: 10px 0 0 80px;
+}
+.innerWp tr td select{
+	margin-right: 10px;
+    height:30px;
+    font-family: "Microsoft YaHei";
+}
+.innerWp ul  li p input{
+	min-width: 220px;
+}
+.innerWp .submit{
+	background: #f7266a;
+	border: none;
+	color: #fff;
+	cursor: pointer;
+	font-size: 16px;
+	height: 37px;
+	width: 240px;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+}
+.innerWp .borderN td{
+	border: none;
+}
+.innerWp .tips label{
+	font-size: 13px;
+}
+.innerWp .tips a{
+	color: #0066cc;
+	font-size: 13px;
+}
+.regStep{
+	width: 500px;
+	margin: 0px auto;
+	padding: 55px 0 40px;
+}
+.regStep ul{
+	background: url(../images/register/step1.png) top center no-repeat;
+	overflow: hidden;
+	height: 80px;
+}
+.regStep ul li{
+	float: left;
+	padding-top: 60px;
+	width: 33%;
+	text-align: center;
+	color: #828282;
+	font-size: 14px;
+}
+.regStep ul .active{
+	color: #e03032;
+}
+.regAlert{
+	background: #fff;
+	border: 8px solid #e5e5e5;
+	width: 540px;
+	position: absolute;
+	top: 40%;
+	left: 36%;
+	text-align: center;
+	padding: 20px 0;
+	font-size: 15px;
+	color: #666;
+}
+.regAlert span{
+	width: 60px;
+	height: 55px;
+	display: inline-block;
+	background: url(../images/register/audi.png) no-repeat center center;
+	margin-bottom: 10px;
+}
+.regAlert p{
+	margin-bottom: 5px;
+}
+.regAlert p input{
+	background: #e4e9e9;
+	border:1px solid #b0b4b4;
+	border-right: none;
+	border-bottom: none;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	padding: 7px 30px;
+	color: #666;
+	font-size: 15px;
+	margin-top: 10px;
+}

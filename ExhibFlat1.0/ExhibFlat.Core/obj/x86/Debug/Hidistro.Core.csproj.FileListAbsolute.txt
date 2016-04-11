@@ -1,0 +1,14 @@
+D:\offices\gitcode_timely\F2B\src\Hidistro.Core\bin\Debug\Hidistro.Core.dll
+D:\offices\gitcode_timely\F2B\src\Hidistro.Core\bin\Debug\Hidistro.Core.pdb
+D:\offices\gitcode_timely\F2B\src\Hidistro.Core\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll
+D:\offices\gitcode_timely\F2B\src\Hidistro.Core\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Data.dll
+D:\offices\gitcode_timely\F2B\src\Hidistro.Core\obj\x86\Debug\Hidistro.Core.dll
+D:\offices\gitcode_timely\F2B\src\Hidistro.Core\obj\x86\Debug\Hidistro.Core.pdb
+D:\offices\gitcode_timely\F2B\src\Hidistro.Core\obj\x86\Debug\Hidistro.Core.csprojResolveAssemblyReference.cache
+C:\offices\gitcode_timely\F2B\src\Hidistro.Core\bin\Debug\Hidistro.Core.dll
+C:\offices\gitcode_timely\F2B\src\Hidistro.Core\bin\Debug\Hidistro.Core.pdb
+C:\offices\gitcode_timely\F2B\src\Hidistro.Core\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll
+C:\offices\gitcode_timely\F2B\src\Hidistro.Core\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Data.dll
+C:\offices\gitcode_timely\F2B\src\Hidistro.Core\obj\x86\Debug\Hidistro.Core.dll
+C:\offices\gitcode_timely\F2B\src\Hidistro.Core\obj\x86\Debug\Hidistro.Core.pdb
+C:\offices\gitcode_timely\F2B\src\Hidistro.Core\obj\x86\Debug\Hidistro.Core.csprojResolveAssemblyReference.cache

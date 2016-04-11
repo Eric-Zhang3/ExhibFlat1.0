@@ -1,0 +1,170 @@
+/*专题页面*/
+.specialWp{
+	width: 1200px;
+	margin: 0px auto;
+	background: #fff;
+	padding-bottom: 30px;
+}
+.sTitle{
+	text-align: center;
+	background: url(../images/special/bLine.jpg) bottom center repeat-x;
+	padding: 20px 0;
+	position: relative;
+	width: 1135px;
+	margin: 0px auto 20px;
+}
+.sTitle a{
+	width: 32px;
+	height: 19px;
+	display: block;
+	background: url(../images/special/more.jpg) no-repeat;
+	position: absolute;
+	right: -8px;
+	bottom: 0;
+}
+.sList{
+	overflow: hidden;
+	width: 1170px;
+	margin: 0px auto;
+}
+.sList ul{
+	padding-left: 14px;
+	width: 1200px;
+}
+.sList ul li{
+	float: left;
+	width: 280px;
+	margin-right:7px;
+	text-align: center;
+}
+.sList ul li h3 a{
+	color: #000;
+	font-size: 16px;
+	background: url(../images/special/border.png) no-repeat;
+	width: 155px;
+	height: 33px;
+	line-height: 33px;
+	display: inline-block;
+	margin: 12px 0;
+}
+.sList ul li h3 a:hover{
+	text-decoration: none;
+}
+
+/*介绍页面*/
+.introWp{
+    width:100%;
+    min-width:1200px;
+    margin:0px auto;
+    text-align:center;
+}
+.imgA{
+    background:#ee1053;
+}
+.imgB{
+    background:#ffc80b;
+}
+.imgC{
+    background:#fff;
+}
+.timebg{
+    background: #282520;
+    width: 100%;
+    min-width: 1200px;
+    margin: 0 auto;
+}
+#timeline {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  background:#f2649d;
+}
+#issues {
+  height: 100%;
+  overflow: hidden;
+  width:1200px;
+  margin: 0 auto;
+}
+#issues li{
+  float: left;
+  display: none;
+}
+#issues li img{
+
+}
+#issues .span5 img {
+  margin: 40px 30px 0px 0px;
+  background: transparent;
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)";
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
+  zoom: 1;
+  -webkit-transition: all 2s ease-in-out;
+  -moz-transition: all 2s ease-in-out;
+  -o-transition: all 2s ease-in-out;
+  -ms-transition: all 2s ease-in-out;
+  transition: all 2s ease-in-out;
+  -webkit-transform: scale(0.5,0.5);
+  -moz-transform: scale(0.5,0.5);
+  -o-transform: scale(0.5,0.5);
+  -ms-transform: scale(0.5,0.5);
+  transform: scale(0.5,0.5);
+  max-width: 100%;
+}
+#issues li.selected .span5 img {
+  -webkit-transform: scale(1,1);
+  -moz-transform: scale(1,1);
+  -o-transform: scale(1,1);
+  -ms-transform: scale(1,1);
+  transform: scale(1,1);
+}
+#timebg2 {
+  height: 50px;
+  line-height: 50px;
+  margin: 20px auto;
+}
+
+#dates {
+  height: 60px;
+  overflow: hidden;
+  display: inline-block;
+  margin: 0 auto;
+}
+#dates li {
+  list-style: none;
+  float: left;
+  width: 150px;
+  height: 50px;
+  font-size: 20px;
+  text-align: center;
+  background: url(../images/special/and.png) center right no-repeat;
+}
+#dates .bn{
+    background: none;
+}
+#dates a {
+  line-height: 38px;
+  padding-bottom: 10px;
+  color: #f2649d;
+}
+#dates a:hover{
+    text-decoration: none;
+}
+#dates .selected {
+  font-size: 30px;
+  font-weight: bold;
+}
+.timebg .span5{
+    width: 40%;
+    float: left;
+}
+.timebg .span7{
+    width: 60%;
+    float: left;
+    margin-top: 180px;
+}
+.timebg .span7 p{
+    color: #fff;
+    font-family: "SimHei";
+    font-size: 16px;
+    margin-top: 10px;
+}

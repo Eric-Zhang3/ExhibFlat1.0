@@ -1,0 +1,85 @@
+body,ul,li,img{
+    margin: 0;
+    padding: 0;
+}
+img{
+    vertical-align: middle;
+}
+ul{
+    list-style: none;
+}
+body{
+    width: 100%;
+    height: 100%;
+}
+.shopName{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 2.75rem;
+    background-color: #ED4575;
+    text-align: center;
+    font-size:1.4rem;
+    line-height: 2.75rem;
+    color: #ffffff;
+    z-index: 999999;
+}
+.productTop{
+    width: 100%;
+    height: 19.5rem;
+}
+.productTop img{
+    height: 16.75rem;
+    width: 100%;
+    background-color:red ;
+}
+.productTitle{
+    width: 100%;
+    height: 2.75rem;
+    background-color: #f4b91d;
+    text-align: center;
+    font-size:1.4rem;
+    line-height: 2.75rem;
+    color: #ffffff;
+}
+.slider-left{
+    float: left;
+}
+.slider-left,.slider-right{
+    height: 18.75rem;
+    width: 48.5%;
+    margin-top:.75rem ;
+    background-color: blue;
+}
+.slider-right{
+    float: right;
+}
+.slide-content{
+    zoom: 1;
+    padding: 0 .75rem;
+}
+.slide-content:after{
+    display: block;
+    clear: both;
+    content: "";
+    height: 0;
+    visibility: hidden;
+}
+#main {
+    width: 100%;
+    height: 39rem;
+    overflow: hidden;
+    position: relative;
+    margin: 2.75rem  auto 0 auto;
+}
+#main ul li{
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    list-style: none;
+}

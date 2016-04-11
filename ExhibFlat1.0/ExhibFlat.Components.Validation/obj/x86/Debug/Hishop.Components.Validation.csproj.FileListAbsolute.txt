@@ -1,0 +1,9 @@
+D:\offices\gitcode_timely\F2B\src\Hishop.Components.Validation\bin\Debug\Hishop.Components.Validation.dll
+D:\offices\gitcode_timely\F2B\src\Hishop.Components.Validation\bin\Debug\Hishop.Components.Validation.pdb
+D:\offices\gitcode_timely\F2B\src\Hishop.Components.Validation\obj\x86\Debug\Hishop.Components.Validation.dll
+D:\offices\gitcode_timely\F2B\src\Hishop.Components.Validation\obj\x86\Debug\Hishop.Components.Validation.pdb
+D:\offices\gitcode_timely\F2B\src\Hishop.Components.Validation\obj\x86\Debug\Hishop.Components.Validation.csprojResolveAssemblyReference.cache
+C:\offices\gitcode_timely\F2B\src\Hishop.Components.Validation\bin\Debug\Hishop.Components.Validation.dll
+C:\offices\gitcode_timely\F2B\src\Hishop.Components.Validation\bin\Debug\Hishop.Components.Validation.pdb
+C:\offices\gitcode_timely\F2B\src\Hishop.Components.Validation\obj\x86\Debug\Hishop.Components.Validation.dll
+C:\offices\gitcode_timely\F2B\src\Hishop.Components.Validation\obj\x86\Debug\Hishop.Components.Validation.pdb

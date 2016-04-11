@@ -1,0 +1,230 @@
+﻿/*品牌馆*/
+.navWp{
+	background: #232323;
+	height: 55px;
+	line-height: 55px;
+	width: 100%;
+	border-bottom: 1px solid #646464;
+}
+.subNav{
+	width: 1000px;
+	margin: 0px auto;
+}
+.subNav img{
+	float: left;
+}
+.subNav ul{
+	float: right;
+	margin-right: 10px;
+}
+.subNav ul li{
+	float: left;
+	margin-left: 40px;
+}
+.subNav ul .active a{
+	color: #c40001;
+}
+.subNav ul li a{
+	color: #fff;
+	font-family: "SimSun";
+	font-size: 14px;
+	font-weight: bold;
+}
+.addWp{
+	width: 1000px;
+	margin: 0px auto;
+	overflow: hidden;
+	clear: both;
+	padding-top: 10px;
+}
+.focusL{
+	float: left;
+	width: 660px;
+}
+.focusR{
+	width: 320px;
+	height: 280px;
+	float: right;
+}
+.fTitle{
+	width: 100%;
+	background: #3f3f3f;
+	height: 30px;
+}
+.fTitle li{
+	float: left;
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+	border-right: 1px solid #c1c1c1;
+	border-bottom: 1px solid #c1c1c1;
+	padding: 0 20px;
+}
+.fTitle .ks-active{
+	background: #fff;
+	height: 34px;
+	line-height: 34px;
+	margin-top: -5px;
+	border-top: 1px solid #c1c1c1;
+	border-bottom: none;
+	box-shadow: 2px 0 4px rgba(0,0,0,.3);
+	-webkit-box-shadow: 2px 0 4px rgba(0,0,0,.3);
+	-moz-box-shadow: 2px 0 4px rgba(0,0,0,.3);
+}
+.fTitle .ks-active a{
+	color: #434343;
+	text-decoration: none;
+}
+.fTitle li a{
+	color: #cecece;
+	font-size: 12px;
+	font-weight: bold;
+}
+.fTitle .last{
+	border-right: none;
+	padding-left: 26px;
+}
+.brandCont{
+	position: relative;
+	background: #fff;
+}
+.brandList{
+	position: relative;
+	width: 660px;
+	height: 250px;
+	overflow: hidden;
+	box-shadow: 0 2px 3px #c1c1c1;
+	-webkit-box-shadow: 0 2px 3px #c1c1c1;
+	-moz-box-shadow: 0 2px 3px #c1c1c1;
+	border-bottom: 1px solid #dfdfdf;
+}
+.brandList ul{
+	height: 240px;
+	position: absolute;
+	margin-top: 7px;
+}
+.brandList ul li{
+	float: left;
+	width: 102px;
+	height: 60px;
+	border-right: 1px dotted #dbdbdb;
+	border-bottom: 1px dotted #dbdbdb;
+	text-align: center;
+}
+.brandList ul li img{
+	width: 90px;
+	height: 45px;
+	margin-top: 7px;
+}
+.brandSlide{
+	width: 618px;
+	margin: 0px auto;
+	overflow: hidden;
+	height: 250px;
+}
+.brandList span{
+	width: 18px;
+	height: 120px;
+	display: block;
+	position: absolute;
+	top: 60px;
+	z-index: 2;
+	cursor: pointer;
+	opacity: 0.8;
+	filter:alpha(opacity=80);
+}
+.brandList span:hover{
+	opacity: 1;
+	filter:alpha(opacity=100);	
+}
+.brandList span.bPre{
+	background-position: -32px 0;
+	left: 0px;
+}
+.brandList span.bNext{
+	background-position: -52px 0;
+	right: 0px;
+}
+.bList{
+	clear: both;
+	padding-top: 35px;
+}
+.bList h2{
+	background: #c12c20;
+	color: #fff;
+	font-size: 18px;
+	height: 35px;
+	line-height: 35px;
+	padding-left: 10px;
+}
+.listWrap ul{
+	width: 1100px;
+}
+.listWrap ul li{
+	width: 478px;
+	height: 203px;
+	margin: 16px 16px 0 0;
+	float: left;
+	border: 1px solid #d9d9d9;
+	padding:10px 0 10px 10px;
+	background: #fff;
+}
+.listWrap dl{
+	overflow: hidden;
+}
+.listWrap dl dt{
+	float: left;
+	width: 300px;
+	position: relative;	
+}
+.listWrap dl dt p{
+	width: 100%;
+	position: absolute;
+	height: 20px;
+	left: 0px;
+	bottom: 0px;
+	background: #000;
+	opacity: 0.7;
+	filter:alpha(opacity=70);	
+}
+.listWrap dl dt span{
+	position: absolute;
+	left: 10px;
+	color: #fff;
+	bottom: 0px;
+}
+.listWrap dl dd{
+	width: 168px;
+	float: left;
+	margin-left: 10px;
+	text-align: center;	
+	padding-top: 25px;
+}
+.listWrap dl dd a:hover{
+	text-decoration: none;
+}
+.listWrap dl dd h3{
+	font-size: 14px;
+	color: #666;
+	white-space: nowrap;
+	overflow: hidden;	
+	font-family: "Microsoft YaHei";
+	margin-top: 20px;
+}
+.listWrap dl dd p{
+	background: #ebedff;
+	padding: 15px 0 3px 0;
+	text-align: center;
+	margin: 15px 6px 0 0;
+}
+.listWrap dl dd p a{
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+	background: #c40001;
+	width: 95px;
+	height: 22px;
+	line-height: 22px;
+	color: #fff;
+	margin-bottom: 5px;
+}

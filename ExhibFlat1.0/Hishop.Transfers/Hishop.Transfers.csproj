@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C416C355-E53D-49C4-9428-EDB114F594CC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Hishop.Transfers</RootNamespace>
+    <AssemblyName>Hishop.Transfers</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\Hidistro.UI.Web\DLL_Reference\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="LumenWorks.Framework.IO">
+      <HintPath>..\Hidistro.UI.Web\DLL_Reference\LumenWorks.Framework.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="JHCSV.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Yfx1_2_from_Paipai4_0.cs" />
+    <Compile Include="Yfx1_2_from_ShangJi2_7.cs" />
+    <Compile Include="Yfx1_2_from_Taobao5_0.cs" />
+    <Compile Include="Yfx1_2_from_Yfx1_2.cs" />
+    <Compile Include="Yfx1_2_to_Paipai4_0.cs" />
+    <Compile Include="Yfx1_2_to_ShangJi_2.7.cs" />
+    <Compile Include="Yfx1_2_to_Taobao5_0.cs" />
+    <Compile Include="Yfx1_2_to_Yfx1_2.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExhibFlat.Core\ExhibFlat.Core.csproj">
+      <Project>{99035962-500a-4a89-acda-10bd0919e884}</Project>
+      <Name>Hidistro.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExhibFlat.Entities\ExhibFlat.Entities.csproj">
+      <Project>{922825df-371e-4afe-949a-7abeb9653610}</Project>
+      <Name>Hidistro.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExhibFlat.SiteSet\ExhibFlat.SiteSet.csproj">
+      <Project>{267181ab-9cca-47e6-9f51-3c31da010945}</Project>
+      <Name>Hidistro.Membership.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Hidistro.Membership.Core\Hidistro.Membership.Core.csproj">
+      <Project>{c61ce28d-0a63-4ee2-a7e8-69b18c5c98af}</Project>
+      <Name>Hidistro.Membership.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExhibFlat.UI.Common.Controls\ExhibFlat.UI.Common.Controls.csproj">
+      <Project>{19b92c42-ddd4-4920-9b2d-d813d0de6e38}</Project>
+      <Name>Hidistro.UI.Common.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExhibFlat.UI.ControlPanel.Utility\ExhibFlat.UI.ControlPanel.Utility.csproj">
+      <Project>{a614f0ec-4528-47b9-87d4-b8fe1f4eed64}</Project>
+      <Name>Hidistro.UI.ControlPanel.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Hishop.TransferManager\Hishop.TransferManager.csproj">
+      <Project>{4f3336dd-493f-4593-a950-e7f07e7c3f3d}</Project>
+      <Name>Hishop.TransferManager</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

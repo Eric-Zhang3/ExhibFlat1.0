@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectType>local</ProjectType>
+    <ProjectVersion>7.10.377</ProjectVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{922825DF-371E-4AFE-949A-7ABEB9653610}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <AssemblyName>ExhibFlat.Entities</AssemblyName>
+    <OutputType>Library</OutputType>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="ExhibFlat\Entities\Commodities\TagInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\ExpressDetail.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\ChanelQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\ChanelQueryParm.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\SessionUser.cs" />
+    <Compile Include="ExhibFlat\Entities\Refund\RefundAmountListInput.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\AssignQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\SupplierAccountQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\YiQuanDetailQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\YiQuanQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Store\DistriShopInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Store\ShopProductInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=4.1.0.0, Culture=neutral, PublicKeyToken=7f2f4d7aece0749d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Hidistro.UI.Web\DLL_Reference\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=4.1.0.0, Culture=neutral, PublicKeyToken=7f2f4d7aece0749d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Hidistro.UI.Web\DLL_Reference\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Web" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Compile Include="ExhibFlat\Entities\Commodities\DxAttriDef.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\DxAttriValue.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\SupplierInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\DropdownlistModel.cs" />
+    <Compile Include="ExhibFlat\Entities\JSC\JSC_Activity.cs" />
+    <Compile Include="ExhibFlat\Entities\JSC\JSC_Breach.cs" />
+    <Compile Include="ExhibFlat\Entities\JSC\JSC_BreachDetail.cs" />
+    <Compile Include="ExhibFlat\Entities\JSC\JSC_Category.cs" />
+    <Compile Include="ExhibFlat\Entities\JSC\JSC_Dictionary.cs" />
+    <Compile Include="ExhibFlat\Entities\JSC\JSC_DictionaryBizType.cs" />
+    <Compile Include="ExhibFlat\Entities\JSC\JSC_IntervalPrice.cs" />
+    <Compile Include="ExhibFlat\Entities\JSC\JSC_OperatorOrder.cs" />
+    <Compile Include="ExhibFlat\Entities\JSC\JSC_SOrderQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\OrderWarehouseInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Refund\JS_Refund.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\BreachStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\JscOrder.cs" />
+    <Compile Include="ExhibFlat\Entities\SKUDistributorPrice.cs" />
+    <Compile Include="ExhibFlat\Entities\StockInfos.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\AfficheInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\ArticleCategoryInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\ArticleInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\ArticleQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\ConsultationReplyType.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\HelpCategoryInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\HelpInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\LeaveCommentInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\LeaveCommentQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\LeaveCommentReplyInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\MessageBoxInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\MessageBoxQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\MessageStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\ProductConsultationAndReplyQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\ProductConsultationInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\ProductReviewAndReplyQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\ProductReviewInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\ProductReviewQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\UserProductReviewAndReplyQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\ProductQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\AdvancedProductQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\ApiErrorCode.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\AttributeInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\AttributeUseageMode.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\AttributeValueInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\BrandCategoryInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\BrowsedProductQueue.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\CategoryActionStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\CategoryInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\CategorySearchType.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\CategoryZIndex.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\PenetrationStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\ProductActionStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\ProductBrowseInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\ProductBrowseQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\ProductInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\ProductTypeInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\ProductTypeQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\SKUItem.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\SubjectListQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\ProductSaleStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\PublishStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\DataMapper.cs" />
+    <Compile Include="ExhibFlat\Entities\Distribution\DistributorQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\DistributorGradeInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Commodities\ProductLineInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Distribution\SiteRequestInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Distribution\SiteRequestStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\EmailType.cs" />
+    <Compile Include="ExhibFlat\Entities\ExpressHelper.cs" />
+    <Compile Include="ExhibFlat\Entities\HOP\TaobaoProductInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\HOP\PublishToTaobaoProductInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\ManageThemeInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\AccountSummaryInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\BalanceDetailInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\BalanceDetailQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\BalanceDrawRequestInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\BalanceDrawRequestQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\ClientStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\FreezeType.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\InpourRequestInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\MemberClientSet.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\MemberGradeInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\MemberQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\MemberRankActionStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\OpenIdSettingsInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Members\TradeTypes.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\BindInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\BindInfoQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\BindItemInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\BundlingInfoQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\CountDownInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\CouponActionStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\CouponInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\CouponItemInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\CouponItemInfoQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\GiftActionStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\GiftInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\GiftQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\GropBuyConditionInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\GroupBuyInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\GroupBuyQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\GroupBuyStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\PromotionInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\PromoteType.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\BundlingItemInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Promotions\BundlingInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\RegionHelper.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\StatisticsInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\AdminStatisticsInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\CalculateModeTypes.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\CurrencyActionStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\ExpressCompanyInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\LeaveWordUserType.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\LineItemInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\OrderActions.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\OrderGiftInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\OrderGiftQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\OrderMark.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\OrderInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\OrderPriceStatisticsForChartInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\OrderQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\OrderStatisticsInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\PaymentModeActionStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\PaymentModeInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\PurchaseOrderActions.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\PurchaseOrderGiftQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\PurchaseOrderInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\PurchaseOrderTaobaoInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\PurchaseShoppingCartItemInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\RankingsState.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\RefundStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\SaleStatisticsAnalyzeInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\SaleStatisticsQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\SaleStatisticsType.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\SelectModeTypes.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\ShippingAddressInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\ShippingModeGroupInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\ShippingModeInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\ShippingModeRegionInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\ShippingRegionInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\ShoppingCartInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\ShoppingCartItemInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\UserOrderQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\UserPointInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\UserPointTradeType.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\UserStatisticsForDate.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\UserStatisticsInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\OrderStatus.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\PurchaseOrderItemInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\PurchaseOrderGiftInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\PurchaseOrderQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\ShippersInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Sales\ShoppingCartGiftInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Store\AdvPositionInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Store\FriendlyLinksInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Store\ManagerQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Store\OperationLogEntry.cs" />
+    <Compile Include="ExhibFlat\Entities\Store\OperationLogQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Store\Privilege.cs" />
+    <Compile Include="ExhibFlat\Entities\Store\ProductSubjectInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Store\VoteCheckType.cs" />
+    <Compile Include="ExhibFlat\Entities\Store\VoteInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Store\VoteItemInfo.cs" />
+    <Compile Include="ExhibFlat\Entities\Comments\HelpQuery.cs" />
+    <Compile Include="ExhibFlat\Entities\Store\ArticleSubjectInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExhibFlat.Components.Validation\ExhibFlat.Components.Validation.csproj">
+      <Project>{36187fd3-554c-4495-91dc-066945f1d285}</Project>
+      <Name>ExhibFlat.Components.Validation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExhibFlat.Core\ExhibFlat.Core.csproj">
+      <Project>{99035962-500a-4a89-acda-10bd0919e884}</Project>
+      <Name>ExhibFlat.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

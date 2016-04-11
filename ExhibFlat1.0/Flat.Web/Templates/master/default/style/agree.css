@@ -1,0 +1,137 @@
+/*聚生产协议*/
+.agreeMentNav{
+	background:#e81250;
+	height: 30px;
+	line-height: 30px;
+}
+.agreeMentNav ul{
+	overflow: hidden;
+	width: 1000px;
+	margin: 0px auto;
+}
+.agreeMentNav ul li{
+	float: left;
+}
+.agreeMentNav ul li a{
+	color: #fff;
+	font-size: 14px;
+	display: inline-block;
+	padding: 0 28px;
+	font-weight: bold;
+}
+.agreeMentNav ul .active a{
+    background:#e6e6e6;
+    color:#e81250;
+    margin:0;
+    height:auto;
+}
+.agreeTab{
+	width: 1200px;
+	margin: 0px auto;
+	padding-top: 30px;
+	height: 40px;
+}
+.agreeTab ul{
+	margin-left: -3px;
+}
+.agreeTab ul li{
+    float:left;
+    width: 140px;
+    text-align: center;
+/*	-moz-box-shadow: 0px 1px 2px 2px #efedf6;
+	-webkit-box-shadow:  0px 1px 2px 2px #efedf6;
+	box-shadow: 0px 1px 2px 2px #efedf6;*/
+	background: url(../images/add/agreeActive.png) no-repeat;
+	margin-right: 5px;
+    height: 40px;
+    line-height: 40px;
+}
+.agreeTab ul li img{
+	vertical-align: middle;
+}
+.agreeTab ul .active{
+	background: url(../images/add/agreeA.png) no-repeat;
+	position: relative;
+	z-index: 3;	
+}
+.agreeWp{
+	-moz-box-shadow: 0px 0px 2px 2px #efedf6;
+	-webkit-box-shadow:  0px 0px 2px 2px #efedf6;
+	box-shadow: 0px 0px 2px 2px #efedf6;
+	width: 1200px;
+	margin: 0px auto 10px;
+	clear: both;
+	border-radius: 0 5px 5px 5px;
+	-webkit-border-radius: 0 5px 5px 5px;
+	-moz-border-radius: 0 5px 5px 5px;
+	position: relative;
+	z-index: 2;
+	padding: 23px 1px 70px 0;
+}
+.listItem{
+	border: 1px solid #f0f0f0;
+	border-left: none;
+	overflow: hidden;
+	margin-bottom: 6px;
+	color: #797878;	
+}
+.listItem h2{
+	font-size: 18px;
+	color: #7a7a7a;
+	background: #f6f6f6;
+	border-left: 6px solid #ef5b86;
+	height: 43px;
+	line-height: 43px; 
+	padding-left: 8px;
+}
+.listItem h2 span{
+	font-size: 12px;
+	border-left: 1px dotted #838383;
+	padding-left: 13px;
+	margin-left: 15px;
+}
+.listItem p{
+	line-height: 23px;
+	padding: 20px 35px;
+	text-indent: 2em;
+	border-top:1px solid #f0f0f0;	
+}
+.listItem table td{
+	border-top: 1px solid #f0f0f0;
+	line-height: 22px;
+	padding: 10px 0;
+}
+.listItem .tL{
+	width: 66px;
+	border-right: 1px solid #f0f0f0;
+	margin-right: 15px;
+}
+.listItem .tR{
+	padding:10px 30px 10px 15px;
+}
+.listSteps{
+	border-bottom: none;
+}
+.listSteps span{
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+	margin-top: 25px;
+	width: 100%;
+	text-align: center;
+}
+
+.listSteps span img{
+	margin-bottom: 95px;
+}
+.listSteps span input{
+	background: #ff006c;
+	width: 164px;
+	height: 47px;
+	text-align: center;
+	line-height: 47px;
+	color: #fff;
+	border: none;
+	font-size: 16px;
+	cursor:pointer; ;
+}

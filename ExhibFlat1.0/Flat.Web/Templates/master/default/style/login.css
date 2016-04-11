@@ -1,0 +1,207 @@
+﻿/*CSS RESET 共用*/
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    color: #6d6d6d;
+    font-family: "Microsoft YaHei", "Arial";
+    overflow-x: auto;
+    *overflow-x: hidden;
+    text-align:center;
+}
+
+form, ul, li, ol, li, dl, dt, dd, img, p, span, div, h1, h2, h3, h4, h5, h6, input {
+    margin: 0;
+    padding: 0;
+}
+
+input, select {
+    font-size: 12px;
+    outline: none;
+    color: #6d6d6d;
+}
+
+img { border: 0; }
+
+ul, li { list-style-type: none; }
+
+strong { font-weight: normal; }
+
+em, i, cite { font-style: normal; }
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    font-size: 12px;
+}
+
+a {
+    color: #6d6d6d;
+    text-decoration: none;
+}
+
+a:hover { text-decoration: underline; }
+
+a:focus, li:focus { outline: none; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.fr { float: right; }
+
+.fl { float: left; }
+
+.textC { text-align: center; }
+
+.red { color: #f33838; }
+
+.errorTips { color: #f33838; }
+
+.sBtn, .sOk {
+    background: #f09017;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    color: #fff;
+    font-family: "Microsoft YaHei";
+    border: 1px solid #f4ae55;
+    cursor: pointer;
+}
+
+.sBtn { padding: 6px 40px; }
+
+.sOk { padding: 6px 25px; }
+
+.sCancel {
+    background: #fff;
+    border: 1px solid #d4d9dc;
+    color: #8d8d8d;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    font-family: "Microsoft YaHei";
+    padding: 6px 25px;
+    cursor: pointer;
+}
+
+.sInput {
+    width: 233px;
+    border: 1px solid #bebebe;
+    height: 24px;
+    line-height: 24px;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    padding-left: 10px;
+    margin-right: 10px;
+}
+
+.sSearch {
+    background: #5eb5e6;
+    border-radius: 4px;
+    -webkit-border-radiu: 4px;
+    -moz-border-radius: 4px;
+    color: #fff;
+    padding: 7px 22px;
+    border: none;
+    cursor: pointer;
+}
+
+.even { background: #fff; }
+
+.odd { background: #eeeff2; }
+
+.header {
+    width: 1010px;
+    margin: 50px auto 60px auto;
+    text-align:left;
+}
+.wrapper {
+    width: 1000px;
+    margin: 0px auto;
+    overflow: hidden;
+}
+.innerL{
+    width:590px;
+    float:left;
+}
+.loginWp {
+    width: 260px;
+    padding: 42px 35px 43px;
+    margin-right: 5px;
+    background: #f4f4f4;
+    border-radius:6px;
+    -webkit-border-radius:6px;
+    -moz-border-radius:6px;
+    margin:auto;
+    margin-top:45px;
+}
+.loginWp ul li .cInput {
+    width: 240px;
+    background: #fff;
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid #afafaf;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    padding-left: 25px;
+    margin-bottom:18px;
+}
+.loginWp ul .tips{
+    text-align: right;
+}
+.loginWp ul .tips a{
+    margin-left: 8px;
+}
+.Form .phonetips {
+    display:none;
+}
+.loginWp ul li #Account{
+    background: #fff url(../images/user.jpg) 8px no-repeat;    
+}
+.loginWp ul li #Pwd{
+    background: #fff url(../images/pwd.jpg) 8px no-repeat;  
+    margin-bottom:10px;  
+}
+.loginWp ul li i{
+    display:none;
+}
+.loginWp ul li .sign {
+    background:#058cff;
+    height: 39px;
+    line-height:39px;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 18px;
+    font-weight: normal;
+    width: 265px;
+    margin-top: 52px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    font-family: "Microsoft YaHei";
+}
+.footWp {
+    clear: both;
+    margin: 0px auto;
+    width: 1010px;
+    text-align: center;
+    background: #f2f2f2;
+    border-top: 2px solid #e0e0e0;
+    width: 100%;
+    margin-top: 100px;
+    padding:60px 0;
+}
+.footWp p {
+    color: #666;
+    margin-top: 15px;
+}
+.footWp p span {
+    font-size: 12px;
+}
+.addTips{
+    display:none;
+}

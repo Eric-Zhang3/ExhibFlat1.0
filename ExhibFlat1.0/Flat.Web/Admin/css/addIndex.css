@@ -1,0 +1,117 @@
+﻿/*后台首页*/
+body{
+	font-family: "Microsoft YaHei"
+}
+.indexWp{
+	width: 1220px;
+	height: 446px;
+	position:relative;
+	margin: 120px auto;
+}
+.indexL{
+	width: 665px;
+	float: left;
+	position: relative;
+	height: 446px;
+	text-align: center;
+}
+.indexL ul li{
+	text-align: center;
+	cursor: pointer;
+	position: absolute;
+	left: 340px;
+	top: 250px;
+	z-index: 2;			
+}
+.indexL ul li span{
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+}
+.indexL ul li p{
+	font-size: 15px;
+	color: #6a747f;
+	font-weight: normal;
+	margin-top: 3px;
+}
+.indexL ul li img{
+	width: 84px;
+	height: 82px;
+}
+.indexL ul li:hover img{
+	width: 90px;
+	height: 88px;
+}
+.indexL .com{
+	margin: 170px 0 0 30px;
+	position: relative;
+	z-index: 3;
+}
+/*.indexL ul .list1{
+	left: 0;
+	top: 139px;
+}
+.indexL ul .list2{
+	left: 101px;
+	top: 63px;
+}
+.indexL ul .list3{
+	left: 218px;
+	top: 20px;
+}
+.indexL ul .list4{
+	left: 333px;
+	top: 0;
+}
+.indexL ul .list5{
+	left: 460px;
+	top: 30px;
+}
+.indexL ul .list6{
+	left: 587px;
+	top: 82px;
+}*/
+.indexR{
+	position: absolute;
+	right: 10px;
+	bottom: 25px;
+	width: 630px;
+	display: none;
+}
+.indexR h2{
+	color: #404952;
+	font-size: 43px;
+	text-align: center;
+}
+.indexR h2 em{
+	font-size: 34px;
+	color: #cacdcf;
+}
+.indexR fieldset{
+	border: 3px solid #a0d5e1;
+	padding: 5px 23px;
+	height: 108px;
+	width: 578px;
+}
+.indexR fieldset legend{
+	color: #9ca5ae;
+	font-size: 14px;
+	padding: 0 20px;
+	margin-left: 180px;
+}
+.indexR strong{
+	color: #6d7379;
+	font-size: 14px;
+	text-align: left;
+}
+.indexR p{
+	line-height: 23px;
+	color: #7a7d7f;
+	font-size: 13px;
+	margin: 5px 0 22px 0;
+}
+@media (max-width: 1200px){
+    .indexWp{
+        margin-top:60px;
+    }
+}

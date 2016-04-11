@@ -1,0 +1,1136 @@
+﻿namespace Hidistro.ControlPanel.Data
+{
+    using Hidistro.ControlPanel.Members;
+using Hidistro.Core;
+using Hidistro.Core.Entities;
+using Hidistro.Entities;
+using Hidistro.Entities.Members;
+using Hidistro.Membership.Context;
+using Hidistro.Membership.Core;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Text;
+    public class MemberData : MemberProvider
+    {
+        private Database database = DatabaseFactory.CreateDatabase();
+
+        private static string BuildBalanceDetailsQuery(BalanceDetailQuery query)
+        {
+            StringBuilder builder = new StringBuilder();
+            if (query.UserId.HasValue)
+            {
+                builder.AppendFormat(" AND UserId = {0}", query.UserId.Value);
+            }
+            if (!string.IsNullOrEmpty(query.UserName))
+            {
+                builder.AppendFormat(" AND UserName='{0}'", DataHelper.CleanSearchString(query.UserName));
+            }
+            if (query.FromDate.HasValue)
+            {
+                builder.AppendFormat(" AND TradeDate >= '{0}'", DataHelper.GetSafeDateTimeFormat(query.FromDate.Value));
+            }
+            if (query.ToDate.HasValue)
+            {
+                builder.AppendFormat(" AND TradeDate <= '{0}'", DataHelper.GetSafeDateTimeFormat(query.ToDate.Value));
+            }
+            if (query.TradeType != TradeTypes.NotSet)
+            {
+                builder.AppendFormat(" AND TradeType = {0}", (int) query.TradeType);
+            }
+            return builder.ToString();
+        }
+
+        private static string BuildBalanceDrawRequestQuery(BalanceDrawRequestQuery query)
+        {
+            StringBuilder builder = new StringBuilder();
+            if (query.UserId.HasValue)
+            {
+                builder.AppendFormat(" AND UserId = {0}", query.UserId.Value);
+            }
+            if (!string.IsNullOrEmpty(query.UserName))
+            {
+                builder.AppendFormat(" AND UserName='{0}'", DataHelper.CleanSearchString(query.UserName));
+            }
+            if (query.FromDate.HasValue)
+            {
+                builder.AppendFormat(" AND RequestTime >= '{0}'", DataHelper.GetSafeDateTimeFormat(query.FromDate.Value));
+            }
+            if (query.ToDate.HasValue)
+            {
+                builder.AppendFormat(" AND RequestTime <= '{0}'", DataHelper.GetSafeDateTimeFormat(query.ToDate.Value));
+            }
+            return builder.ToString();
+        }
+
+        public override bool CreateMemberGrade(MemberGradeInfo memberGrade)
+        {
+            string query = string.Empty;
+            if (memberGrade.IsDefault)
+            {
+                query = query + "UPDATE aspnet_MemberGrades SET IsDefault = 0";
+            }
+            query = query + " INSERT INTO aspnet_MemberGrades ([Name], Description, Points, IsDefault, Discount) VALUES (@Name, @Description, @Points, @IsDefault, @Discount)";
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(query);
+            this.database.AddInParameter(sqlStringCommand, "Name", DbType.String, memberGrade.Name);
+            this.database.AddInParameter(sqlStringCommand, "Description", DbType.String, memberGrade.Description);
+            this.database.AddInParameter(sqlStringCommand, "Points", DbType.Int32, memberGrade.Points);
+            this.database.AddInParameter(sqlStringCommand, "IsDefault", DbType.Boolean, memberGrade.IsDefault);
+            this.database.AddInParameter(sqlStringCommand, "Discount", DbType.Int32, memberGrade.Discount);
+            return (this.database.ExecuteNonQuery(sqlStringCommand) > 0);
+        }
+
+        public override bool DealBalanceDrawRequest(int userId, bool agree)
+        {
+            DbCommand storedProcCommand = this.database.GetStoredProcCommand("cp_BalanceDrawRequest_Update");
+            this.database.AddOutParameter(storedProcCommand, "Status", DbType.Int32, 4);
+            this.database.AddInParameter(storedProcCommand, "UserId", DbType.Int32, userId);
+            this.database.AddInParameter(storedProcCommand, "Agree", DbType.Boolean, agree);
+            this.database.ExecuteNonQuery(storedProcCommand);
+            object parameterValue = this.database.GetParameterValue(storedProcCommand, "Status");
+            if ((parameterValue == DBNull.Value) || (parameterValue == null))
+            {
+                return false;
+            }
+            return (((int) this.database.GetParameterValue(storedProcCommand, "Status")) == 0);
+        }
+
+        public override bool Delete(int userId)
+        {
+            DbCommand storedProcCommand = this.database.GetStoredProcCommand("cp_Member_Delete");
+            Member user = Users.GetUser(userId) as Member;
+            this.database.AddInParameter(storedProcCommand, "UserId", DbType.Int32, userId);
+            this.database.AddInParameter(storedProcCommand, "UserName", DbType.String, user.Username);
+            this.database.AddParameter(storedProcCommand, "ReturnValue", DbType.Int32, ParameterDirection.ReturnValue, string.Empty, DataRowVersion.Default, null);
+            this.database.ExecuteNonQuery(storedProcCommand);
+            object parameterValue = this.database.GetParameterValue(storedProcCommand, "ReturnValue");
+            return (((parameterValue != null) && (parameterValue != DBNull.Value)) && (Convert.ToInt32(parameterValue) == 0));
+        }
+
+        public override bool DeleteMemberGrade(int gradeId)
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("DELETE FROM aspnet_MemberGrades WHERE GradeId = @GradeId AND IsDefault = 0 AND NOT EXISTS(SELECT * FROM aspnet_Members WHERE GradeId = @GradeId)");
+            this.database.AddInParameter(sqlStringCommand, "GradeId", DbType.Int32, gradeId);
+            return (this.database.ExecuteNonQuery(sqlStringCommand) > 0);
+        }
+
+        public override DbQueryResult GetBalanceDetails(BalanceDetailQuery query)
+        {
+            if (null == query)
+            {
+                return new DbQueryResult();
+            }
+            DbQueryResult result = new DbQueryResult();
+            StringBuilder builder = new StringBuilder();
+            string str = BuildBalanceDetailsQuery(query);
+            builder.AppendFormat("SELECT TOP {0} *", query.PageSize);
+            builder.Append(" FROM Hishop_BalanceDetails B where 0=0 ");
+            if (query.PageIndex == 1)
+            {
+                builder.AppendFormat("{0} ORDER BY JournalNumber DESC", str);
+            }
+            else
+            {
+                builder.AppendFormat(" and JournalNumber < (select min(JournalNumber) from (select top {0} JournalNumber from Hishop_BalanceDetails where 0=0 {1} ORDER BY JournalNumber DESC ) as tbltemp) {1} ORDER BY JournalNumber DESC", (query.PageIndex - 1) * query.PageSize, str);
+            }
+            if (query.IsCount)
+            {
+                builder.AppendFormat(";select count(JournalNumber) as Total from Hishop_BalanceDetails where 0=0 {0}", str);
+            }
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                result.Data = DataHelper.ConverDataReaderToDataTable(reader);
+                if (query.IsCount && reader.NextResult())
+                {
+                    reader.Read();
+                    result.TotalRecords = reader.GetInt32(0);
+                }
+            }
+            return result;
+        }
+
+        public override DbQueryResult GetBalanceDetailsNoPage(BalanceDetailQuery query)
+        {
+            DbQueryResult result = new DbQueryResult();
+            StringBuilder builder = new StringBuilder();
+            string str = BuildBalanceDetailsQuery(query);
+            builder.Append("SELECT * FROM Hishop_BalanceDetails WHERE 0=0 ");
+            builder.AppendFormat("{0} ORDER BY JournalNumber DESC", str);
+            if (query.IsCount)
+            {
+                builder.AppendFormat(";select count(JournalNumber) as Total from Hishop_BalanceDetails where 0=0 {0}", str);
+            }
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                result.Data = DataHelper.ConverDataReaderToDataTable(reader);
+                if (query.IsCount && reader.NextResult())
+                {
+                    reader.Read();
+                    result.TotalRecords = reader.GetInt32(0);
+                }
+            }
+            return result;
+        }
+
+        public override DbQueryResult GetBalanceDrawRequests(BalanceDrawRequestQuery query)
+        {
+            if (null == query)
+            {
+                return new DbQueryResult();
+            }
+            DbQueryResult result = new DbQueryResult();
+            StringBuilder builder = new StringBuilder();
+            string str = BuildBalanceDrawRequestQuery(query);
+            builder.AppendFormat("select top {0} *", query.PageSize);
+            builder.Append(" from Hishop_BalanceDrawRequest B where 0=0 ");
+            if (query.PageIndex == 1)
+            {
+                builder.AppendFormat("{0} ORDER BY RequestTime DESC", str);
+            }
+            else
+            {
+                builder.AppendFormat(" and RequestTime < (select min(RequestTime) from (select top {0} RequestTime from Hishop_BalanceDrawRequest where 0=0 {1} ORDER BY RequestTime DESC ) as tbltemp) {1} ORDER BY RequestTime DESC", (query.PageIndex - 1) * query.PageSize, str);
+            }
+            if (query.IsCount)
+            {
+                builder.AppendFormat(";select count(*) as Total from Hishop_BalanceDrawRequest where 0=0 {0}", str);
+            }
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                result.Data = DataHelper.ConverDataReaderToDataTable(reader);
+                if (query.IsCount && reader.NextResult())
+                {
+                    reader.Read();
+                    result.TotalRecords = reader.GetInt32(0);
+                }
+            }
+            return result;
+        }
+
+        public override DbQueryResult GetBalanceDrawRequestsNoPage(BalanceDrawRequestQuery query)
+        {
+            if (null == query)
+            {
+                return new DbQueryResult();
+            }
+            DbQueryResult result = new DbQueryResult();
+            StringBuilder builder = new StringBuilder();
+            string str = BuildBalanceDrawRequestQuery(query);
+            builder.Append("select *");
+            builder.Append(" from Hishop_BalanceDrawRequest B where 0=0 ");
+            builder.AppendFormat("{0} ORDER BY RequestTime DESC", str);
+            if (query.IsCount)
+            {
+                builder.AppendFormat(";select count(*) as Total from Hishop_BalanceDrawRequest where 0=0 {0}", str);
+            }
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                result.Data = DataHelper.ConverDataReaderToDataTable(reader);
+                if (query.IsCount && reader.NextResult())
+                {
+                    reader.Read();
+                    result.TotalRecords = reader.GetInt32(0);
+                }
+            }
+            return result;
+        }
+
+        public override DbQueryResult GetMemberBlanceList(MemberQuery query)
+        {
+            if (null == query)
+            {
+                return new DbQueryResult();
+            }
+            DbQueryResult result = new DbQueryResult();
+            StringBuilder builder = new StringBuilder();
+            string str = string.Empty;
+            if (!string.IsNullOrEmpty(query.Username))
+            {
+                str = string.Format("AND UserId IN (SELECT UserId FROM vw_aspnet_Members WHERE UserName LIKE '%{0}%')", DataHelper.CleanSearchString(query.Username));
+            }
+            if (!string.IsNullOrEmpty(query.Realname))
+            {
+                str = str + string.Format(" AND RealName LIKE '%{0}%'", DataHelper.CleanSearchString(query.Realname));
+            }
+            builder.AppendFormat("SELECT TOP {0} *", query.PageSize);
+            builder.Append(" FROM vw_aspnet_Members WHERE 0=0");
+            if (query.PageIndex == 1)
+            {
+                builder.AppendFormat("{0} ORDER BY CreateDate DESC", str);
+            }
+            else
+            {
+                builder.AppendFormat("AND CreateDate < (select min(CreateDate) FROM (SELECT TOP {0} CreateDate FROM vw_aspnet_Members WHERE 0=0 {1} ORDER BY CreateDate DESC ) AS tbltemp) {1} ORDER BY CreateDate DESC", (query.PageIndex - 1) * query.PageSize, str);
+            }
+            if (query.IsCount)
+            {
+                builder.AppendFormat(";SELECT COUNT(CreateDate) AS Total FROM vw_aspnet_Members WHERE 0=0 {0}", str);
+            }
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                result.Data = DataHelper.ConverDataReaderToDataTable(reader);
+                if (query.IsCount && reader.NextResult())
+                {
+                    reader.Read();
+                    result.TotalRecords = reader.GetInt32(0);
+                }
+            }
+            return result;
+        }
+
+        public override Dictionary<int, MemberClientSet> GetMemberClientSet()
+        {
+            Dictionary<int, MemberClientSet> dictionary = new Dictionary<int, MemberClientSet>();
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("SELECT * FROM Hishop_MemberClientSet");
+            MemberClientSet set = null;
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                while (reader.Read())
+                {
+                    set = DataMapper.PopulateMemberClientSet(reader);
+                    dictionary.Add(set.ClientTypeId, set);
+                }
+            }
+            return dictionary;
+        }
+
+        public override MemberGradeInfo GetMemberGrade(int gradeId)
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("SELECT * FROM aspnet_MemberGrades WHERE GradeId = @GradeId");
+            this.database.AddInParameter(sqlStringCommand, "GradeId", DbType.Int32, gradeId);
+            MemberGradeInfo info = null;
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                if (reader.Read())
+                {
+                    info = DataMapper.PopulateMemberGrade(reader);
+                }
+            }
+            return info;
+        }
+
+        public override IList<MemberGradeInfo> GetMemberGrades()
+        {
+            try
+            {
+                DbCommand sqlStringCommand = this.database.GetSqlStringCommand("SELECT * FROM aspnet_MemberGrades");
+                IList<MemberGradeInfo> list = new List<MemberGradeInfo>();
+                using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(DataMapper.PopulateMemberGrade(reader));
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                log.blog = true;
+                log.GetInstance().writeLog("GetMemberGrades::" + ex.Message);
+            }
+            return null;
+        }
+
+        public override DbQueryResult GetMembers(MemberQuery query)
+        {
+            object obj2;
+            StringBuilder builder = new StringBuilder();
+            if (query.GradeId.HasValue)
+            {
+                builder.AppendFormat("GradeId = {0}", query.GradeId.Value);
+            }
+            if (query.IsApproved!=null)
+            {
+                if (builder.Length > 0)
+                {
+                    builder.Append(" AND ");
+                }
+                builder.AppendFormat("IsApproved = '{0}'", query.IsApproved);
+            }
+            if (!string.IsNullOrEmpty(query.Username))
+            {
+                if (builder.Length > 0)
+                {
+                    builder.Append(" AND ");
+                }
+                builder.AppendFormat("UserName LIKE '%{0}%'", DataHelper.CleanSearchString(query.Username));
+            }
+            if (!string.IsNullOrEmpty(query.Realname))
+            {
+                if (builder.Length > 0)
+                {
+                    builder.AppendFormat(" AND ", new object[0]);
+                }
+                builder.AppendFormat("RealName LIKE '%{0}%'", DataHelper.CleanSearchString(query.Realname));
+            }
+            string str = "";
+            if (!string.IsNullOrEmpty(query.ClientType))
+            {
+                string clientType = query.ClientType;
+                if (clientType == null)
+                {
+                    goto Label_04C9;
+                }
+                if (!(clientType == "new"))
+                {
+                    if (clientType == "activy")
+                    {
+                        str = "SELECT UserId FROM Hishop_Orders WHERE 1=1";
+                        if (query.OrderNumber.HasValue)
+                        {
+                            obj2 = str;
+                            obj2 = string.Concat(new object[] { obj2, " AND datediff(dd,OrderDate,'", query.StartTime.Value.Date, "')<=0" });
+                            obj2 = string.Concat(new object[] { obj2, " AND datediff(dd,OrderDate,'", query.EndTime.Value.Date, "')>=0" });
+                            str = string.Concat(new object[] { obj2, " GROUP BY UserId HAVING COUNT(*)", query.CharSymbol, query.OrderNumber.Value });
+                        }
+                        if (query.OrderMoney.HasValue)
+                        {
+                            obj2 = str;
+                            obj2 = string.Concat(new object[] { obj2, " AND datediff(dd,OrderDate,'", query.StartTime.Value.Date, "')<=0" });
+                            obj2 = string.Concat(new object[] { obj2, " AND datediff(dd,OrderDate,'", query.EndTime.Value.Date, "')>=0" });
+                            str = string.Concat(new object[] { obj2, " GROUP BY UserId HAVING SUM(OrderTotal)", query.CharSymbol, query.OrderMoney.Value });
+                        }
+                        if (builder.Length > 0)
+                        {
+                            builder.AppendFormat(" AND ", new object[0]);
+                        }
+                        builder.AppendFormat("UserId IN (" + str + ")", new object[0]);
+                        goto Label_05B7;
+                    }
+                    goto Label_04C9;
+                }
+                str = "SElECT UserId FROM aspnet_Users WHERE 1=1";
+                if (query.StartTime.HasValue)
+                {
+                    obj2 = str;
+                    str = string.Concat(new object[] { obj2, " AND datediff(dd,CreateDate,'", query.StartTime.Value.Date, "')<=0" });
+                }
+                if (query.EndTime.HasValue)
+                {
+                    obj2 = str;
+                    str = string.Concat(new object[] { obj2, " AND datediff(dd,CreateDate,'", query.EndTime.Value.Date, "')>=0" });
+                }
+                if (builder.Length > 0)
+                {
+                    builder.AppendFormat(" AND ", new object[0]);
+                }
+                builder.Append("UserId IN (" + str + ")");
+            }
+            goto Label_05B7;
+        Label_04C9:
+            str = "SELECT UserId FROM Hishop_Orders WHERE 1=1";
+            obj2 = str;
+            obj2 = string.Concat(new object[] { obj2, " AND datediff(dd,OrderDate,'", query.StartTime.Value.Date, "')<=0" });
+            str = string.Concat(new object[] { obj2, " AND datediff(dd,OrderDate,'", query.EndTime.Value.Date, "')>=0" }) + " GROUP BY UserId";
+            if (builder.Length > 0)
+            {
+                builder.AppendFormat(" AND ", new object[0]);
+            }
+            builder.AppendFormat("UserId NOT IN (" + str + ")", new object[0]);
+        Label_05B7:
+            return DataHelper.PagingByRownumber(query.PageIndex, query.PageSize, query.SortBy, query.SortOrder, query.IsCount, "vw_aspnet_Members", "UserId", (builder.Length > 0) ? builder.ToString() : "UserRole=3", "*");
+        }
+
+        public override DataTable GetMembersNopage(MemberQuery query, IList<string> fields)
+        {
+            if (fields.Count == 0)
+            {
+                return null;
+            }
+            DataTable table = null;
+            string str = string.Empty;
+            foreach (string str2 in fields)
+            {
+                str = str + str2 + ",";
+            }
+            str = str.Substring(0, str.Length - 1);
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat("SELECT {0} FROM vw_aspnet_Members WHERE 1=1 ", str);
+            if (!string.IsNullOrEmpty(query.Username))
+            {
+                builder.AppendFormat(" AND UserName LIKE '%{0}%'", query.Username);
+            }
+            if (query.GradeId.HasValue)
+            {
+                builder.AppendFormat(" AND GradeId={0}", query.GradeId);
+            }
+            if (!string.IsNullOrEmpty(query.Realname))
+            {
+                builder.AppendFormat(" AND Realname LIKE '%{0}%'", query.Realname);
+            }
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                table = DataHelper.ConverDataReaderToDataTable(reader);
+                reader.Close();
+            }
+            return table;
+        }
+
+        public override bool HasSamePointMemberGrade(MemberGradeInfo memberGrade)
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("SELECT COUNT(GradeId) as Count FROM aspnet_MemberGrades WHERE Points=@Points AND GradeId<>@GradeId;");
+            this.database.AddInParameter(sqlStringCommand, "Points", DbType.Int32, memberGrade.Points);
+            this.database.AddInParameter(sqlStringCommand, "GradeId", DbType.Int32, memberGrade.GradeId);
+            return (((int) this.database.ExecuteScalar(sqlStringCommand)) > 0);
+        }
+
+        public override bool InsertBalanceDetail(BalanceDetailInfo balanceDetails)
+        {
+            if (null == balanceDetails)
+            {
+                return false;
+            }
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("INSERT INTO Hishop_BalanceDetails (UserId, UserName, TradeDate, TradeType, Income, Expenses, Balance, Remark) VALUES(@UserId, @UserName, @TradeDate, @TradeType, @Income, @Expenses, @Balance, @Remark);");
+            this.database.AddInParameter(sqlStringCommand, "UserId", DbType.Int32, balanceDetails.UserId);
+            this.database.AddInParameter(sqlStringCommand, "UserName", DbType.String, balanceDetails.UserName);
+            this.database.AddInParameter(sqlStringCommand, "TradeDate", DbType.DateTime, balanceDetails.TradeDate);
+            this.database.AddInParameter(sqlStringCommand, "TradeType", DbType.Int32, (int) balanceDetails.TradeType);
+            this.database.AddInParameter(sqlStringCommand, "Income", DbType.Currency, balanceDetails.Income);
+            this.database.AddInParameter(sqlStringCommand, "Expenses", DbType.Currency, balanceDetails.Expenses);
+            this.database.AddInParameter(sqlStringCommand, "Balance", DbType.Currency, balanceDetails.Balance);
+            this.database.AddInParameter(sqlStringCommand, "Remark", DbType.String, balanceDetails.Remark);
+            return (this.database.ExecuteNonQuery(sqlStringCommand) > 0);
+        }
+
+        public override bool InsertClientSet(Dictionary<int, MemberClientSet> clientsets)
+        {
+            StringBuilder builder = new StringBuilder("DELETE FROM  [Hishop_MemberClientSet];");
+            foreach (KeyValuePair<int, MemberClientSet> pair in clientsets)
+            {
+                string str = "";
+                string str2 = "";
+                if (pair.Value.StartTime.HasValue)
+                {
+                    str = pair.Value.StartTime.Value.ToString("yyyy-MM-dd");
+                }
+                if (pair.Value.EndTime.HasValue)
+                {
+                    str2 = pair.Value.EndTime.Value.ToString("yyyy-MM-dd");
+                }
+                builder.AppendFormat(string.Concat(new object[] { "INSERT INTO Hishop_MemberClientSet(ClientTypeId,StartTime,EndTime,LastDay,ClientChar,ClientValue) VALUES (", pair.Key, ",'", str, "','", str2, "',", pair.Value.LastDay, ",'", pair.Value.ClientChar, "',", pair.Value.ClientValue, ");" }), new object[0]);
+            }
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+            return (this.database.ExecuteNonQuery(sqlStringCommand) > 0);
+        }
+
+        public override void SetDefalutMemberGrade(int gradeId)
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("UPDATE aspnet_MemberGrades SET IsDefault = 0;UPDATE aspnet_MemberGrades SET IsDefault = 1 WHERE GradeId = @GradeId");
+            this.database.AddInParameter(sqlStringCommand, "GradeId", DbType.Int32, gradeId);
+            this.database.ExecuteNonQuery(sqlStringCommand);
+        }
+
+        public override bool UpdateMemberGrade(MemberGradeInfo memberGrade)
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("UPDATE aspnet_MemberGrades SET [Name] = @Name, Description = @Description, Points = @Points, Discount = @Discount WHERE GradeId = @GradeId");
+            this.database.AddInParameter(sqlStringCommand, "Name", DbType.String, memberGrade.Name);
+            this.database.AddInParameter(sqlStringCommand, "Description", DbType.String, memberGrade.Description);
+            this.database.AddInParameter(sqlStringCommand, "Points", DbType.Int32, memberGrade.Points);
+            this.database.AddInParameter(sqlStringCommand, "Discount", DbType.Int32, memberGrade.Discount);
+            this.database.AddInParameter(sqlStringCommand, "GradeId", DbType.Int32, memberGrade.GradeId);
+            return (this.database.ExecuteNonQuery(sqlStringCommand) > 0);
+        }
+        /*积分等级与积分的匹配约束*/
+        public override void CheckMemberGrade()
+        {
+            DbCommand sqlStringCommand1 = this.database.GetSqlStringCommand("update aspnet_Members set GradeId=1 where Points<(select aspnet_MemberGrades.Points from aspnet_MemberGrades where aspnet_MemberGrades.GradeId=2)");
+            DbCommand sqlStringCommand2 = this.database.GetSqlStringCommand("update aspnet_Members set GradeId=2 where (Points<(select aspnet_MemberGrades.Points from aspnet_MemberGrades where aspnet_MemberGrades.GradeId=3) and Points>=(select aspnet_MemberGrades.Points from aspnet_MemberGrades where aspnet_MemberGrades.GradeId=2))");
+            DbCommand sqlStringCommand3 = this.database.GetSqlStringCommand("update aspnet_Members set GradeId=3 where ( Points>=(select aspnet_MemberGrades.Points from aspnet_MemberGrades where aspnet_MemberGrades.GradeId=3))");
+            this.database.ExecuteNonQuery(sqlStringCommand1);
+            this.database.ExecuteNonQuery(sqlStringCommand2);
+            this.database.ExecuteNonQuery(sqlStringCommand3);
+        }
+
+        public override bool UpdateToChanel(ChanelQuery queryparm)
+        {
+            string query = string.Empty;
+            query += "update aspnet_Users set UserRole=6 where UserId=@UserId;";
+            query += "INSERT INTO Hishop_Channel (UserID, Province, City, Country, Region, DistributorRate, SupplierRate,ServiceRate,ParentID,RequestCode,CreatedDate) VALUES(@cUserId, @Province, @City, @Country, @Region, @DistributorRate, @SupplierRate, @ServiceRate,@ParentID,@RequestCode,@CreatedDate)";
+            query += " insert into aspnet_UsersInRoles (userid,RoleId) values (@ruserid,(select RoleId from aspnet_Roles where RoleName=@rolename));";
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(query);
+            //DbCommand sqlStringCommand2 = this.database.GetSqlStringCommand("INSERT INTO Hishop_Channel (UserID, Province, City, Country, Region, DistributorRate, SupplierRate,ServiceRate,ParentID,RequestCode,CreatedDate) VALUES(@UserId, @Province, @City, @Country, @Region, @DistributorRate, @SupplierRate, @ServiceRate,@ParentID,@RequestCode,@CreatedDate);");
+            this.database.AddInParameter(sqlStringCommand, "cUserId", DbType.Int32, queryparm.UserID);
+            this.database.AddInParameter(sqlStringCommand, "UserId", DbType.Int32, queryparm.UserID);
+            this.database.AddInParameter(sqlStringCommand, "Province", DbType.String, queryparm.Province);
+            this.database.AddInParameter(sqlStringCommand, "City", DbType.String, queryparm.City);
+            this.database.AddInParameter(sqlStringCommand, "Country", DbType.String, queryparm.Country);
+            this.database.AddInParameter(sqlStringCommand, "Region", DbType.String, queryparm.Region);
+            this.database.AddInParameter(sqlStringCommand, "DistributorRate", DbType.Decimal, queryparm.DistributorRate);
+            this.database.AddInParameter(sqlStringCommand, "SupplierRate", DbType.Decimal, queryparm.SupplierRate);
+            this.database.AddInParameter(sqlStringCommand, "ServiceRate", DbType.Decimal, queryparm.ServiceRate);
+            this.database.AddInParameter(sqlStringCommand, "ParentID", DbType.Decimal, queryparm.ParentID);
+            this.database.AddInParameter(sqlStringCommand, "RequestCode", DbType.String, queryparm.RequertCode);
+            this.database.AddInParameter(sqlStringCommand, "CreatedDate", DbType.DateTime, queryparm.CreatedDate);
+            this.database.AddInParameter(sqlStringCommand, "ruserid", DbType.Int32, queryparm.UserID);
+            this.database.AddInParameter(sqlStringCommand, "rolename", DbType.String, queryparm.UserRole);
+            return (this.database.ExecuteNonQuery(sqlStringCommand)>0);
+
+        }
+
+        public override string QueryRequestCode()
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("SELECT Top 1   * FROM  Hishop_Channel order by RequestCode desc");
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                if (reader.Read())
+                {
+                    if (reader["RequestCode"] != DBNull.Value)
+                    {
+                        return Convert.ToString( reader["RequestCode"]);
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+                }
+                reader.Close();
+                return string.Empty;
+            }
+            
+        }
+
+        public override DbQueryResult QueryChanels(ChanelQueryParm query)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat(" UserName LIKE '%{0}%'", query.UserName);
+            if(query.UserID.HasValue)
+            {
+                builder.AppendFormat("AND( UserID = {0} OR ParentID={0})", query.UserID);
+            }
+            if (!string.IsNullOrEmpty(query.RealName))
+            {
+                builder.AppendFormat("AND RealName LIKE '%{0}%'", query.RealName);
+            }
+            if(!string.IsNullOrEmpty(query.Country))
+            {
+                builder.AppendFormat("AND Country LIKE '%{0}%'", query.Country);
+            }
+            if (!string.IsNullOrEmpty(query.City))
+            {
+                builder.AppendFormat("AND City LIKE '%{0}%'", query.City);
+            }
+            if (!string.IsNullOrEmpty(query.Province))
+            {
+                builder.AppendFormat("AND Province LIKE '%{0}%'", query.Province);
+            }
+            if (!string.IsNullOrEmpty(query.Region))
+            {
+                builder.AppendFormat("AND Region LIKE '%{0}%'", query.Region);
+            }
+            if (!string.IsNullOrEmpty(query.RequertCode))
+            {
+                builder.AppendFormat("AND RequestCode LIKE '%{0}%'", query.RequertCode);
+            }
+            return DataHelper.PagingByRownumber(query.PageIndex, query.PageSize, query.SortBy, query.SortOrder, query.IsCount, "vw_aspnet_Chanels", "UserId", (builder.Length > 0) ? builder.ToString() : null, "*");
+
+        }
+
+        public override IList<ChanelQuery> GetChanels()
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("SELECT * FROM vw_aspnet_Chanels");
+            IList<ChanelQuery> list = new List<ChanelQuery>();
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                ChanelQuery item = null;
+                while (reader.Read())
+                {
+                    item = new ChanelQuery
+                    {
+                        UserID = (int)reader["UserID"],
+                        UserName = (string)reader["UserName"]
+                    };
+                    list.Add(item);
+                }
+            }
+            return list;
+        }
+        public override DataTable GetChannels()
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("SELECT * FROM vw_aspnet_Chanels");
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                return DataHelper.ConverDataReaderToDataTable(reader);
+            }
+        }
+
+        public override IList<ChanelQuery> GetChanelsDrop()
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("SELECT * FROM Hishop_ChannelRpt");
+            IList<ChanelQuery> list = new List<ChanelQuery>();
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                ChanelQuery item = null;
+                while (reader.Read())
+                {
+                    item = new ChanelQuery
+                    {
+                        UserID = (int)reader["UserID"],
+                        UserName = (string)reader["ChannelName"]
+                    };
+                    list.Add(item);
+                }
+            }
+            return list;
+        }
+
+        public override DataTable GetChannelRptByChance(string dropStr, string strtime, string endtime)
+        {
+
+            StringBuilder builder = new StringBuilder("select * from Hishop_ChannelRpt where 1=1");
+            
+            if (!string.IsNullOrEmpty(dropStr))
+            {
+                builder.Append(" AND UserID = @dropId ");
+                
+            }
+            //builder.Append(" and DATEDIFF([day], CreateDate ,@EndTime)>=0 and DATEDIFF([day],@StartTime, CreateDate)>=0 ");
+            builder.Append(" and Convert(varchar(10),CreateDate,120) between Convert(varchar(10),@sDate,120) and convert(varchar(10),@eDate ,120) ");
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+            if (!string.IsNullOrEmpty(dropStr))
+            {
+                this.database.AddInParameter(sqlStringCommand, "dropId", DbType.Int32, dropStr);
+            }
+            
+            this.database.AddInParameter(sqlStringCommand, "eDate", DbType.DateTime, endtime);
+            this.database.AddInParameter(sqlStringCommand, "sDate", DbType.DateTime, strtime);
+            
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                return DataHelper.ConverDataReaderToDataTable(reader);
+            }
+
+        }
+
+        public override DataTable GetChannelStatistics(ChanelQueryParm Query)
+        {
+            StringBuilder builder = new StringBuilder();
+            if (Query.UserID.HasValue && Query.UserID == -3)
+            {
+                builder.AppendFormat("select * from Hishop_ChannelRpt where UserID <>'{0}' and UserId IN (select UserID from Hishop_Channel where ParentID = '{0}')", (int)Query.ChannelID);
+            }
+            else if (Query.UserID.HasValue && Query.UserID == -2)
+            {
+                builder.AppendFormat("select * from Hishop_ChannelRpt where (UserID ='{0}' or UserId IN (select UserID from Hishop_Channel where ParentID = '{0}'))", (int)Query.ChannelID);
+            }
+            else if (Query.UserID.HasValue && Query.UserID == -1)
+            {
+                builder.AppendFormat("select * from Hishop_ChannelRpt where UserID ='{0}'", (int)Query.ChannelID);
+            }
+            else if (Query.UserID.HasValue && Query.UserID == 0)
+            {
+                builder.AppendFormat("select * from Hishop_ChannelRpt where 1=1");
+            }
+
+            else if(Query.UserID.HasValue && Query.UserID.Value > 0)
+            {
+                builder.AppendFormat("select * from Hishop_ChannelRpt where UserID = '{0}'", (int)Query.UserID);
+            }
+            //if (Query.StartDate.HasValue)
+            //{
+            //    builder.AppendFormat("AND Convert(varchar(10),CreateDate,120) >='{0}'", DataHelper.GetSafeDateTimeFormat(Query.StartDate.Value));
+            //}
+            //if(Query.EndDate.HasValue)
+            //{
+            //    builder.AppendFormat("AND Convert(varchar(10),CreateDate,120) <='{0}'", DataHelper.GetSafeDateTimeFormat(Query.EndDate.Value));
+            //}
+            DateTime strtime = Query.StartDate.HasValue? Query.StartDate.Value : DateTime.Parse("1/1/1753 12:00:00");
+            DateTime endtime = Query.EndDate.HasValue ? Query.EndDate.Value : DateTime.Parse("12/31/9999 11:59:59");
+            //builder.AppendFormat("AND Convert(varchar(10),CreateDate,120) between Convert(varchar(10),'{0}',120) and convert(varchar(10),'{1}' ,120)",sDate, eDate);
+            builder.Append(" and Convert(varchar(10),CreateDate,120) between Convert(varchar(10),@sDate,120) and convert(varchar(10),@eDate ,120) ");
+            
+            builder.AppendFormat("order by CreateDate desc", new object[0]);
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+            this.database.AddInParameter(sqlStringCommand, "eDate", DbType.DateTime, endtime);
+            this.database.AddInParameter(sqlStringCommand, "sDate", DbType.DateTime, strtime);
+            using(IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                return DataHelper.ConverDataReaderToDataTable(reader);
+            }
+            
+        }
+        public override DataTable GetChannelByRoleId(int RoleId)
+        {
+            StringBuilder builder = new StringBuilder();
+            if (RoleId > 0)
+            {
+                builder.AppendFormat("select * from vw_aspnet_Chanels where UserID<>'{0}' and UserId IN (select UserID from vw_aspnet_Chanels where ParentID = '{0}')", (int)RoleId);
+            }
+            else
+                builder.AppendFormat("select * from vw_aspnet_Chanels where 1=1");
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                return DataHelper.ConverDataReaderToDataTable(reader);
+            }
+        }
+
+        public override DataTable GetChannelById(int userid)
+        {
+            StringBuilder builder = new StringBuilder();
+            if (userid > 0)
+            {
+                builder.AppendFormat("select * from vw_aspnet_Chanels where UserID = '{0}' or UserId IN (select UserID from vw_aspnet_Chanels where ParentID = '{0}')", (int)userid);
+            }
+            else
+                builder.AppendFormat("select * from vw_aspnet_Chanels where 1=1");
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                return DataHelper.ConverDataReaderToDataTable(reader);
+            }
+        }
+        public override DataTable GetChannelStatiByMonth(int UserId)
+        {
+            StringBuilder builder = new StringBuilder();
+            if (UserId > 0)
+            {
+                builder.AppendFormat("select ChannelName,sum(ServiceRegCount) as ServiceRegCount,sum(QuanCount) as QuanCount,sum(SendCount) as SendCount,sum(SubContriEarnings) as SubContriEarnings,sum(SubEarnings) as SubEarnings,sum(EarningTotal) as EarningTotal from Hishop_ChannelRpt where UserID = '{0}' and Convert(varchar(7),CreateDate,120)= Convert(varchar(7),GETDATE(),120) group by ChannelName", UserId);
+            }
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                return DataHelper.ConverDataReaderToDataTable(reader);
+            }
+        }
+        public override DataTable GetChannelRpt()
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("select * from Hishop_ChannelRpt where 1=1");
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                return DataHelper.ConverDataReaderToDataTable(reader);
+            }
+        }
+        public override DataTable GetServiceByChannelID(int userid, DateTime strtime, DateTime endtime)
+        {
+            DbCommand storedProcCommand = this.database.GetStoredProcCommand("P_S_GetServiceByChannelID");
+            this.database.AddInParameter(storedProcCommand, "ChannelID", DbType.Int32, userid);
+            this.database.AddInParameter(storedProcCommand, "sDate", DbType.DateTime, strtime);
+            this.database.AddInParameter(storedProcCommand, "eDate", DbType.DateTime, endtime);
+
+            using (IDataReader reader = this.database.ExecuteReader(storedProcCommand))
+            {
+                return DataHelper.ConverDataReaderToDataTable(reader);
+            }
+        }
+<<<<<<< HEAD
+        public override DataTable GetServiceYiQuan(int userid,DateTime strtime, DateTime endtime)
+=======
+        public override DataTable GetServiceYiQuan(int userid, string strtime, string endtime)
+>>>>>>> a71b8562511ebca809b95bb135117b066f5fcad1
+        {
+            DbCommand storedProcCommand = this.database.GetStoredProcCommand("P_S_GetServiceYiQuan");
+            this.database.AddInParameter(storedProcCommand, "UserID", DbType.Int32, userid);
+            this.database.AddInParameter(storedProcCommand, "sDate", DbType.DateTime, strtime);
+            this.database.AddInParameter(storedProcCommand, "eDate", DbType.DateTime, endtime);
+            using (IDataReader reader = this.database.ExecuteReader(storedProcCommand))
+            {
+                return DataHelper.ConverDataReaderToDataTable(reader);
+            }
+        }
+        public override ChanelQuery GetChanel(int userid)
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(" SELECT  * FROM  dbo.vw_aspnet_Chanels  where  UserID=@UserId;");
+            this.database.AddInParameter(sqlStringCommand, "UserId", DbType.Int32, userid);
+            ChanelQuery result = new ChanelQuery();
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                
+                if (reader.Read())
+                {
+                    result.UserID=userid;
+                    if (reader["Province"] != DBNull.Value)
+                    {
+                        result.Province = (string)reader["Province"];
+                    }
+                    if (reader["City"] != DBNull.Value)
+                    {
+                        result.City = (string)reader["City"];
+                    }
+                    if (reader["Country"] != DBNull.Value)
+                    {
+                        result.Country = (string)reader["Country"];
+                    }
+                    if (reader["Region"] != DBNull.Value)
+                    {
+                        result.Region = (string)reader["Region"];
+                    }
+                    if (reader["RequestCode"] != DBNull.Value)
+                    {
+                        result.RequertCode = (string)reader["RequestCode"];
+                    }
+                    if (reader["ServiceRate"] != DBNull.Value)
+                    {
+                        result.ServiceRate = (int?)reader["ServiceRate"];
+                    }
+                    if (reader["SupplierRate"] != DBNull.Value)
+                    {
+                        result.SupplierRate = (int?)reader["SupplierRate"];
+
+                    }
+                    if (reader["DistributorRate"] != DBNull.Value)
+                    {
+                        result.DistributorRate = (int?)reader["DistributorRate"];
+                    }
+                    if (reader["CreatedDate"] != DBNull.Value)
+                    {
+                        result.CreatedDate = (DateTime?)reader["CreatedDate"];
+                    }
+                    if (reader["UserName"] != DBNull.Value)
+                    {
+                        result.UserName = (string)reader["UserName"];
+                    }
+                    if (reader["RealName"] != DBNull.Value)
+                    {
+                        result.RealName = (string)reader["RealName"];
+                    }
+                    if (reader["Indate"] != DBNull.Value)
+                    {
+                        result.Indate = (DateTime?)reader["Indate"];
+                    }
+                    if (reader["Outdate"] != DBNull.Value)
+                    {
+                        result.Outdate = (DateTime?)reader["Outdate"];
+                    }
+                    if (reader["ParentID"]!=DBNull.Value)
+                    {
+                        result.ParentID=(int?)reader["ParentID"];
+                    }
+                }
+                reader.Close();
+            }
+            return result;
+        }
+
+        public override bool CheckChanelExist(string reqcode)
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("select COUNT(*) AS Total from Hishop_Channel where RequestCode=@ReqCode;");
+            this.database.AddInParameter(sqlStringCommand, "ReqCode", DbType.String, reqcode);
+            bool flag = false;
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+
+                if (reader.Read())
+                {
+                    if ((reader["Total"] != DBNull.Value) && Convert.ToInt32(reader["Total"])>0) flag = true;
+                    else flag=false;
+                }
+                reader.Close();
+                return flag;
+            }
+        }
+
+        public override bool UpdateChanel(ChanelQuery chanel)
+        {
+            string query = string.Empty;
+            query += "update Hishop_Channel set Province=@Province,City=@City,Country=@Country,Region=@Region,ServiceRate=@ServiceRate,SupplierRate=@SupplierRate,DistributorRate=@DistributorRate,Indate=@Indate,Outdate=@Outdate,ParentID=@ParentID where UserID=@UserID;";
+            
+            
+            if(!string.IsNullOrEmpty(chanel.RealName))
+            {
+                query += "update aspnet_Members set RealName=@RealName where UserId=@UserID;";
+            
+            }
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(query);
+            this.database.AddInParameter(sqlStringCommand, "Province", DbType.String, chanel.Province);
+            this.database.AddInParameter(sqlStringCommand, "City", DbType.String, chanel.City);
+            this.database.AddInParameter(sqlStringCommand, "Country", DbType.String, chanel.Country);
+            this.database.AddInParameter(sqlStringCommand, "Region", DbType.String, chanel.Region);
+            this.database.AddInParameter(sqlStringCommand, "ServiceRate", DbType.Decimal, chanel.ServiceRate);
+            this.database.AddInParameter(sqlStringCommand, "SupplierRate", DbType.Decimal, chanel.SupplierRate);
+            this.database.AddInParameter(sqlStringCommand, "DistributorRate", DbType.Decimal, chanel.DistributorRate);
+            this.database.AddInParameter(sqlStringCommand, "UserID", DbType.Decimal, chanel.UserID);
+            this.database.AddInParameter(sqlStringCommand, "Outdate",DbType.DateTime,chanel.Outdate);
+            this.database.AddInParameter(sqlStringCommand,"Indate",DbType.DateTime,chanel.Indate);
+            this.database.AddInParameter(sqlStringCommand, "ParentID", DbType.Int32, chanel.ParentID);
+            this.database.AddInParameter(sqlStringCommand, "RealName", DbType.String, chanel.RealName);
+            return (this.database.ExecuteNonQuery(sqlStringCommand) > 0);
+        }
+        public override bool IsTheChannelOnly(ChanelQuery chanel)
+        {
+           
+            StringBuilder builder = new StringBuilder("select Count(*) from dbo.vw_aspnet_Chanels  where Province = @Province and City = @City and Country = @Country and UserId <> @UserID");
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+            this.database.AddInParameter(sqlStringCommand,"Province",DbType.String, chanel.Province);
+            this.database.AddInParameter(sqlStringCommand,"City",DbType.String, chanel.City);
+            this.database.AddInParameter(sqlStringCommand,"Country",DbType.String, chanel.Country);
+            this.database.AddInParameter(sqlStringCommand, "UserID", DbType.Decimal, chanel.UserID);
+            return ((int)this.database.ExecuteScalar(sqlStringCommand) == 0);
+
+        }
+        public override bool IsValidationChannel(ChanelQuery query)
+        {
+            StringBuilder builder = new StringBuilder("select * from Hishop_channel  where 1=1");
+
+            if(!string.IsNullOrEmpty(query.Province))
+            {
+                builder.AppendFormat(" and Province = '{0}'", query.Province);
+            }
+            if(!string.IsNullOrEmpty(query.City))
+            {
+                builder.AppendFormat(" and City = '{0}'", query.City);
+            }
+            if(!string.IsNullOrEmpty(query.Country))
+            {
+                builder.AppendFormat(" and Country = '{0}'", query.Country);
+            }
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(builder.ToString());
+            
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                return reader.Read();
+            }
+        }
+
+        public override DbQueryResult QueryUsers(ChanelQueryParm query)
+        {
+            StringBuilder builder = new StringBuilder();           
+            builder.AppendFormat("UserName LIKE '%{0}%'", query.UserName);
+            if(!string.IsNullOrEmpty(query.RealName))
+            {
+                builder.AppendFormat("AND RealName LIKE '%{0}%'", query.RealName);
+            }
+            if(query.UserID.HasValue)
+            {
+                builder.AppendFormat("AND UserID = {0}", query.UserID);
+            }
+            return DataHelper.PagingByRownumber(query.PageIndex, query.PageSize, query.SortBy, query.SortOrder, query.IsCount, "vw_aspnet_Users", "UserId", (builder.Length > 0) ? builder.ToString() : null, "*");
+
+        }
+
+        public override List< ChanelQuery > GetChanelQueryList(int userid)
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("select a.UserID,b.UserName from hishop_channel a join aspnet_Users b on a.UserID=b.UserId  where a.UserID=@UserId or a.ParentID=@UserId;");
+            this.database.AddInParameter(sqlStringCommand, "UserId", DbType.Int32, userid);
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+                List<ChanelQuery> list = new List<ChanelQuery>();
+                while (reader.Read())
+                {
+                    ChanelQuery item=null;
+                    item = new ChanelQuery
+                    {
+                        UserID = (int)reader["UserID"],
+                        UserName = (string)reader["UserName"]
+                    };
+                    list.Add(item);
+                }
+                return list;
+            }
+        }
+
+        public override Member GetUserByUserID(int userid)
+        {
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("select * from vw_aspnet_Users where userid=@UserId;");
+            this.database.AddInParameter(sqlStringCommand, "UserId", DbType.Int32, userid);
+            Member result = new Member(Hidistro.Membership.Core.Enums.UserRole.Member);
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+
+                if (reader.Read())
+                {
+                    result.UserId = userid;
+                    if (reader["RegionId"] != DBNull.Value)
+                    {
+                        result.RegionId = (Int32)reader["RegionId"];
+                    }
+                }
+                reader.Close();
+            }
+            return result;
+        }
+
+        public override bool DeleteChanel(int userid)
+        {
+            string parm = " DELETE FROM dbo.aspnet_UsersInRoles WHERE UserId=@UserId; DELETE FROM dbo.Hishop_Channel WHERE UserID=@UserId;update aspnet_Users set IsApproved=0,UserRole=3 where UserId=@UserId;";
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(parm);
+            this.database.AddInParameter(sqlStringCommand, "UserId", DbType.Int32, userid);
+            return (this.database.ExecuteNonQuery(sqlStringCommand) > 0);
+        }
+
+        /// <summary>
+        /// 审核联盟商户
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public override bool AcceptChanelApplier(ChanelQuery queryparm)
+        {
+            string query = string.Empty;
+            query += "update aspnet_Users set IsApproved=1,UserRole=6 where UserId=@UserId;";
+            query += "INSERT INTO Hishop_Channel (UserID, Province, City, Country, Region, DistributorRate, SupplierRate,ServiceRate,ParentID,RequestCode,CreatedDate) VALUES(@cUserId, @Province, @City, @Country, @Region, @DistributorRate, @SupplierRate, @ServiceRate,@ParentID,@RequestCode,@CreatedDate)";
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(query);
+            //DbCommand sqlStringCommand2 = this.database.GetSqlStringCommand("INSERT INTO Hishop_Channel (UserID, Province, City, Country, Region, DistributorRate, SupplierRate,ServiceRate,ParentID,RequestCode,CreatedDate) VALUES(@UserId, @Province, @City, @Country, @Region, @DistributorRate, @SupplierRate, @ServiceRate,@ParentID,@RequestCode,@CreatedDate);");
+            this.database.AddInParameter(sqlStringCommand, "cUserId", DbType.Int32, queryparm.UserID);
+            this.database.AddInParameter(sqlStringCommand, "UserId", DbType.Int32, queryparm.UserID);
+            this.database.AddInParameter(sqlStringCommand, "Province", DbType.String, queryparm.Province);
+            this.database.AddInParameter(sqlStringCommand, "City", DbType.String, queryparm.City);
+            this.database.AddInParameter(sqlStringCommand, "Country", DbType.String, queryparm.Country);
+            this.database.AddInParameter(sqlStringCommand, "Region", DbType.String, queryparm.Region);
+            this.database.AddInParameter(sqlStringCommand, "DistributorRate", DbType.Decimal, queryparm.DistributorRate);
+            this.database.AddInParameter(sqlStringCommand, "SupplierRate", DbType.Decimal, queryparm.SupplierRate);
+            this.database.AddInParameter(sqlStringCommand, "ServiceRate", DbType.Decimal, queryparm.ServiceRate);
+            this.database.AddInParameter(sqlStringCommand, "ParentID", DbType.Decimal, queryparm.ParentID);
+            this.database.AddInParameter(sqlStringCommand, "RequestCode", DbType.String, queryparm.RequertCode);
+            this.database.AddInParameter(sqlStringCommand, "CreatedDate", DbType.DateTime, queryparm.CreatedDate);
+            return (this.database.ExecuteNonQuery(sqlStringCommand) > 0);
+        }
+
+        public override Supplier CheckSupplierExist(int UserId)
+        {
+            Supplier item=new Supplier();
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand("select t1.SupplierId,t1.BnessCode,t1.BankCode from dbo.Hishop_Suppliers t1,dbo.aspnet_Users t2 where t1.UserId=t2.UserId and t1.UserId=@UserId; ");
+            this.database.AddInParameter(sqlStringCommand, "UserId", DbType.Int32, UserId);
+            using (IDataReader reader = this.database.ExecuteReader(sqlStringCommand))
+            {
+
+                while (reader.Read())
+                {
+                    if (reader["BnessCode"] != null && reader["BnessCode"] != DBNull.Value)
+                        item.BnessCode = (string)reader["BnessCode"];
+                    else
+                    {
+                        item.BnessCode = "";
+                    }
+                    if (reader["BankCode"] != null && reader["BankCode"] != DBNull.Value)
+                        item.BankCode = (string)reader["BankCode"];
+                    else
+                    {
+                        item.BnessCode = "";
+                    }
+                    if (reader["SupplierId"] != null && reader["SupplierId"] != DBNull.Value)
+                        item.SupplierId = reader["SupplierId"].ToString();
+                    else
+                    {
+                        item.SupplierId = "";
+                    }
+                }
+                
+                reader.Close();
+                return item;
+            }
+        }
+
+
+        public override bool AccSpecialDistributor(Member queryparm)
+        {
+            string query = string.Empty;
+            query += "update aspnet_Members set GradeId=@GradeId where UserId=@UserId;UPDATE dbo.aspnet_Users SET IsApproved=1,UserRole=3 WHERE UserId=@UserId";
+            DbCommand sqlStringCommand = this.database.GetSqlStringCommand(query);
+            this.database.AddInParameter(sqlStringCommand, "UserId", DbType.Int32, queryparm.UserId);
+            this.database.AddInParameter(sqlStringCommand, "GradeId", DbType.Int32, queryparm.GradeId);       
+            return (this.database.ExecuteNonQuery(sqlStringCommand) > 0);
+        }
+
+    }
+}
+

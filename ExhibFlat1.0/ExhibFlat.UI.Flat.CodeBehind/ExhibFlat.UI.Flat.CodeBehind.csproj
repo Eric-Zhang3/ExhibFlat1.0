@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectType>local</ProjectType>
+    <ProjectVersion>7.10.377</ProjectVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BDAE11E8-4EB6-4813-BFE4-BFD7831A389B}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <AssemblyName>ExhibFlat.UI.Flat.CodeBehind</AssemblyName>
+    <OutputType>Library</OutputType>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="ASPNET.WebControls, Version=1.0.6.34559, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Hidistro.UI.Web\DLL_Reference\ASPNET.WebControls.dll</HintPath>
+    </Reference>
+    <Reference Include="ASPNET.WebControls2">
+      <HintPath>..\Hidistro.UI.Web\DLL_Reference\ASPNET.WebControls2.dll</HintPath>
+    </Reference>
+    <Reference Include="ExhibFlat.SiteSet">
+      <HintPath>..\Flat.Web\bin\ExhibFlat.SiteSet.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Hidistro.UI.Web\DLL_Reference\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Hidistro.UI.Web\DLL_Reference\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
+    <Compile Include="Default.cs" />
+    <Compile Include="Login.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExhibFlat.ControlPanel.Commodities\ExhibFlat.ControlPanel.Commodities.csproj">
+      <Project>{48788445-b5c5-44a0-ad1f-0b8527af6a12}</Project>
+      <Name>ExhibFlat.ControlPanel.Commodities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExhibFlat.Entities\ExhibFlat.Entities.csproj">
+      <Project>{922825df-371e-4afe-949a-7abeb9653610}</Project>
+      <Name>ExhibFlat.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExhibFlat.UI.Common.Controls\ExhibFlat.UI.Common.Controls.csproj">
+      <Project>{19b92c42-ddd4-4920-9b2d-d813d0de6e38}</Project>
+      <Name>ExhibFlat.UI.Common.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExhibFlat.UI.ControlPanel.Utility\ExhibFlat.UI.ControlPanel.Utility.csproj">
+      <Project>{a614f0ec-4528-47b9-87d4-b8fe1f4eed64}</Project>
+      <Name>ExhibFlat.UI.ControlPanel.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

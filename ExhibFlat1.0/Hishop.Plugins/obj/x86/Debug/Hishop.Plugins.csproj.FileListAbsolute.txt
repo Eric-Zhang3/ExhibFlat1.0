@@ -1,0 +1,14 @@
+D:\offices\gitcode_timely\F2B\src\Hishop.Plugins\bin\Debug\Hishop.Plugins.dll
+D:\offices\gitcode_timely\F2B\src\Hishop.Plugins\bin\Debug\Hishop.Plugins.pdb
+D:\offices\gitcode_timely\F2B\src\Hishop.Plugins\obj\x86\Debug\Hishop.Plugins.dll
+D:\offices\gitcode_timely\F2B\src\Hishop.Plugins\obj\x86\Debug\Hishop.Plugins.pdb
+D:\offices\gitcode_timely\F2B\src\Hishop.Plugins\obj\x86\Debug\Hishop.Plugins.csprojResolveAssemblyReference.cache
+C:\offices\gitcode_timely\F2B\src\Hishop.Plugins\bin\Debug\Hishop.Plugins.dll
+C:\offices\gitcode_timely\F2B\src\Hishop.Plugins\bin\Debug\Hishop.Plugins.pdb
+C:\offices\gitcode_timely\F2B\src\Hishop.Plugins\obj\x86\Debug\Hishop.Plugins.dll
+C:\offices\gitcode_timely\F2B\src\Hishop.Plugins\obj\x86\Debug\Hishop.Plugins.pdb
+C:\offices\gitcode_timely\F2B\src\Hishop.Plugins\obj\x86\Debug\Hishop.Plugins.csprojResolveAssemblyReference.cache
+C:\offices\enterprise\ExhibFlat1.0\Hishop.Plugins\bin\Debug\Hishop.Plugins.dll
+C:\offices\enterprise\ExhibFlat1.0\Hishop.Plugins\bin\Debug\Hishop.Plugins.pdb
+C:\offices\enterprise\ExhibFlat1.0\Hishop.Plugins\obj\x86\Debug\Hishop.Plugins.dll
+C:\offices\enterprise\ExhibFlat1.0\Hishop.Plugins\obj\x86\Debug\Hishop.Plugins.pdb

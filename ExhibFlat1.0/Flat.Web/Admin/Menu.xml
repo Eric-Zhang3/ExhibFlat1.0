@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Menu>
+  <Module Title="首页" >
+    <Item Title="" >
+      <PageLink Title="" Link="SupplierDefault.aspx" act="true" role="supplier" />
+      <PageLink Title="" Link="index.html" act="true" role="admin" /> 
+    </Item>
+  </Module>
+  <Module Title="产品管理" >
+    <Item Title="产品管理" >
+      <PageLink Title="发布产品" Link="product/selectcategory.aspx" privilege="3040" />
+      <PageLink Title="商品列表" Link="product/productonsales.aspx" />
+    </Item>
+    
+  </Module>
+  <Module Title="类目管理">
+    <Item Title="类目属性管理">
+      <PageLink Title="类目管理" privilege="3009" Link="product/managecategories.aspx" role="admin" />
+      <PageLink Title="商品类型" privilege="3005" Link="product/producttypes.aspx" role="admin" />
+      <PageLink Title="产品标签" Link="product/producttags.aspx" role="admin" />
+    </Item>
+  </Module>
+  <Module Title="内容管理" Link="store/sitecontent.aspx">
+    <Item Title="内容管理">
+      <!--<PageLink Title="基本设置" Link="store/sitecontent.aspx" />-->
+      <PageLink Title="设置广告位" Link="store/advpositions.aspx" role="admin" />
+      <PageLink Title="设置产品栏目" Link="store/productsubject.aspx" />
+      <PageLink Title="平台公告" Link="comment/affichelist.aspx" />
+      <PageLink Title="帮助中心" Link="comment/helplist.aspx" />
+      <!--<PageLink Title="文章管理" Link="comment/articlelist.aspx" />-->
+      <PageLink Title="友情链接" Link="store/friendlylinks.aspx" />
+      <!--<PageLink Title="热门关键字" Link="store/managehotkeywords.aspx" />-->
+      <!--<PageLink Title="投票调查" Link="store/votes.aspx" />-->
+    </Item>
+    <!--<Item Title="客户反馈" privilege="2008" Link="distribution/distributorrequests.aspx">
+      <PageLink Title="商品咨询" Link="comment/productconsultations.aspx" role="supplier" />
+      <PageLink Title="商品评论" Link="comment/productreviews.aspx" role="supplier" />
+      <PageLink Title="客户留言" Link="comment/manageleavecomments.aspx" role="supplier" />
+    </Item>-->
+  </Module>
+</Menu>

@@ -1,0 +1,965 @@
+/*885CSS RESET*/
+body{
+	background: #f3f3f3;
+}
+i,em,cite{
+	font-style: normal;
+}
+.jRoll .jLogo span,
+.jRoll .more em,
+.jSorts .jTips em,
+.jSorts li i,
+.jSorts .jNotice em,
+.buySubmit p,
+.buySubmit .jBuy,
+.timeWp,
+.parameter ul li .share,
+.jPages ul li,
+.jPages ul i,
+.noticeList ul li .fav em,
+.nPre,
+.nNext,
+.jThumb span,
+.jSocial ul li i
+{
+	background: url(../images/add/icon.png) no-repeat;
+}
+.dfocusR dl dt span,
+.agreeMent .red,
+.agreeMent .grey
+{
+	background: url(../images/add/status.png) no-repeat;
+}
+/*活动首页*/
+.wrap{
+	width: 1200px;
+	margin: 10px auto 0;
+}
+.addNav{
+	background: #404852;
+	height: 30px;
+	line-height: 30px;
+}
+.addNav ul{
+	overflow: hidden;
+	width: 1000px;
+	margin: 0px auto;
+}
+.addNav ul li{
+	float: left;
+}
+.addNav ul li a{
+	color: #fff;
+	font-size: 14px;
+	display: inline-block;
+	padding: 0 28px;
+	font-weight: bold;
+}
+.addNav ul .home a{
+	background: #4d555e;
+}
+.addNav ul .active a{
+	background: #c40001;
+	margin-top: 1px;
+	height: 29px;
+}
+.agreeMentNav{
+    background:#e81250;
+}
+.agreeMentNav ul .active a{
+    background:#e6e6e6;
+    color:#e81250;
+    margin:0;
+    height:auto;
+}
+.addsubNav{
+	background: #f3f3f3;
+	padding-top: 1px;
+}
+.addsubNav ul{
+	overflow: hidden;
+	border: 1px solid #dfdfdf;
+	background: #e6e6e6;
+	width: 998px;
+	margin: 0 auto 5px auto;	
+	height: 30px;
+	line-height: 30px;
+}
+.addsubNav ul li{
+	float: left;
+	margin: 0 30px;
+}
+.addsubNav ul li a{
+	color: #404852;
+}
+.jTop{
+	border: 1px solid #dfdfdf;
+	background: #fff;
+}
+.jTop ul{
+	overflow: hidden;
+}
+.jTop ul li{
+	float: left;
+	text-align: center;
+    padding:0 4px;
+}
+.jTop ul li a{
+	color: #767a79;
+}
+.jRoll{
+	border-bottom: 1px solid #dfdfdf;
+}
+.jRoll li{
+	margin-right: 20px;
+	height: 40px;
+	line-height: 40px;
+}
+.jRoll .jLogo{
+	margin-left: 17px;
+}
+.jRoll .jLogo img{
+	vertical-align: middle;
+}
+.jRoll .jLogo span{
+	width: 2px;
+	height: 15px;
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+	background-position: -2px -280px;
+	margin-left: 15px;
+	vertical-align: middle;
+}
+.jRoll .more{
+	margin-left: 35px;
+	float: right;
+}
+.jRoll .more a{
+	color: #fe9900;
+	text-decoration: underline;
+}
+.jRoll .more em{
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+	width: 15px;
+	height: 18px;
+	background-position: 0 0;	
+	vertical-align: middle;
+	margin-right: 2px;
+}
+.jSorts li{
+	margin-right: 20px;
+	height: 45px;
+	line-height: 45px;
+}
+.jSorts .jTips,
+.jSorts .jNotice
+{
+	background:#ed4676 url(../images/add/btnBg.png) repeat-x;
+	height: 24px;
+	line-height: 24px;
+	padding: 0 10px;
+	color: #fff;
+	font-weight: bold;	
+	margin: 10px 30px;
+}
+.jSorts .jTips em,
+.jSorts .jNotice em
+{
+	width: 12px;
+	height: 12px;
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+	background-position: 0 -21px;
+	vertical-align: middle;	
+}
+.jSorts .default{
+	background: #ffeded;
+	height: 22px;
+	text-align: center;
+	line-height: 22px;
+	margin: 12px 22px 0 0;
+}
+.jSorts .default a{
+	color: #d90303;
+}
+.jSorts li i{
+	width: 10px;
+	height: 11px;
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+	background-position: 0 -38px;
+	vertical-align: middle;
+	margin-left: 5px;	
+}
+.jSorts .jOver{
+	background: #d4d4d4;
+	height: 22px;
+	line-height: 22px;
+	padding: 0 15px;
+	margin-top:12px;
+}
+.jSorts .jNotice{
+	float: right;
+	margin-right: 110px;
+}
+.jSorts .jNotice a{
+	color: #fff;
+}
+.jListWp{
+	margin-top: 2px;
+}
+.jList{
+	margin-bottom: 15px;
+	background: #fff;
+	height: 325px;
+	margin-left: 8px;
+	border: 1px solid #dfdfdf;	
+}
+.jList:hover{
+	border: 1px solid #d41938;
+}
+.jSold{
+	border:1px solid #d41938;
+}
+.listL{
+	float: left;
+	width: 380px;
+	padding: 5px 0 0 9px;	
+}
+.listL strong{
+	font-size: 18px;
+	color: #404852;
+	line-height: 25px;
+}
+.listL strong span{
+	width: 153px;
+	height: 26px;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	display: inline-block;
+	font-family: "SimSun";
+	font-size: 14px;
+	font-weight: bold;
+	color: #fff;
+	text-align: center;
+	line-height: 26px;
+	margin-right: 10px;
+}
+.listL strong .jIng{
+	background: #ee8c00;
+}
+.listL strong .jSucc{
+	background: #f8245f;
+}
+.listL strong .jEmpty{
+	background: #8c9197;
+}
+.listL strong em{
+	font-size: 12px;
+}
+.buySubmit{
+	background: url(../images/add/side.png) no-repeat;
+	width: 399px;
+	height: 87px;
+	margin:5px 0 0 -17px;
+	position: relative;
+}
+.buySubmit .sGary{
+	background: url(../images/add/side1.png) no-repeat;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 399px;
+	height: 87px;
+	margin: 0;
+	opacity: 0.9;
+	filter:alpha(opacity=90);
+	cursor: pointer;
+}
+.buySubmit span{
+	float: left;
+	color: #fff;
+	font-family: Arial;
+	font-size: 42px;
+	font-weight: bold;
+	width: 195px;
+	text-align: center;
+	height: 87px;
+	line-height: 87px;
+}
+.buySubmit span small{
+	font-size: 32px;
+}
+.buySubmit p{
+	background-position: 0 -255px;
+	float: left;
+	width: 52px;
+	height: 20px;
+	line-height: 21px;
+	font-size: 17px;
+	color: #767a79;
+	padding-left: 7px;
+	margin-top: 25px;
+}
+.buySubmit .jBuy{
+	text-indent: -999em;
+	width: 117px;
+	height: 58px;
+	text-align: center;
+	line-height: 58px;
+	background-position: 0 -306px;
+	border:none;
+	margin: 11px 0 0 10px;
+	cursor: pointer;
+}
+.timeWp{
+	background-position: 0 -205px;
+	padding-left: 25px;
+	position: relative;
+	line-height: 23px;
+}
+.timeWp span{
+	background: #fff4f6;
+	color: #5f6062;
+}
+.timeWp span i{
+	font-size: 16px;
+}
+.timeWp p{
+	position: absolute;
+	right: 10px;
+	top: 0;
+	border:1px solid #e7e7e7;
+	padding:0 11px;
+	color: #9b9b9b;
+}
+.timeWp p i{
+	color: #cb0000;
+}
+.parameter{
+	margin-top: 8px;
+	position: relative;
+}
+.parameter .iSold{
+	background: url(../images/add/sold.png);
+	position: absolute;
+	top: -25px;
+	left: 23%;
+	width: 174px;
+	height: 137px;
+}
+.parameter ul li{
+	color: #848484;
+	margin: 5px 0;
+}
+.parameter ul li span{
+	margin-right: 20px;
+}
+.parameter ul li cite{
+	margin-right: 15px;
+	color: #404852;
+	display: inline-block;
+	text-align: left;
+	width: 70px;
+}
+.parameter .number{
+	background: #fff0e4;
+	padding: 2px 0 2px 10px;
+	margin-left: -9px;
+}
+.parameter .number .spe cite{
+	margin-right: 12px;
+	font-size: 16px;
+}
+.parameter ul li .share{
+	background-position: 0 -236px;
+	text-indent: -999em;
+	width: 70px;
+	height: 18px;
+	cursor: pointer;
+	position: absolute;
+	top: 8px;
+	right: 20px;
+	*top:4px;
+}
+.parameter ul .last{
+	padding: 7px 0;
+	position: relative;	
+}
+.listR{
+	float: left;
+	width: 800px;
+	position: relative;
+}
+.listR img{
+	width: 800px;
+	height: 325px;
+	display: block;
+}
+.listR .bottomBar{
+	position: absolute;
+	left: 0px;
+	bottom: 0;
+	background: #404852;
+	height: 22px;
+	line-height: 22px;
+	color: #dedede;
+	width: 100%;
+	text-indent: 2em;
+}
+.listR p{
+	float: left;
+}
+.listR p i{
+	color: #f79d01;
+	margin: 0 5px;
+}
+.listR span{
+	color: #f79d01;
+	float: left;
+}
+.jPages{
+	padding: 45px 0;
+	margin: 0 auto;
+	text-align: center;
+}
+.jPages ul li{
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	line-height: 20px;
+	background-position: 0 -84px;
+	margin:0 5px;
+}
+.jPages ul li a{
+	color: #404852;
+}
+.jPages ul .jPre,
+.jPages ul .jNext,
+.jPages ul .more
+{
+	width: auto;
+	background: none;
+}
+.jPages ul .active{
+	background-position: 0 -56px;
+}
+.jPages ul .active a{
+	color: #fff;
+}
+.jPages ul .jPre{
+	margin:0;
+}
+.jPages ul li i{
+	width: 6px;
+	height: 8px;
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+	margin:0 1px;
+	vertical-align: middle;
+}
+.jPages ul .jPre i{	
+	background-position: 0 -123px;
+}
+.jPages ul .jNext i{
+	background-position: 0 -111px;
+}
+.jPages ul li i.trigger{
+	background-position: -10px -123px;
+}
+.box{
+	position: relative;
+	width: 1200px;
+	overflow: hidden;
+	margin: 15px auto 0;
+	border:1px solid #e0e0e0;
+	padding:1px 0;
+	background: #fff;	
+}
+.noticeList{
+	overflow: hidden;
+	position: relative;
+	height: 380px;
+	width: 1999px;
+}
+.box h2{
+	font-size: 16px;
+	color: #e81250;
+	margin-left: 14px;
+	padding-top: 5px;
+}
+.box h2 span{
+	font-size: 12px;
+	color: #767a79;
+	margin:0 5px;
+	font-family: "SimSun";
+}
+.noticeList ul{
+	margin-top: 3px;
+	overflow: hidden;
+	width: 20000px;
+	height: 349px;
+}
+.noticeList ul li{
+	float: left;
+	border-right: 1px dashed #c2c2c2;
+	padding:0 7px;
+	margin-bottom: 7px;
+	width: 227px;
+}
+.noticeList ul li a{
+	display: block;
+	border: 1px solid #fff;
+}
+.noticeList ul li a:hover{
+	border: 1px solid #f79d01;
+}
+.noticeList ul li img{
+	width: 225px;
+	height: 280px;
+}
+.noticeList ul li .fav{
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+	height: 24px;
+	text-align: center;
+	line-height: 24px;
+	color: #fff;
+	background: #f92560;
+	font-weight: bold;
+	padding: 0 8px 0 25px;
+	letter-spacing: 1px;
+	font-family: "SimSun";
+}
+.noticeList ul li p{
+	margin: 6px 0 0 25px;
+	color: #7e807c;
+}
+.noticeList ul li .fav em{
+	width: 12px;
+	height: 12px;
+	display: inline-block;
+	background-position: 0 -21px;
+	vertical-align: middle;
+	margin-left: 10px;
+}
+.noticeList ul li p span{
+	margin-left: 10px;
+}
+.noticeList ul li i{
+	color: #f79d01;
+	font-size: 14px;
+}
+.noticeList ul li cite{
+	color: #3d3d3d;
+}
+.nPre,
+.nNext{
+	width: 25px;
+	height: 60px;
+	position: absolute;
+	top: 40%;
+	cursor: pointer;
+}
+.nPre{
+	background-position: 0 -141px;
+	left: 0px;
+}
+.nNext{
+	background-position: -27px -141px;
+	right: 0px;
+}
+.addFoot{
+	background: #fff;
+	margin-top: 65px;
+	padding: 22px 0;
+}
+.jFoot{
+	width: 1000px;
+	margin: 0px auto;	
+}
+.jFoot ul{
+	overflow: hidden;
+	padding-left: 90px;
+	width: 1100px;
+}
+.jFoot ul li{
+	float: left;
+	width: 235px;
+}
+.jFoot ul li strong{
+	font-size: 15px;
+}
+.jFoot ul li strong a{
+	color: #6e706f;
+}
+.jFoot ul li p a{
+	color: #929393;
+}
+.jFoot ul li i{
+	color: #4581ca;
+}
+
+
+/*活动详情页面*/
+.jDetail{
+	margin-top: 6px;
+}
+.jDetail .dTitle{
+	font-size: 18px;
+	color: #2b2a2a;
+	margin: 5px 0;
+}
+.jFocus{
+	overflow: hidden;
+	background: #fff;
+	border: 1px solid #dfdfdf;
+	padding-left: 8px;
+}
+.focusL{
+	float: left;
+	width: 350px;
+}
+.jGallery img{
+	border: 1px solid #ddd;
+	width: 350px;
+	height: 350px;
+}
+.jThumb{
+	margin-top: 5px;
+}
+.jThumb ul{
+	float: left;
+	padding-top: 3px;
+}
+.jThumb ul li{
+	float: left;
+	margin-left: 6px;
+}
+.jThumb ul li img{	
+	width: 40px;
+	height: 40px;
+}
+.jThumb ul li a{
+	border: 1px solid #cecfce;
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;	
+}
+.jThumb ul li a:hover{
+	border: 1px solid #e81250;
+}
+.jThumb ul .active img{
+	border: 2px solid #e4393c;
+}
+.jThumb span{
+	width: 17px;
+	height: 54px;
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+	float: left;
+	cursor: pointer;
+}
+.jThumb span.tPre{
+	background-position: -30px -1px;
+	margin-right: 2px;
+}
+.jThumb span.tNext{
+	background-position: -50px -1px;
+	margin-left: 8px;
+}
+.jSocial{
+	clear: both;
+	margin-bottom: 25px;
+	padding-top: 16px;
+}
+.jSocial ul{
+	overflow: hidden;
+}
+.jSocial ul li{
+	float: left;
+	background: #f7f7f7;
+	border: 1px solid #dddddd;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	height: 23px;
+	line-height: 23px;
+	padding:0 9px;
+	margin-right: 5px;
+}
+.jSocial ul li a{
+	color: #555555;
+}
+.jSocial ul li i{
+	display: inline-block;
+	*display: inline;
+	*zoom:1;
+	width: 21px;
+	height: 19px;	
+	vertical-align: middle;
+}
+.jSocial ul li .big{
+	background-position: -29px -60px;
+}
+.jSocial ul li .fav{
+	background-position: -53px -60px;
+}
+.jSocial ul .dShare{
+	background: #fff;
+	border-radius: 0;
+	margin-right: 0;
+	padding-right: 30px;
+	position: relative;
+}
+.dfocusR{
+	float: left;
+	width: 840px;
+}
+.dfocusR .dPrize{
+	overflow: hidden;
+	width: 100%;
+	background: #fe9039;
+}
+.dfocusR .dPrize li{
+	float: left;
+	padding:16px 0 0 25px;
+	color: #fff;
+	display: inline;
+}
+.dfocusR .dPrize li p{
+	padding-bottom: 10px;
+}
+.dfocusR .dPrize li span{
+	color: #feecd6;
+	width: 80px;
+	text-align: left;
+	display: inline-block;
+	*display: inline;
+	*zoom:1;	
+}
+.dfocusR .dPrize li strong{
+	color: #fff;
+	font-size: 28px;
+}
+.dfocusR .dPrize li small{
+	font-size: 18px;
+}
+.dfocusR .dPrize .prize1{
+	background: #fea154; 
+	/*width: 241px;*/
+}
+
+.dfocusR .dPrize .prize2{
+	background: #ff9742;
+	/*width: 167px;*/
+     
+}
+.dfocusR .dPrize .prize3{
+	background: #fe9039;
+	/*width: 157px;*/ 
+}
+.dTips{
+	padding-left: 10px;
+	position: relative;
+}
+.dTips p{
+	padding-top: 9px;
+}
+.dTips p span{
+	width: 75px;
+	display: inline-block;
+	*display: inline;
+	*zoom:1;	
+	margin-right: 25px;
+}
+.dTips .timeWp{
+	position: absolute;
+	top: 10px;
+	right: 20px;
+}
+.dfocusR dl{
+	padding-top: 8px;
+	overflow: hidden;
+}
+.dfocusR dl dt{
+	width: 185px;
+	height: 92px;
+	float: left;
+	border-top: 1px solid #c9c9c9;
+	margin-top: -2px;
+}
+.dfocusR dl dt span{
+	display: block;
+	width: 100%;
+	height: 92px;
+	text-indent: -999em;
+}
+.dfocusR .dSold span{
+	background-position: 1px 0;
+}
+.dfocusR .preSale span{
+	background-position: 1px -93px;
+}
+.dfocusR .dIng span{
+	background-position: 1px -186px;
+}
+.dfocusR .dSucc span{
+	background-position: 1px -280px;
+}
+.dfocusR dl dd{
+	background: #ececec;
+	float: left;
+	height: 82px;
+	border-top: 1px solid #c9c9c9;
+	width: 654px;
+	text-align: center;
+	padding-top: 7px;
+}
+.dfocusR dl dd strong{
+	border-bottom: 1px solid #dcddde;
+	font-size: 23px;
+	padding-bottom: 8px;
+	text-shadow: -2px 2px 1px #d4d3d3;
+	/*filter: dropshadow(color=#d4d3d3, offx=-2, offy=2);	*/
+	display: inline-block;
+}
+.dfocusR .dSold strong{
+	color: #9a9a9a;
+}
+.dfocusR .preSale strong{
+	color: #ff5556;
+}
+.dfocusR .dIng strong{
+	color: #fea154;
+}
+.dfocusR .dSucc strong{
+	color: #c40001;
+}
+.dfocusR .dSold strong a{
+	color: #ff5556;
+}
+.dfocusR dl dd p{
+	color: #404852;
+	font-size: 13px;
+}
+.dfocusR dl dd p em{
+	color: #fe9039;
+	font-size: 18px;
+	margin: 0 3px;
+}
+.dAmount{
+	margin: 11px 0 0 15px;
+	clear: both;
+}
+.dAmount span{
+	color: #555555;
+}
+.dAmount .amountText{
+	border: 1px solid #e4e4e4;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	height: 26px;
+	line-height: 26px;
+	display: inline-block;
+	*display: inline;
+	*zoom:1;	
+	margin:0 11px;
+}
+.dAmount input{
+	width: 65px;
+/*	height: 24px;*/
+	padding-left: 5px;
+	border: none;
+}
+.dAmount i{
+	cursor: pointer;
+	color: #a3a5a4;
+	font-size: 14px;
+	font-weight: bold;
+	display: inline-block;
+	*display: inline;
+	*zoom:1;	
+	width: 26px;
+	text-align: center;	
+	background: #f9f9f9;
+}
+.dAmount .minus{
+	border-right: 1px solid #e4e4e4;
+}
+.dAmount .plus{
+	border-left: 1px solid #e4e4e4;
+}
+.agreeMent{
+	text-align: right;
+	margin: 28px 35px 10px 0;
+	color: #555;
+}
+.agreeMent .red,
+.agreeMent .grey
+{
+	width: 160px;
+	height: 50px;
+	border: none;
+}
+.agreeMent .red{
+	background-position: 0 -375px;
+}
+.agreeMent .grey{
+	background-position: 0 -429px;
+}
+.agreeMent em{
+	color: #fe9039;
+	text-decoration: underline;
+}
+.agreeMent label{
+	margin-right: 20px;
+}
+.dList{
+	margin-top: 14px;
+	height: 160px;
+}
+.dList ul{
+	margin-left: 30px;
+	height: 160px;
+}
+.dList ul li{
+	width: 122px;
+	padding: 0 18px;
+}
+.dList ul li p{
+	display: none;
+}
+.dList ul li img{
+	width: 120px;
+	height: 150px;
+}
+
+/*聚生产活动介绍*/
+.addNav ul .fr{
+	float: right;
+}
+
+/*============================== 上部左侧图片 ===================================*/
+		/*图片放大镜样式*/
+.displayP_pic_jqzoom{float:left;border:none;position:relative;padding:0px;margin:0px;display:block;}
+.displayP_pic_zoomdiv{z-index:100;position:absolute;top:0px;left:0px;width:300px;height:300px;background:#ffffff; display:none;text-align:center;overflow:hidden;}
+.displayP_pic_jqzoomPup{z-index:10;visibility:hidden;position:absolute;top:0px;left:0px;width:90px;height:90px;border:1px solid #aaa;background:#fff ;opacity: 0.5;-moz-opacity: 0.5;-khtml-opacity: 0.5;filter: alpha(Opacity=50);}		
+		/*图片小图预览列表*/
+.displayP_pic-preview{width:350px;height:350px; overflow:hidden;}
+.displayP_pic-scroll{width:350px; padding:0px;}
+.displayP_pic-scroll .items{float:left;position:relative;width:305px;height:57px; padding:3px 0px 0px; overflow:hidden;}
+.displayP_pic-scroll .items ul{position:absolute;width:999999px;}

@@ -1,0 +1,14 @@
+D:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\bin\Debug\Hishop.TransferManager.dll
+D:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\bin\Debug\Hishop.TransferManager.pdb
+D:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\bin\Debug\Ionic.Zip.dll
+D:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\bin\Debug\LumenWorks.Framework.IO.dll
+D:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\obj\x86\Debug\Hishop.TransferManager.dll
+D:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\obj\x86\Debug\Hishop.TransferManager.pdb
+D:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\obj\x86\Debug\Hishop.TransferManager.csprojResolveAssemblyReference.cache
+C:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\bin\Debug\Hishop.TransferManager.dll
+C:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\bin\Debug\Hishop.TransferManager.pdb
+C:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\bin\Debug\Ionic.Zip.dll
+C:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\bin\Debug\LumenWorks.Framework.IO.dll
+C:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\obj\x86\Debug\Hishop.TransferManager.dll
+C:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\obj\x86\Debug\Hishop.TransferManager.pdb
+C:\offices\gitcode_timely\F2B\src\Hishop.TransferManager\obj\x86\Debug\Hishop.TransferManager.csprojResolveAssemblyReference.cache

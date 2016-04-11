@@ -1,0 +1,4 @@
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.UI.Common.Validator\bin\Debug\ExhibFlat.UI.Common.Validator.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.UI.Common.Validator\bin\Debug\ExhibFlat.UI.Common.Validator.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.UI.Common.Validator\obj\x86\Debug\ExhibFlat.UI.Common.Validator.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.UI.Common.Validator\obj\x86\Debug\ExhibFlat.UI.Common.Validator.pdb

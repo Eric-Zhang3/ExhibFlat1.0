@@ -1,0 +1,82 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Admin.master.cs" Inherits="ExhibFlat.Flat.Web.Admin.AdminMaster" %>
+<%@ Register TagPrefix="Hi" Namespace="ExhibFlat.UI.Common.Controls" Assembly="ExhibFlat.UI.Common.Controls" %>
+<%@ Register TagPrefix="Hi" Namespace="ExhibFlat.UI.ControlPanel.Utility" Assembly="ExhibFlat.UI.ControlPanel.Utility" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head runat="server">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <Hi:PageTitle ID="PageTitle1" runat="server" />
+    <Hi:HeadContainer runat="server" />
+     <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+     <!--功能页面独有的脚本文件、样式文件的引用-->
+    </asp:ContentPlaceHolder> 
+    <link rel="stylesheet" href="/admin/css/css.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/admin/css/windows.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/admin/css/pagevalidator.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/utility/skins/blue.css" />
+    <%--<script> 
+        if (!window.$ || !window.jQuery) {
+            document.write("<scri" + "pt src='/utility/jquery-1.6.4.min.js'></sc" + "ript>");
+        }
+    </script>--%>
+   <Hi:Script ID="Script9" runat="server" Src="/utility/jquery-1.6.4.min.js" />
+      <Hi:Script ID="Script5" runat="server" Src="/utility/jquery.artDialog.js" />
+       <Hi:Script ID="Script7" runat="server" Src="/utility/iframeTools.js" />
+      <Hi:Script ID="Script6" runat="server" Src="/utility/Window.js" /> 
+    <Hi:Script ID="Script1" runat="server" Src="/utility/globals.js" />   
+      <Hi:Script ID="Script3" runat="server" Src="/utility/windows.js" />
+        <Hi:Script ID="Script4" runat="server" Src="/admin/script/pagevalidator.js" />
+    <asp:ContentPlaceHolder ID="headHolder" runat="server">
+     <!--功能页面独有的脚本文件、样式文件的引用-->
+    </asp:ContentPlaceHolder>        
+    <asp:ContentPlaceHolder ID="validateHolder" runat="server">
+     <!--客户端验证-->
+    </asp:ContentPlaceHolder>
+      <script type="text/javascript">
+          function BrowsVersion()
+          {
+              var Sys = {};
+              var ua = navigator.userAgent.toLowerCase();
+              var s;
+              (s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] :
+              (s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :
+              (s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :
+              (s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :
+              (s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
+              //以下进行测试
+              if (Sys.ie) return false;
+              if (Sys.firefox) return true; /*document.write('Firefox: ' + Sys.firefox);*/
+              if (Sys.chrome) return false;
+              if (Sys.opera) return false;
+              if (Sys.safari) return false;     
+          }
+      </script>
+
+<script>
+    $(function () {
+        //奇数行，偶数行不同颜色
+        $(".datalist table tr:odd").css({ "background": "#fff" });
+        $(".datalist table tr:even").css({ "background": "#eeeff2" });
+        $(".speTable tr:odd").css({ "background": "#fff" });
+        $(".speTable tr:even").css({ "background": "#eeeff2" });
+        $(".aa .speBg table tr").css({ "background": "#fff" });
+        //})
+    })
+</script>
+</head>
+<body>
+    <form id="thisForm" runat="server">               
+        <div id="mainhtml">
+        <asp:ContentPlaceHolder ID="contentHolder" runat="server">
+        <!--功能页面-->
+        </asp:ContentPlaceHolder>
+        </div>
+    </form>   
+    <div class="bottomarea testArea">
+    </div> 
+     <asp:ContentPlaceHolder ID="ContentPlaceHolderlast" runat="server">
+      
+     </asp:ContentPlaceHolder>
+</body>
+</html>

@@ -1,0 +1,327 @@
+﻿/*快捷登录*/
+.loginTaobao{
+	float:left;
+	margin:10px 10px 0px 10px;
+}
+.loginTaobao label{
+	font-size:12px;
+	line-height:24px;
+	text-indent:0em;
+	font-weight:bold;
+}
+.loginTaobao ul{
+	border:1px solid #ccc;
+	background:#efefef;
+	padding:10px 40px;
+}
+.dialog{
+	width:305px;
+	height:115px;
+	border:1px solid #a3a3a3;
+	font-size:12px;
+	position:absolute;
+	z-index:3;
+	display:none;
+	background-color:#fff;
+}
+.dialog_title{
+	height:29px;
+	line-height:29px;
+	padding:0px 5px;
+	background-color:#f7f9fb;
+	color: #535353;	
+	border-bottom: 1px solid #ababab;
+}
+.dialog_title_l{
+	font-weight:700;
+	padding:0px 0px 2px 0px;
+	float:left;
+	height:18px;
+}
+.dialog_title_l img{
+	margin-top:0px;
+}
+.dialog_title_r{
+	float:right;
+	cursor: pointer;
+	font-size: 20px;
+}
+.dialog_cartitem{
+	width:295px;
+	line-height:15px;
+	margin:10px 5px;
+	height:70px;
+	text-align:center;
+	padding-left:0px;
+}
+.btnbar{
+	width:275px;
+	margin:15px 10px 0px 10px;
+}
+.btn-viewcart,.btn-continue{
+	color: #f6276a;
+	background: #fff5f8;
+	height: 22px;
+	margin-right:10px;
+	width: 75px;
+	line-height: 22px;
+	text-align: center;
+	border: 1px solid #f82a6c;
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+}
+.btn-viewcart:hover,.btn-continue:hover{
+	color: #f6276a;
+	text-decoration: none;
+}
+.btn-send{
+	background: url("../images/process/btn_ginfo_links.gif") no-repeat scroll 0 0 transparent;
+	margin: 0;
+	padding: 3px 0 0 18px;
+}
+
+/*弹出框login*/
+input:-webkit-autofill {
+-webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+.login_tan{
+	width:254px;
+	background:#efefef;
+	position:fixed;
+	top:50%;
+	left:50%;
+	margin-top: -151px;
+	margin-left: -165px;
+	z-index:99999;
+	border: 8px solid #e5e5e5;
+	padding: 47px 30px 40px 30px;
+}
+.favSec{
+	margin-bottom: 5px;
+	color: #e81250;
+}
+.login_tan .favSec a{
+	color: #e81250;
+}
+.login_tan table{
+	font-size:12px;
+	line-height:30px;
+	font-weight: bold;
+}
+.login_tan a{
+	color:#6b7d8b;
+	font-weight: normal;
+}
+.login_tan p{
+	margin-bottom: 7px;
+}
+.login_tan .forget{
+	text-align: right;
+}
+.login_tan .forget a{
+	margin-left: 8px;
+}
+.login_tan input{
+	border: solid 1px #c8c8c8;
+	background: #fff;
+	width: 240px;
+	height: 24px;
+	line-height: 24px;
+	color: #979797;
+	padding-left: 8px;
+}
+.login_tan .fB{
+	position: relative;
+}
+.login_tan .close{
+	position: absolute;
+	font-size: 20px;
+	top: -45px;
+	right: -20px;
+	font-weight: normal;
+}
+/*.login_tan_input1{
+	width:175px;
+	height:26px;
+	line-height:26px;
+	background:url(../images/process/tancu_07.gif) no-repeat;
+	padding-left:25px;
+}*/
+.login_tan .login_tan_input3{
+	background: url(../images/add/btnBg.png) repeat-x;
+	height: 30px;
+	line-height: 30px;
+	border: none;
+	width: 252px;
+	padding: 0;
+	color: #fff;
+	font-weight: bold;
+	cursor: pointer;
+}
+#imgCloseLogin{
+	cursor:pointer;
+}
+/*成交量*/
+.tab_sales{
+	border:1px #e2e2e7 solid;
+	color:#333;
+	border-bottom:none;
+	width:100%;
+}
+.tab_sales td{
+	border:1px #e2e2e7 solid;
+	padding:6px;
+	color: #6e6e6e;
+	text-align: center;
+}
+.tr_head{
+	background:#cecfce;
+	color:#5c4a35;
+	line-height:16px;
+	height:16px;
+	font-weight:700;
+	border: 1px solid #e2e2e7;
+}
+.tr_head td{
+	border: none;
+	background: url(../images/add/line.png) right center no-repeat;
+}
+.tr_head td:last-child{
+	background: none;
+}
+
+.re_productreviews_h2{
+	margin: 10px;
+	font-size: 14px;
+	font-weight: bold;
+	border-bottom: 1px solid #f1f1f1;
+}
+.re_productreviews_h2 span{
+	color: #cecfce;
+	font-size: 12px;
+	font-weight: normal;
+	margin-left: 5px;
+}
+/*商品评价*/
+.appraiseList{
+	border: 1px solid #e2e2e7;
+	padding: 30px 15px;
+	margin-top:15px;
+}
+.appraiseList dl{
+	overflow: hidden;
+}
+.appraiseList dl dt{
+	width: 70px;
+	float: left;
+	text-align: center;
+	margin-right: 30px;
+}
+.appraiseList dl dt img{
+	width: 40px;
+	height: 40px;
+}
+.appraiseList dl dt a{
+	color: #3366cc;
+}
+.appraiseList dl dd{
+	width: 835px;
+}
+.appraiseList dl dd p{
+	color: #b0b0b0;
+	margin-top: 5px;
+}
+.appraiseList dl dd span{
+	float: right;
+	color: #b0b0b0;
+}
+.appraiseList dl dd span b{
+	font-weight: normal;
+	color: #3366cc;
+}
+/*商品咨询*/
+.re_productreviews_tabc td{
+	padding: 5px;
+}
+
+.re_productreviews_tabc td input{
+	border: 1px solid #e2e2e7;
+	height: 20px;
+	line-height: 20px;
+	padding-left: 5px;
+}
+.re_productreviews_tabc td textarea{
+	border: 1px solid #e2e2e7;
+	resize:none;
+}
+.btn_sub{
+	background: #d4d4d4;
+	height: 24px;
+	line-height: 24px;
+	padding: 0 10px;
+	color: #fff;
+	font-weight: bold;
+	border: none;
+}
+
+/*收藏*/
+.favWp{
+	background: #fff;
+	border: 8px solid #e5e5e5;
+	position: fixed;
+	top: 50%;
+	left: 40%;
+	width: 400px;
+	padding: 20px;
+}
+.favWp h2{
+	position: relative;
+	border-bottom: 1px dashed #cacaca;
+	font-size: 14px;
+	margin: 20px 0;
+	background: url(../images/add/order.png) 0 -272px no-repeat;
+	padding: 0 0 10px 30px;
+}
+.favWp .close{
+	position: absolute;
+	top: -40px;
+	right: 0px;
+	font-size: 20px;
+	cursor: pointer;
+}
+.favWp h2 b{
+	font-weight: normal;
+	color: #3165cb;
+}
+.favWp h2 a{
+	float: right;
+	color: #3165cb;
+	font-size: 12px;
+	text-decoration: underline;
+}
+.favWp p{
+	color: #787878;
+}
+.favWp p a{
+	float: right;
+	color: #3165cb;
+}
+.favWp ul{
+	overflow: hidden;
+	margin-top: 10px;
+}
+.favWp ul li{
+	float: left;
+	width: 82px;
+	margin:0 9px;
+	text-align: center;
+}
+.favWp ul li img{
+	width: 80px;
+	height: 80px;
+	border: 1px solid #cacaca;
+}
+.favWp ul li a:hover{
+	text-decoration: none;
+}

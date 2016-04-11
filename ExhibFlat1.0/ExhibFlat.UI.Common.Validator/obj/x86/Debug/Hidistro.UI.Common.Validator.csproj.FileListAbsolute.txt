@@ -1,0 +1,8 @@
+D:\offices\gitcode_timely\F2B\src\Hidistro.UI.Common.Validator\bin\Debug\Hidistro.UI.Common.Validator.dll
+D:\offices\gitcode_timely\F2B\src\Hidistro.UI.Common.Validator\bin\Debug\Hidistro.UI.Common.Validator.pdb
+D:\offices\gitcode_timely\F2B\src\Hidistro.UI.Common.Validator\obj\x86\Debug\Hidistro.UI.Common.Validator.dll
+D:\offices\gitcode_timely\F2B\src\Hidistro.UI.Common.Validator\obj\x86\Debug\Hidistro.UI.Common.Validator.pdb
+C:\offices\gitcode_timely\F2B\src\Hidistro.UI.Common.Validator\bin\Debug\Hidistro.UI.Common.Validator.dll
+C:\offices\gitcode_timely\F2B\src\Hidistro.UI.Common.Validator\bin\Debug\Hidistro.UI.Common.Validator.pdb
+C:\offices\gitcode_timely\F2B\src\Hidistro.UI.Common.Validator\obj\x86\Debug\Hidistro.UI.Common.Validator.dll
+C:\offices\gitcode_timely\F2B\src\Hidistro.UI.Common.Validator\obj\x86\Debug\Hidistro.UI.Common.Validator.pdb

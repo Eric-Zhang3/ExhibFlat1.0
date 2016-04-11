@@ -1,0 +1,10 @@
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Entities\bin\Debug\ExhibFlat.Entities.dll.config
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Entities\bin\Debug\ExhibFlat.Entities.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Entities\bin\Debug\ExhibFlat.Entities.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Entities\bin\Debug\ExhibFlat.Components.Validation.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Entities\bin\Debug\ExhibFlat.Core.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Entities\bin\Debug\ExhibFlat.Components.Validation.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Entities\bin\Debug\ExhibFlat.Core.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Entities\obj\x86\Debug\ExhibFlat.Entities.csprojResolveAssemblyReference.cache
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Entities\obj\x86\Debug\ExhibFlat.Entities.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Entities\obj\x86\Debug\ExhibFlat.Entities.pdb

@@ -1,0 +1,261 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+.pic {
+    text-decoration: none;
+    display:block;
+}
+a:hover{
+    text-decoration: none;
+}
+.ju-cycle-description {
+    height:70px;
+    margin:0 auto;
+}
+.ju-cycle-description span {
+    color:#b3b3b3;
+    position:absolute;
+    left:750px;
+}
+
+.ju_item
+{
+    height: 258px;
+    border: 1px solid #e9e8e8;
+    cursor: pointer;
+    position:relative;
+    margin-bottom:10px;
+}
+
+.ju_channel_img{
+    border: 1px solid #e9e8e8;
+    width: 980px;
+    height: 180px;
+    margin-bottom:10px;
+}
+.ju_channel_img:hover{
+
+}
+
+.ju_item:hover
+{
+    border: 1px solid #d03a3a;
+}
+
+.ju_item_ctrl
+{
+    width: 260px;
+    height: 256px;
+    position: relative;
+    float:left;
+    background-color:#f7f5f6;
+}
+.ju_order_qty {
+    position:absolute;
+    left:160px;
+    top:171px;
+    color:#b81c22;
+}
+.ju-delivery{
+    position:absolute;
+    left:55px;
+    top:27px;
+    color:#808080;
+}
+.ju-delivery span{
+    font-family:ËÎÌå;
+}
+.ju-delivery .ju-delivery-title {
+    font-size:10.5pt;
+    color:#414141;
+    font-weight:700;
+}
+
+.ju-delivery .ju-delivery-date {
+    font-size:12pt; 
+    color:#414141;
+    font-weight:700;
+}
+.ju-item-info {
+    position:absolute;
+    left:23px;
+    top:72px;
+    color:#808080;
+}
+
+.ju-item-info div{
+    font-size:9pt;
+    font-family:ËÎÌå;
+    height:18px;
+    line-height:17px;
+    text-decoration:none;
+}
+
+.ju-item-price{
+    position:absolute;
+    left:20px;
+    top:156px;
+    color:#b81c22;
+    font-size:14pt; 
+}
+.ju-item-price span{
+    font-family:Î¢ÈíÑÅºÚ;
+    font-size:30pt; 
+    font-weight:720;
+}
+
+
+.ju-item-cycle
+{
+    position:absolute;
+    left:50px;
+    top:230px;
+    color:#b81c22;
+    margin:0;
+    border:0;
+    padding:0;
+}
+
+.ju_item_img {
+    float:right;
+    width:720px;
+    position: absolute;
+    height: 258px;
+    right:0px;
+    top:0px;
+}
+.ju_item .left_tag {
+    position:absolute;
+    left:0px;
+    top:0px;
+
+}
+.ju_time
+{
+    position: absolute;
+    left: 70px;
+    top: 205px;
+    height: 20px;
+    width: 150px;
+    padding-left:18px;
+    padding-top:3px;
+    background-position: left center;   
+    background-repeat: no-repeat;
+    overflow: hidden;
+    color:#808080;
+    margin:0;
+    border:0;
+    background-image: url('/site/images/sale/time.png');
+}
+.qq
+{
+    /*background-image: url('/site/images/sale/qq.gif');
+    background-position: right center;
+    background-repeat: no-repeat;
+    padding-right:24px;*/
+    color:black;
+    height:20px;
+    line-height:20px;
+    /*padding-left:12px;*/
+    display:inline-block;
+    vertical-align:middle;
+    border:0px;
+    padding-left:5px;
+    padding-right:5px;
+    text-decoration:none;
+    float:left;
+}
+.qq:hover
+{
+    color:#ff0000;
+    text-decoration:none;
+}
+.alww {
+    padding-right:10px;
+    color:black;
+    height:20px;
+    line-height:19px;
+    display:inline-block;
+    vertical-align:middle;
+    border:0px;
+    padding-left:5px;
+    padding-right:5px;
+    text-decoration:none;
+    float:left;
+}
+.weixin {
+    padding-right:10px;
+    height:20px;
+    line-height:19px;
+    padding-left:12px;
+    display:inline-block;
+    text-decoration:none;
+}
+.panic-buying {
+    width: 238px;
+    float: left;
+    height: 276px;
+    border: 1px solid #ccc;
+    background: #fff;
+    position: relative;
+    z-index: 60;
+}
+.panic-buying .p-body {
+    width: 238px;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+.ju_over
+{
+    position: absolute;
+    left: 120px;
+    color: #666666;
+    top: 50px;
+    z-index:99;
+}
+.customer-service{
+    position:fixed;
+    left:auto;
+    right:0;
+    top:300px;
+    z-index: 999;
+    /*ie6*/
+    _position:absolute;
+    _top:expression(eval(document.documentElement.scrollTop)+160);
+    background-color:white;
+}
+.slide {
+    margin:0;
+    border:0;
+    padding:0;
+}
+.slide ul {
+    margin:0;
+    border:0;
+    padding:0;
+    
+}
+.slide ul li {
+    margin:0;
+    border:0;
+    padding:0;
+    
+}
+.slide a {
+    margin:0;
+    border:0;
+    padding:0;
+    
+}
+.slide img {
+    margin:0;
+    border:0;
+    padding:0;
+    
+}
+
+.slideBox .li {
+    width: 320px;
+}

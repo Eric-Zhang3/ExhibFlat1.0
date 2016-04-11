@@ -1,0 +1,188 @@
+/*分销商样式
+--
+
+----首页----
+
+--
+*/
+body{
+	font-family: "微软雅黑";
+}
+.supperBox{
+	margin: 15px;
+	background: #fff;
+	border: 1px solid #c9c9c9;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+}
+.indexWp{
+	padding: 30px 30px 45px;
+	background: #fbfbfe; /* Old browsers */
+	background: -moz-linear-gradient(top,  #fbfbfe 0%, #fcfefe 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fbfbfe), color-stop(100%,#fcfefe)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #fbfbfe 0%,#fcfefe 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #fbfbfe 0%,#fcfefe 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #fbfbfe 0%,#fcfefe 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #fbfbfe 0%,#fcfefe 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbfbfe', endColorstr='#fcfefe',GradientType=0 ); /* IE6-9 */
+	position: relative;
+}
+.indexWp dl{
+	overflow: hidden;
+}
+.indexWp dl dt{
+	float: left;
+	width: 140px;
+	height: 140px;
+	margin-right: 25px;
+}
+.indexWp dl dt img{
+	border: 1px solid #ccc;
+}
+.indexWp dl dd{
+	float: left;
+	padding: 4px 80px 0 0;
+}
+.indexWp dl dd strong{
+	color: #3f3e3e;
+	font-size: 17px;
+	font-weight: normal;
+}
+.indexWp dl dd p{
+	margin-top: 5px;
+	color: #929292;
+}
+.indexWp dl dd img{
+	margin-right: 14px;
+}
+.indexWp .ulR{
+	position: absolute;
+	top: 40px;
+	right: 50px;
+}
+.indexWp .ulR li{
+	float: left;
+	border: 1px solid #d0d5dc;
+	margin-left: 40px;
+	text-align: center;
+	width: 252px;
+	height: 82px;
+	position: relative;
+	color: #929292;
+	background: #fafbfd;
+}
+.indexWp .ulR li span{
+	display: block;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background: #f2f4f7;
+	text-align: center;
+	width: 82px;
+	height: 82px;
+	border-right: 1px solid #d0d5dc;
+}
+.indexWp .ulR li .kc{
+	background: #f2f4f7 url(../images/supplier/kc.png) center center no-repeat;
+}
+.indexWp .ulR li .sy{
+	background: #f2f4f7 url(../images/supplier/sy.png) center center no-repeat;
+}
+.indexWp .ulR li p{
+	margin-top: 10px;
+	font-size: 13px;
+	padding-left: 40px;
+}
+.indexWp .ulR li strong{
+	font-size: 24px;
+	color: #5b88bc;
+	font-weight: normal;
+	margin:0 5px 0 40px;
+}
+.indexWp .ulR li em{
+	font-size: 15px;
+}
+.indexWp .ulR li a{
+	color: #6696ca;
+	margin-left: 20px;
+	text-decoration: underline;
+}
+.indexWp .ulR li cite{
+	display: block;
+	position: absolute;
+	right: 30px;
+	top: 15px;
+	background: url(../images/supplier/arrow.png) no-repeat;
+	width: 14px;
+	height: 7px;
+}
+.indexWp .ulR li .normal{
+	background-position: 0 -10px;
+}
+.indexWp .ulR li .active{
+	background-position: 0 0;
+}
+.subList{
+	width: 169px;
+	position: absolute;
+	top: 82px;
+	right: -1px;
+	border: 1px solid #d0d5dc;
+	background: #fafbfd;
+	border-top: none;
+	display: none;
+}
+.indexWp .ulR .subList p{
+	margin: 0px;
+	padding: 0px;
+	text-align: left;
+	width: 122px;
+	margin: 0px auto;
+	border-top: 1px solid #d0d5dc;
+	padding-top: 10px;
+}
+.indexWp .ulR .subList strong{
+	font-size: 17px;
+	font-weight: normal;
+	margin-left: 0;
+	margin-top: 14px;
+	margin-bottom: 15px;
+	display: inline-block;
+}
+.indexWp .ulR .subList strong em{
+	font-size: 13px;
+	color: #929292;
+	margin-left: 3px;
+}
+.tabInfo{
+  overflow: hidden;
+  border:1px solid #cbcbcb;
+  border-left: 0;
+  border-right: 0;
+  margin: 0 30px 45px 30px;
+  height: 110px;
+}
+.myList ul li{
+  float: left;
+  width: 19%;
+  color: #929292;
+  border-right: 1px solid #d0d5dc;
+  text-align: center;
+  margin: 12px 0;
+  font-size: 13px;
+  padding: 15px 0;
+}
+.myList ul li strong{
+  color: #5c81b2;
+  font-size: 24px;
+  margin-right: 5px;
+  display: inherit;
+  font-weight: normal;
+  margin-top: 5px;
+}
+.myList ul li strong em{
+	font-size: 13px;
+	color: #6d6d6d;
+	margin-left: 5px;
+}

@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <%<Hi:HeadContainer ID="HeadContainer1" runat="server" />%>
+    <%<Hi:pagetitle runat="server" />%>
+    <link href="/style/common.css" rel="stylesheet" type="text/css" />
+    <link href="/style/index.css" rel="stylesheet" type="text/css" />
+    <link href="/style/other.css" rel="stylesheet" type="text/css" />
+    <script src="/script/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script src="/utility/jquery.cookie.js" type="text/javascript"></script>
+    <script src="/utility/validate/pagevalidator.js" type="text/javascript"></script>
+    <script src="/utility/globals.js" type="text/javascript"></script>
+    <script src="/script/web_qq.js" type="text/javascript"></script>
+    <script src="/script/jquery.flexslider-min.js" type="text/javascript"></script>
+    <script src="/utility/LoginForm.js" type="text/javascript"></script>
+    <title></title>
+</head>
+<body>
+    <form runat="server" id="form1">
+        
+        <div class="floorList">
+            <div id="content">
+                <div class="partBox">
+                    <div class="partList bigAvater">
+                        <ul class="listUl">
+                            <%
+                            <hi:common_goodslist_default templatefile="/ascx/tags/Common_GoodsList/Skin-Common_GoodsList_Default.ascx" subjectid="3" runat="server"></hi:common_goodslist_default>
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </form>
+</body>
+</html>

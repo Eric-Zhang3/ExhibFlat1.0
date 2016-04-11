@@ -1,0 +1,6 @@
+C:\offices\enterprise\ExhibFlat1.0\Flat.Web\bin\ExhibFlat.Components.Validation.dll
+C:\offices\enterprise\ExhibFlat1.0\Flat.Web\bin\ExhibFlat.Components.Validation.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Components.Validation\bin\Debug\ExhibFlat.Components.Validation.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Components.Validation\bin\Debug\ExhibFlat.Components.Validation.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Components.Validation\obj\x86\Debug\ExhibFlat.Components.Validation.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Components.Validation\obj\x86\Debug\ExhibFlat.Components.Validation.pdb

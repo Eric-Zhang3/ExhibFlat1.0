@@ -1,0 +1,164 @@
+﻿
+.selectItem:after, .selectItem ul:after, .selectItem dl:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+.selectItem dl, .selectItem dl dt {
+    padding-right: 20px;
+}
+
+    .selectItem dl dd span.selday {
+        cursor: pointer;
+        color: #5C7DE0;
+    }
+
+    .selectItem dl dd span.action {
+        color: #008b8b;
+    }
+
+#Searchresult tr.odd {
+    background-color: #eeeff2;
+}
+#Searchresult tr td .noborder {
+   
+    color: darkgray;
+    cursor:default;
+    text-decoration: none;
+}
+#Searchresult .red{color:red}
+/*.dataarea .datalist {
+
+overflow: auto;
+}*/
+#guanli table td {
+    text-align: center;
+}
+#guanli table td.tt {
+    text-align: right;
+    width: 142px;
+}
+#guanli table td.tl {
+    text-align: left;
+}
+ /*==================*/
+.input-group {
+position: relative;
+display: table;
+border-collapse: separate;
+}
+.input-group-addon {
+padding: 6px 12px;
+font-size: 14px;
+font-weight: 400;
+color: #555;
+text-align: center;
+background-color: #eee;
+border: 1px solid #ccc;
+border-radius: 4px;
+-moz-border-radius: 4px;
+-webkit-border-radius: 4px;
+}
+.input-group-addon, .input-group-btn {
+width: 14px;
+white-space: nowrap;
+vertical-align: middle;
+}
+
+.form-control {
+display: inline-block;
+*display:inline;
+*zoom:1;
+width: 30px;
+height: 24px;
+padding: 6px 12px;
+font-size: 14px;
+line-height: 24px;
+color: #555;
+background-color: #fff;
+background-image: none;
+border: 1px solid #ccc;
+border-radius: 4px;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+vertical-align:middle;
+}
+.input-group-addon:not(:first-child):not(:last-child), .input-group-btn:not(:first-child):not(:last-child), .input-group .form-control:not(:first-child):not(:last-child) {
+border-radius: 0;
+}
+.input-group .form-control:first-child,
+ .input-group-addon:first-child,
+ .input-group-btn:first-child>.btn, 
+.input-group-btn:first-child>.btn-group>.btn, 
+.input-group-btn:first-child>.dropdown-toggle, .input-group-btn:last-child>.btn:not(:last-child):not(.dropdown-toggle), .input-group-btn:last-child>.btn-group:not(:last-child)>.btn {
+border-top-right-radius: 0;
+border-bottom-right-radius: 0;
+}
+.input-group .form-control:last-child, .input-group-addon:last-child, .input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group>.btn, .input-group-btn:last-child>.dropdown-toggle, .input-group-btn:first-child>.btn:not(:first-child), .input-group-btn:first-child>.btn-group:not(:first-child)>.btn {
+border-top-left-radius: 0;
+border-bottom-left-radius: 0;
+}
+.input-group-addon:first-child {
+border-right: 0;
+}
+.input-group-addon:last-child {
+border-left: 0;
+}
+
+.input-group-addon, .input-group-btn, .input-group .form-control {
+display: inline-block;
+*display:inline;
+*zoom:1;
+}
+input-group .form-control {
+position: relative;
+z-index: 2;
+float: left;
+width: 100%;
+margin-bottom: 0;
+}
+.dataarea .datalist table span.input-group-addon {
+    display: inline-block;
+    *display:inline;
+    *zoom:1;
+    padding: 2px 5px;
+}
+table .input-group {
+    *width: 105px;
+}
+
+table .input-group input.form-control {
+text-align: center;
+height: 24px; 
+padding: 0px 4px;
+}
+
+i.shang{background: url('../images/jiantou.png') -10px 4px no-repeat;
+width: 8px;
+display: inline-block;
+height: 20px;}
+i.xia {
+    background: url('../images/jiantou.png') 0px 4px no-repeat;
+width: 8px;
+display: inline-block;
+height: 20px;
+}
+.input-group-addon:hover,.input-group-addon:active {
+color: #333;
+    cursor: pointer;
+background-color: #e6e6e6;
+border-color: #adadad;
+}
+.input-group-addon:active {
+   background-image: none;
+outline: 0;
+-webkit-box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+}
+#testBox .dataList .innerTable tr.odd {
+background-color: #eeeff2;
+}
+/*===================================================*/

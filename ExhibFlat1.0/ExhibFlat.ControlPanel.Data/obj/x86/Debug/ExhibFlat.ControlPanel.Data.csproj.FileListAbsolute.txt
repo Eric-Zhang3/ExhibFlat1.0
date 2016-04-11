@@ -1,0 +1,17 @@
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\ExhibFlat.ControlPanel.Data.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\ExhibFlat.ControlPanel.Data.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\ExhibFlat.ControlPanel.Commodities.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\ExhibFlat.Core.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\ExhibFlat.Entities.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\ExhibFlat.SiteSet.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Data.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\ExhibFlat.Components.Validation.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\ExhibFlat.ControlPanel.Commodities.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\ExhibFlat.Core.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\ExhibFlat.Entities.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\ExhibFlat.SiteSet.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\bin\Debug\ExhibFlat.Components.Validation.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\obj\x86\Debug\ExhibFlat.ControlPanel.Data.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\obj\x86\Debug\ExhibFlat.ControlPanel.Data.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.ControlPanel.Data\obj\x86\Debug\ExhibFlat.ControlPanel.Data.csprojResolveAssemblyReference.cache

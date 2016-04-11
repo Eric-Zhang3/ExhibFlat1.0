@@ -1,0 +1,2917 @@
+﻿namespace Hidistro.ControlPanel.Commodities
+{
+    using Hidistro.ControlPanel.Store;
+    using Hidistro.Core.Entities;
+    using Hidistro.Entities.Commodities;
+    using Hidistro.Entities.HOP;
+    using Hidistro.Entities.Store;
+    using Hidistro.Membership.Context;
+    using Hidistro.Core;
+    using Hidistro.Jobs;
+    using Microsoft.Practices.EnterpriseLibrary.Data;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.Common;
+    using System.Globalization;
+    using System.IO;
+    using System.Runtime.InteropServices;
+    using System.Web;
+    using Membership.Core;
+    using System.Text.RegularExpressions;
+    using System.Collections;
+    using LitJson;
+    using System.Text;
+    using System.Configuration;
+    using System.Net;
+
+    public static class ProductHelper
+    {
+        //public static ProductActionStatus AddProduct(ProductInfo product, Dictionary<string, SKUItem> skus,
+        //    Dictionary<int, IList<int>> attrs, IList<int> tagsId)
+        //{
+        //    if (null == product)
+        //    {
+        //        return ProductActionStatus.UnknowError;
+        //    }
+        //    Globals.EntityCoding(product, true);
+        //    int decimalLength = HiContext.Current.SiteSettings.DecimalLength;
+        //    if (product.MarketPrice.HasValue)
+        //    {
+        //        product.MarketPrice = new decimal?(Math.Round(product.MarketPrice.Value, decimalLength));
+        //    }
+        //    product.LowestSalePrice = Math.Round(product.LowestSalePrice, decimalLength);
+        //    ProductActionStatus unknowError = ProductActionStatus.UnknowError;
+        //    using (DbConnection connection = DatabaseFactory.CreateDatabase().CreateConnection())
+        //    {
+        //        connection.Open();
+        //        DbTransaction dbTran = connection.BeginTransaction();
+        //        try
+        //        {
+        //            ProductProvider provider = ProductProvider.Instance();
+        //            int productId = provider.AddProduct(product, dbTran);
+        //            if (productId == 0)
+        //            {
+        //                dbTran.Rollback();
+        //                return ProductActionStatus.DuplicateName;
+        //            }
+        //            product.ProductId = productId;
+        //            if (((skus != null) && (skus.Count > 0)) && !provider.AddProductSKUs(productId, skus, dbTran))
+        //            {
+        //                dbTran.Rollback();
+        //                return ProductActionStatus.SKUError;
+        //            }
+        //            if (((attrs != null) && (attrs.Count > 0)) &&
+        //                !provider.AddProductAttributes(productId, attrs, dbTran))
+        //            {
+        //                dbTran.Rollback();
+        //                return ProductActionStatus.AttributeError;
+        //            }
+        //            if (((tagsId != null) && (tagsId.Count > 0)) && !provider.AddProductTags(productId, tagsId, dbTran))
+        //            {
+        //                dbTran.Rollback();
+        //                return ProductActionStatus.ProductTagEroor;
+        //            }
+        //            dbTran.Commit();
+        //            unknowError = ProductActionStatus.Success;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            EventLogs.WriteOperationLog(Privilege.AddProducts, string.Format("异常信息：" + ex.Message));
+        //            dbTran.Rollback();
+        //        }
+        //        finally
+        //        {
+        //            connection.Close();
+        //        }
+        //    }
+        //    if (unknowError == ProductActionStatus.Success)
+        //    {
+        //        EventLogs.WriteOperationLog(Privilege.AddProducts,
+        //            string.Format(CultureInfo.InvariantCulture, "上架了一个新商品:”{0}”", new object[] { product.ProductName }));
+        //    }
+        //    return unknowError;
+        //}
+
+        public static ProductActionStatus AddProduct(ProductInfo product, Dictionary<string, SKUItem> skus, Dictionary<int, IList<Hidistro.Jobs.Attribute>> attrs, IList<int> tagsId)
+        {
+            if (null == product)
+            {
+                return ProductActionStatus.UnknowError;
+            }
+            Globals.EntityCoding(product, true);
+            int decimalLength = HiContext.Current.SiteSettings.DecimalLength;
+            if (product.MarketPrice.HasValue)
+            {
+                product.MarketPrice = new decimal?(Math.Round(product.MarketPrice.Value, decimalLength));
+            }
+            product.LowestSalePrice = Math.Round(product.LowestSalePrice, decimalLength);
+            ProductActionStatus unknowError = ProductActionStatus.UnknowError;
+            using (DbConnection connection = DatabaseFactory.CreateDatabase().CreateConnection())
+            {
+                connection.Open();
+                DbTransaction dbTran = connection.BeginTransaction();
+                try
+                {
+                    ProductProvider provider = ProductProvider.Instance();
+                    int productId = provider.AddProduct(product, dbTran);
+                    if (productId == 0)
+                    {
+                        dbTran.Rollback();
+                        return ProductActionStatus.DuplicateName;
+                    }
+                    product.ProductId = productId;
+                    if (((skus != null) && (skus.Count > 0)) && !provider.AddProductSKUs(productId, skus, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return ProductActionStatus.SKUError;
+                    }
+                    if (((attrs != null) && (attrs.Count > 0)) &&
+                        !provider.AddProductAttributes(productId, attrs, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return ProductActionStatus.AttributeError;
+                    }
+                    //自定义商品属性插入Hishop_CustomAttributes
+                    if (((attrs != null) && (attrs.Count > 0)) && !provider.AddCustomProductAttributes(productId, attrs, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return ProductActionStatus.AttributeError;
+                    }
+                    if (((tagsId != null) && (tagsId.Count > 0)) && !provider.AddProductTags(productId, tagsId, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return ProductActionStatus.ProductTagEroor;
+                    }
+                    dbTran.Commit();
+                    unknowError = ProductActionStatus.Success;
+                }
+                catch (Exception ex)
+                {
+                    EventLogs.WriteOperationLog(Privilege.AddProducts, string.Format("异常信息：" + ex.Message));
+                    dbTran.Rollback();
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            if (unknowError == ProductActionStatus.Success)
+            {
+                EventLogs.WriteOperationLog(Privilege.AddProducts,
+                    string.Format(CultureInfo.InvariantCulture, "上架了一个新商品:”{0}”", new object[] { product.ProductName }));
+            }
+            return unknowError;
+        }
+
+        public static bool AddCustomProductAttributes(ProductInfo product, Dictionary<int, IList<Hidistro.Jobs.Attribute>> attrscus)
+        {
+            using (DbConnection connection = DatabaseFactory.CreateDatabase().CreateConnection())
+            {
+                connection.Open();
+                DbTransaction dbTran = connection.BeginTransaction();
+                try
+                {
+                    ProductProvider provider = ProductProvider.Instance();
+                    int productId = provider.AddProduct(product, dbTran);
+                    if (productId == 0)
+                    {
+                        dbTran.Rollback();
+                        return false;
+                    }
+                    product.ProductId = productId;
+                    //自定义商品属性插入Hishop_CustomAttributes
+                    if (((attrscus != null) && (attrscus.Count > 0)) && !provider.AddCustomProductAttributes(productId, attrscus, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return false;
+                    }
+                    dbTran.Commit();
+
+                }
+                catch (Exception ex)
+                {
+                    EventLogs.WriteOperationLog(Privilege.AddProducts, string.Format("异常信息：" + ex.Message));
+                    dbTran.Rollback();
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+            }
+            return true;
+        }
+
+        public static bool AddProductTags(int productId, IList<int> tagsId, DbTransaction dbtran)
+        {
+            return ProductProvider.Instance().AddProductTags(productId, tagsId, dbtran);
+        }
+
+        public static bool AddRelatedProduct(int productId, int relatedProductId)
+        {
+            return ProductProvider.Instance().AddRelatedProduct(productId, relatedProductId);
+        }
+
+        public static bool AddSkuStock(string productIds, int addStock)
+        {
+            return ProductProvider.Instance().AddSkuStock(productIds, addStock);
+        }
+
+        public static bool AddSubjectProduct(int tagId, int productId)
+        {
+            IList<int> productIds = new List<int>
+            {
+                productId
+            };
+            return ProductProvider.Instance().AddSubjectProducts(tagId, productIds);
+        }
+
+        public static bool AddSubjectProducts(int tagId, IList<int> productIds)
+        {
+            return ProductProvider.Instance().AddSubjectProducts(tagId, productIds);
+        }
+
+        public static string GetCodeByProductCode(string precode, int endcode)
+        {
+            return ProductProvider.Instance().GetCodeByProductCode(precode, endcode);
+        }
+
+        public static int CanclePenetrationProducts(IList<int> productIds)
+        {
+            int num;
+            ManagerHelper.CheckPrivilege(Privilege.UpPackProduct);
+            using (DbConnection connection = DatabaseFactory.CreateDatabase().CreateConnection())
+            {
+                connection.Open();
+                DbTransaction dbTran = connection.BeginTransaction();
+                try
+                {
+                    num = ProductProvider.Instance().CanclePenetrationProducts(productIds, dbTran);
+                    if (num <= 0)
+                    {
+                        dbTran.Rollback();
+                        return 0;
+                    }
+                    if (!DeleteCanclePenetrationProducts(productIds, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return 0;
+                    }
+                    dbTran.Commit();
+                }
+                catch
+                {
+                    dbTran.Rollback();
+                    return 0;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+                if (num > 0)
+                {
+                    EventLogs.WriteOperationLog(Privilege.UpPackProduct,
+                        string.Format(CultureInfo.InvariantCulture, "对 “{0}” 件商品进行了取消铺货",
+                            new object[] { productIds.Count }));
+                }
+            }
+            return num;
+        }
+
+        public static bool CheckPrice(string productIds, string basePriceName, decimal checkPrice)
+        {
+            return ProductProvider.Instance().CheckPrice(productIds, basePriceName, checkPrice);
+        }
+
+        public static bool CheckPrice(string productIds, decimal checkPrice)
+        {
+            return ProductProvider.Instance().CheckPrice(productIds, checkPrice);
+        }
+
+        public static bool CheckPrice1(string productIds, string basePriceName, decimal checkPrice, string operation)
+        {
+            return ProductProvider.Instance().CheckPrice1(productIds, basePriceName, checkPrice, operation);
+        }
+
+        public static bool CheckPrice(string productIds, string basePriceName, decimal checkPrice, string operation)
+        {
+            return ProductProvider.Instance().CheckPrice(productIds, basePriceName, checkPrice, operation);
+        }
+
+        public static bool ClearRelatedProducts(int productId)
+        {
+            return ProductProvider.Instance().ClearRelatedProducts(productId);
+        }
+
+        public static bool ClearSubjectProducts(int tagId)
+        {
+            return ProductProvider.Instance().ClearSubjectProducts(tagId);
+        }
+
+        private static ProductInfo ConverToProduct(DataRow productRow, int categoryId, int lineId, int? bandId,
+            ProductSaleStatus saleStatus, bool includeImages)
+        {
+            ProductInfo info = new ProductInfo
+            {
+                CategoryId = categoryId,
+                TypeId = new int?((int)productRow["SelectedTypeId"]),
+                ProductName = (string)productRow["ProductName"],
+                ProductCode = (string)productRow["ProductCode"],
+                LineId = lineId,
+                BrandId = bandId,
+                LowestSalePrice = (decimal)productRow["LowestSalePrice"],
+                Unit = (string)productRow["Unit"],
+                ShortDescription = (string)productRow["ShortDescription"],
+                Description = (string)productRow["Description"],
+                PenetrationStatus = PenetrationStatus.Notyet,
+                Title = (string)productRow["Title"],
+                MetaDescription = (string)productRow["Meta_Description"],
+                MetaKeywords = (string)productRow["Meta_Keywords"],
+                AddedDate = DateTime.Now,
+                SaleStatus = saleStatus,
+                HasSKU = (bool)productRow["HasSKU"],
+                MainCategoryPath = CatalogHelper.GetCategory(categoryId).Path + "|",
+                ImageUrl1 = (string)productRow["ImageUrl1"],
+                ImageUrl2 = (string)productRow["ImageUrl2"],
+                ImageUrl3 = (string)productRow["ImageUrl3"],
+                ImageUrl4 = (string)productRow["ImageUrl4"],
+                ImageUrl5 = (string)productRow["ImageUrl5"]
+            };
+            if (productRow["MarketPrice"] != DBNull.Value)
+            {
+                info.MarketPrice = new decimal?((decimal)productRow["MarketPrice"]);
+            }
+            if (includeImages)
+            {
+                string[] strArray;
+                HttpContext current = HttpContext.Current;
+                if (!(string.IsNullOrEmpty(info.ImageUrl1) || (info.ImageUrl1.Length <= 0)))
+                {
+                    strArray = ProcessImages(current, info.ImageUrl1);
+                    info.ThumbnailUrl40 = strArray[0];
+                    info.ThumbnailUrl60 = strArray[1];
+                    info.ThumbnailUrl100 = strArray[2];
+                    info.ThumbnailUrl160 = strArray[3];
+                    info.ThumbnailUrl180 = strArray[4];
+                    info.ThumbnailUrl220 = strArray[5];
+                    info.ThumbnailUrl310 = strArray[6];
+                    info.ThumbnailUrl410 = strArray[7];
+                }
+                if (!(string.IsNullOrEmpty(info.ImageUrl2) || (info.ImageUrl2.Length <= 0)))
+                {
+                    strArray = ProcessImages(current, info.ImageUrl2);
+                }
+                if (!(string.IsNullOrEmpty(info.ImageUrl3) || (info.ImageUrl3.Length <= 0)))
+                {
+                    strArray = ProcessImages(current, info.ImageUrl3);
+                }
+                if (!(string.IsNullOrEmpty(info.ImageUrl4) || (info.ImageUrl4.Length <= 0)))
+                {
+                    strArray = ProcessImages(current, info.ImageUrl4);
+                }
+                if (!(string.IsNullOrEmpty(info.ImageUrl5) || (info.ImageUrl5.Length <= 0)))
+                {
+                    strArray = ProcessImages(current, info.ImageUrl5);
+                }
+            }
+            return info;
+        }
+
+        private static Dictionary<string, SKUItem> ConverToSkus(int mappedProductId, DataSet productData,
+            bool includeCostPrice, bool includeStock)
+        {
+            DataRow[] rowArray =
+                productData.Tables["skus"].Select("ProductId=" + mappedProductId.ToString(CultureInfo.InvariantCulture));
+            log.blog = true;
+            log.GetInstance().writeLog("rowArray:" + rowArray.Length + " ProductId:" + mappedProductId);
+            if (rowArray.Length == 0)
+            {
+                return null;
+            }
+            Dictionary<string, SKUItem> dictionary = new Dictionary<string, SKUItem>();
+            foreach (DataRow row in rowArray)
+            {
+                string key = (string)row["NewSkuId"];
+                SKUItem item = new SKUItem
+                {
+                    SkuId = key,
+                    SKU = (string)row["SKU"],
+                    SalePrice = (decimal)row["SalePrice"],
+                    PurchasePrice = (decimal)row["PurchasePrice"],
+                    AlertStock = (int)row["AlertStock"]
+                };
+                if (row["Weight"] != DBNull.Value)
+                {
+                    item.Weight = (int)row["Weight"];
+                }
+                if (includeCostPrice && (row["CostPrice"] != DBNull.Value))
+                {
+                    item.CostPrice = (decimal)row["CostPrice"];
+                }
+                if (includeStock)
+                {
+                    item.Stock = (int)row["Stock"];
+                }
+                DataRow[] rowArray2 =
+                    productData.Tables["skuItems"].Select("NewSkuId='" + key + "' AND MappedProductId=" +
+                                                          mappedProductId.ToString(CultureInfo.InvariantCulture));
+                foreach (DataRow row2 in rowArray2)
+                {
+                    item.SkuItems.Add((int)row2["SelectedAttributeId"], (int)row2["SelectedValueId"]);
+                }
+                dictionary.Add(key, item);
+            }
+            return dictionary;
+        }
+
+        private static Dictionary<int, IList<int>> ConvertToAttributes(int mappedProductId, DataSet productData)
+        {
+            DataRow[] rowArray =
+                productData.Tables["attributes"].Select("ProductId=" +
+                                                        mappedProductId.ToString(CultureInfo.InvariantCulture));
+            if (rowArray.Length == 0)
+            {
+                return null;
+            }
+            Dictionary<int, IList<int>> dictionary = new Dictionary<int, IList<int>>();
+            foreach (DataRow row in rowArray)
+            {
+                int key = (int)row["SelectedAttributeId"];
+                if (!dictionary.ContainsKey(key))
+                {
+                    IList<int> list = new List<int>();
+                    dictionary.Add(key, list);
+                }
+                dictionary[key].Add((int)row["SelectedValueId"]);
+            }
+            return dictionary;
+        }
+
+        public static bool DeleteCanclePenetrationProducts(IList<int> productIds, DbTransaction dbTran)
+        {
+            return ProductProvider.Instance().DeleteCanclePenetrationProducts(productIds, dbTran);
+        }
+        public static string GenerateProductAutoCode()
+        {
+            return ProductProvider.Instance().GenerateProductAutoCode();
+        }
+        public static void DeleteNotinProductLines(int distributorUserId)
+        {
+            ProductProvider.Instance().DeleteNotinProductLines(distributorUserId);
+        }
+
+        public static int DeleteProduct(string productIds, bool isDeleteImage)
+        {
+            ManagerHelper.CheckPrivilege(Privilege.DeleteProducts);
+            if (string.IsNullOrEmpty(productIds))
+            {
+                return 0;
+            }
+            string[] strArray = productIds.Split(new char[] { ',' });
+            IList<int> list = new List<int>();
+            foreach (string str in strArray)
+            {
+                list.Add(int.Parse(str));
+            }
+            IList<ProductInfo> products = ProductProvider.Instance().GetProducts(list);
+            int num = ProductProvider.Instance().DeleteProduct(productIds);
+            if (num > 0)
+            {
+                EventLogs.WriteOperationLog(Privilege.DeleteProducts,
+                    string.Format(CultureInfo.InvariantCulture, "删除了 “{0}” 件商品", new object[] { list.Count }));
+                if (isDeleteImage)
+                {
+                    foreach (ProductInfo info in products)
+                    {
+                        try
+                        {
+                            DeleteProductImage(info);
+                        }
+                        catch
+                        {
+                        }
+                    }
+                }
+            }
+            return num;
+        }
+
+        private static void DeleteProductImage(ProductInfo product)
+        {
+            if (product != null)
+            {
+                Regex re = new Regex("^(http|https)://[^/]+/");
+                if (!string.IsNullOrEmpty(product.ImageUrl1))
+                {
+                    String url = "/" + re.Replace(product.ImageUrl1, "", 1);
+                    ResourcesHelper.DeleteImage(url);
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs40/40_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs60/60_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs100/100_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs160/160_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs180/180_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs220/220_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs310/310_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs410/410_"));
+                }
+                if (!string.IsNullOrEmpty(product.ImageUrl2))
+                {
+                    String url = "/" + re.Replace(product.ImageUrl2, "", 1);
+                    ResourcesHelper.DeleteImage(url);
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs40/40_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs60/60_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs100/100_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs160/160_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs180/180_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs220/220_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs310/310_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs410/410_"));
+                }
+                if (!string.IsNullOrEmpty(product.ImageUrl3))
+                {
+                    String url = "/" + re.Replace(product.ImageUrl3, "", 1);
+                    ResourcesHelper.DeleteImage(url);
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs40/40_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs60/60_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs100/100_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs160/160_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs180/180_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs220/220_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs310/310_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs410/410_"));
+                }
+                if (!string.IsNullOrEmpty(product.ImageUrl4))
+                {
+                    String url = "/" + re.Replace(product.ImageUrl4, "", 1);
+                    ResourcesHelper.DeleteImage(url);
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs40/40_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs60/60_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs100/100_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs160/160_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs180/180_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs220/220_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs310/310_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs410/410_"));
+                }
+                if (!string.IsNullOrEmpty(product.ImageUrl5))
+                {
+                    String url = "/" + re.Replace(product.ImageUrl5, "", 1);
+                    ResourcesHelper.DeleteImage(url);
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs40/40_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs60/60_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs100/100_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs160/160_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs180/180_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs220/220_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs310/310_"));
+                    ResourcesHelper.DeleteImage(url.Replace("/Storage/master/product/images/",
+                        "/Storage/master/product/thumbs410/410_"));
+                }
+            }
+        }
+
+        public static bool DeleteProductTags(int productId, DbTransaction tran)
+        {
+            return ProductProvider.Instance().DeleteProductTags(productId, tran);
+        }
+
+        public static void EnsureMapping(DataSet mappingSet)
+        {
+            ProductProvider.Instance().EnsureMapping(mappingSet);
+        }
+
+        public static DbQueryResult GetAlertProducts(ProductQuery query)
+        {
+            return ProductProvider.Instance().GetAlertProducts(query);
+        }
+
+        public static DbQueryResult GetBindProducts(ProductQuery query)
+        {
+            return ProductProvider.Instance().GetBindProducts(query);
+        }
+
+        public static DbQueryResult GetExportProducts(AdvancedProductQuery query, string removeProductIds)
+        {
+            return ProductProvider.Instance().GetExportProducts(query, removeProductIds);
+        }
+
+        public static DataSet GetExportProducts(AdvancedProductQuery query, bool includeCostPrice, bool includeStock,
+            string removeProductIds)
+        {
+            DataSet set = ProductProvider.Instance()
+                .GetExportProducts(query, includeCostPrice, includeStock, removeProductIds);
+            set.Tables[0].TableName = "types";
+            set.Tables[1].TableName = "attributes";
+            set.Tables[2].TableName = "values";
+            set.Tables[3].TableName = "products";
+            set.Tables[4].TableName = "skus";
+            set.Tables[5].TableName = "skuItems";
+            set.Tables[6].TableName = "productAttributes";
+            set.Tables[7].TableName = "taobaosku";
+            return set;
+        }
+
+        public static DataTable GetExportProduct(int productId)
+        {
+            return ProductProvider.Instance().GetExportProduct(productId);
+        }
+
+        public static DataTable GetProductGuige(int productid)
+        {
+            return ProductProvider.Instance().GetProductGuige(productid);
+        }
+
+        public static DataTable GetAttributeAndValue(string skuid)
+        {
+            return ProductProvider.Instance().GetAttributeAndValue(skuid);
+        }
+        public static DataTable GetAttributesBySkuId(string SkuId)
+        {
+            return ProductProvider.Instance().GetAttributesBySkuId(SkuId);
+        }
+        public static DataTable GetAttributesByProductId(int ProductId)
+        {
+            return ProductProvider.Instance().GetAttributesByProductId(ProductId);
+        }
+        public static DataTable GetCustomAttribute(int productid)
+        {
+            return ProductProvider.Instance().GetCustomAttribute(productid);
+        }
+        public static DataTable GetDefCustomAttribute(int productid)
+        {
+            return ProductProvider.Instance().GetDefCustomAttribute(productid);
+        }
+        /// <summary>
+        /// 收藏夹调用
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static DataSet GetExportProducts(AdvancedProductQuery query, bool includeCostPrice, bool includeStock,
+            string removeProductIds, int productType)
+        {
+            DataSet set = ProductProvider.Instance()
+                .GetExportProducts(query, includeCostPrice, includeStock, removeProductIds, productType);
+            set.Tables[0].TableName = "types";
+            set.Tables[1].TableName = "attributes";
+            set.Tables[2].TableName = "values";
+            set.Tables[3].TableName = "products";
+            set.Tables[4].TableName = "skus";
+            set.Tables[5].TableName = "skuItems";
+            set.Tables[6].TableName = "productAttributes";
+            set.Tables[7].TableName = "taobaosku";
+            return set;
+        }
+
+        public static bool AddUserRole(int UserId)
+        {
+            return ProductProvider.Instance().AddUserRole(UserId);
+        }
+
+        //添加子账户
+        public static bool AddChildSupplier(string Uname, string Sid)
+        {
+            return ProductProvider.Instance().AddChildSupplier(Uname, Sid);
+        }
+
+        public static DataTable CheckChildSupplier(string UserName)
+        {
+            return ProductProvider.Instance().CheckChildSupplier(UserName);
+        }
+
+        public static DataTable CheckIsRegSupplier(string UserName)
+        {
+            return ProductProvider.Instance().CheckIsRegSupplier(UserName);
+        }
+
+        //根据公司名获取iD
+        public static string GetSupplierId(string companyname)
+        {
+            return ProductProvider.Instance().GetSupplierId(companyname);
+        }
+
+        /// <summary>
+        /// 根据供应商ID获取公司名
+        /// </summary>
+        /// <param name="SupplierId"></param>
+        /// <returns></returns>
+        public static string GetCompanyNameBySupplierId(string SupplierId)
+        {
+            return ProductProvider.Instance().GetCompanyNameBySupplierId(SupplierId);
+        }
+
+        public static DataTable GetSupplierAccount(string SupplierId)
+        {
+            return ProductProvider.Instance().GetSupplierAccount(SupplierId);
+        }
+
+        //根据用户ID获取供应商iD
+        public static string GetSupplierId(int UserId)
+        {
+            return ProductProvider.Instance().GetSupplierId(UserId);
+        }
+
+        public static DataTable GetGroupBuyProducts(ProductQuery query)
+        {
+            return ProductProvider.Instance().GetGroupBuyProducts(query);
+        }
+
+        public static int GetMaxSequence()
+        {
+            return ProductProvider.Instance().GetMaxSequence();
+        }
+
+        public static DataTable GetProductBaseInfo(string productIds)
+        {
+            return ProductProvider.Instance().GetProductBaseInfo(productIds);
+        }
+
+
+        public static ProductInfo GetProductDetails(int productId, out Dictionary<int, IList<int>> attrs, out Dictionary<int, IList<string>> attrscus,
+            out IList<int> distributorUserIds, out IList<int> tagsId)
+        {
+            return ProductProvider.Instance().GetProductDetails(productId, out attrs, out attrscus, out distributorUserIds, out tagsId);
+        }
+
+        public static ProductInfo GetProductDetails(int productId, out Dictionary<int, IList<Hidistro.Jobs.Attribute>> attrscus,
+            out IList<int> distributorUserIds, out IList<int> tagsId)
+        {
+            return ProductProvider.Instance().GetProductDetails(productId, out attrscus, out distributorUserIds, out tagsId);
+        }
+
+        public static DataTable GetProPlat(int productId)
+        {
+            return ProductProvider.Instance().GetProPlat(productId);
+        }
+
+        public static bool UpdateProPlat(int productId, string proPlat, string packetName, DateTime now)
+        {
+            return ProductProvider.Instance().UpdateProPlat(productId, proPlat, packetName, now);
+        }
+
+        public static bool Insert(int productId, string proPlat, string packetName, DateTime now)
+        {
+            return ProductProvider.Instance().Insert(productId, proPlat, packetName, now);
+        }
+
+        public static bool DeletePlat(int productId)
+        {
+            return ProductProvider.Instance().DeletePlat(productId);
+        }
+
+        public static IList<int> GetProductIds(ProductQuery query)
+        {
+            return ProductProvider.Instance().GetProductIds(query);
+        }
+
+        public static string GetProductNameByProductIds(string productId, out int sumcount)
+        {
+            return ProductProvider.Instance().GetProductNameByProductIds(productId, out sumcount);
+        }
+
+        public static string GetProductNamesByLineId(int lineId, out int count)
+        {
+            return ProductProvider.Instance().GetProductNamesByLineId(lineId, out count);
+        }
+
+        public static DbQueryResult GetProducts(ProductQuery query)
+        {
+            return ProductProvider.Instance().GetProducts(query);
+        }
+
+        public static IList<ProductInfo> GetProducts(IList<int> productIds)
+        {
+            return ProductProvider.Instance().GetProducts(productIds);
+        }
+
+        public static DataSet GetProductsByQuery(ProductQuery query, out int totalrecord)
+        {
+            return ProductProvider.Instance().GetProductsByQuery(query, out totalrecord);
+        }
+
+        public static DataSet GetProductSkuDetials(int productId)
+        {
+            return ProductProvider.Instance().GetProductSkuDetials(productId);
+        }
+
+        public static DbQueryResult GetRelatedProducts(Pagination page, int productId)
+        {
+            return ProductProvider.Instance().GetRelatedProducts(page, productId);
+        }
+
+        public static DataTable GetSkuContentBySkuBuDistorUserId(string skuId, int distorUserId)
+        {
+            return ProductProvider.Instance().GetSkuContentBySkuBuDistorUserId(skuId, distorUserId);
+        }
+
+        public static DataTable GetSkuDistributorPrices(string productIds)
+        {
+            return ProductProvider.Instance().GetSkuDistributorPrices(productIds);
+        }
+
+        public static DataTable GetSkuMemberPrices(string productIds)
+        {
+            return ProductProvider.Instance().GetSkuMemberPrices(productIds);
+        }
+
+        public static DataTable GetSkusByProductId(int productId)
+        {
+            return ProductProvider.Instance().GetSkusByProductId(productId);
+        }
+
+        public static DataTable GetSkusByProductIdByDistorId(int productId, int distorUserId)
+        {
+            return ProductProvider.Instance().GetSkusByProductIdByDistorId(productId, distorUserId);
+        }
+
+        public static DataTable GetSkuStocks(string productIds)
+        {
+            return ProductProvider.Instance().GetSkuStocks(productIds);
+        }
+
+        public static IList<int> GetSubjectProductIds(int tagId)
+        {
+            return ProductProvider.Instance().GetSubjectProductIds(tagId);
+        }
+
+        public static DbQueryResult GetSubjectProducts(int tagId, Pagination page)
+        {
+            return ProductProvider.Instance().GetSubjectProducts(tagId, page);
+        }
+
+        public static DbQueryResult GetSubmitPuchaseProductsByDistorUserId(ProductQuery query, int distorUserId)
+        {
+            return ProductProvider.Instance().GetSubmitPuchaseProductsByDistorUserId(query, distorUserId);
+        }
+
+        public static DataSet GetTaobaoProductDetails(int productId)
+        {
+            return ProductProvider.Instance().GetTaobaoProductDetails(productId);
+        }
+
+        public static DbQueryResult GetUnclassifiedProducts(ProductQuery query)
+        {
+            return ProductProvider.Instance().GetUnclassifiedProducts(query);
+        }
+
+        public static IList<string> GetUserIdByLineId(int lineId)
+        {
+            return ProductProvider.Instance().GetUserIdByLineId(lineId);
+        }
+
+        public static IList<string> GetUserNameByProductId(string productIds)
+        {
+            return ProductProvider.Instance().GetUserNameByProductId(productIds);
+        }
+
+        public static bool YanZheng(string value)
+        {
+            bool IsNo = true;
+            int aa = Regex.Matches(value, @".").Count;
+            string value1 = value.Replace(".", null);
+            foreach (var s in value1)
+            {
+                if ("0123456789".IndexOf(s) < 0)
+                {
+                    IsNo = false;
+                }
+            }
+            if (IsNo == true)
+            {
+                if (value.Length - value1.Length > 1)
+                {
+                    IsNo = false;
+                }
+            }
+            return IsNo;
+        }
+
+        #region 淘宝包导入
+
+        public static string ImportProducts(DataTable productData, int categoryId, int lineId, int? brandId,
+            ProductSaleStatus saleStatus, bool isImportFromTaobao, Guid supplierId)
+        {
+            string result = ""; //输出内容
+            int successSum = 0; //导入商品成功条数
+            int Sum = 3;
+            string Error = ""; //导入数据失败具体行
+            int pCid = 0; //宝贝类目
+
+            CategoryInfo category = CatalogHelper.GetCategory(categoryId);
+            if ((productData != null) && (productData.Rows.Count > 0))
+            {
+                bool importTb = true;
+                string MsgNo = ""; //提示信息
+                int rowNo = 0; //第几行
+                int sameCount = 0; //sameCount:数据包中存在与已存在商品重复数
+                //校验数据包内数据重复
+                int z = 0; //数据包内重复数据条数                
+
+
+                for (int j = 0; j < productData.Rows.Count; j++)
+                {
+                    importTb = Verification(productData, ref pCid, ref MsgNo, ref rowNo, ref sameCount, ref z, j);
+                    if (importTb == false)
+                    {
+                        result += "数据包第" + rowNo + "行" + MsgNo + "\\r\\n";
+                        result = result + "true";
+                    }
+                    else
+                    {
+                        //  导入数据
+                        ImportAfterExaming(productData.Rows[j], categoryId, lineId, brandId, saleStatus,
+                            isImportFromTaobao, supplierId, ref result, ref successSum, ref Sum, ref Error, pCid,
+                            category, sameCount);
+                    }
+                }
+
+                if (successSum > 0)
+                {
+                    result = "成功导入商品共" + successSum + "条。\\r\\n";
+                    result = result + "true";
+                }
+                if (z > 0)
+                {
+                    result = result + "数据包内部重复" + z + "条。\\r\\n";
+                }
+                if (sameCount > 0)
+                {
+                    result = result + sameCount + "行商品已存在。\\r\\n";
+                }
+                if (successSum < productData.Rows.Count)
+                {
+                    result = result + "导入失败" + (productData.Rows.Count - successSum) + "条。\\r\\n";
+                }
+                if (!string.IsNullOrEmpty(Error))
+                {
+                    for (int a = Error.Length - 1; a > 0; a--)
+                    {
+                        if (Error[a] == ',')
+                        {
+                            Error = Error.Substring(0, a);
+                            break;
+                        }
+                    }
+                    result = result + "第(" + Error + ")行导入失败 \\r\\n";
+                }
+            }
+            else
+            {
+                result = "数据包没数据或者格式错误。";
+            }
+            return result;
+        }
+
+        private static bool Verification(DataTable productData, ref int pCid, ref string MsgNo, ref int rowNo,
+            ref int sameCount, ref int z, int j)
+        {
+            bool importTb = true;
+            //if (j > 0)
+            //{
+            //    for (int t = 0; t < productData.Rows.Count; t++)
+            //    {
+            //        if (productData.Rows[t]["ProductName"].Equals(productData.Rows[j]["ProductName"]) && t != j)
+            //        {
+            //            z++;
+            //            rowNo = j + 4;
+            //            MsgNo = "此条为包内重复数据";
+            //            importTb = false;
+            //            return importTb ;
+            //        }
+            //    }              
+            //}
+            if (ProductProvider.Instance().ProductSum(productData.Rows[j]["ProductName"].ToString()) > 0) //数据库中已存在
+            {
+                sameCount++;
+                rowNo = j + 4;
+                MsgNo = "商品平台已存在，无法再次导入";
+                importTb = false;
+                return importTb;
+            }
+            if (string.IsNullOrEmpty(productData.Rows[j]["ProductName"].ToString()))
+            {
+                rowNo = j + 4;
+                MsgNo = "商品名称不能为空";
+                importTb = false;
+                return importTb;
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(productData.Rows[j]["SalePrice"].ToString()))
+                {
+                    rowNo = j + 4;
+                    MsgNo = "宝贝价格不能为空";
+                    importTb = false;
+                }
+                else if (string.IsNullOrEmpty(productData.Rows[j]["PCid"].ToString()))
+                {
+                    rowNo = j + 4;
+                    MsgNo = "宝贝类目不能为空";
+                    importTb = false;
+                }
+                else
+                {
+                    Regex reg = new Regex(@"^\d{1,12}(?:\.\d{1,4})?$");
+                    pCid = ProductProvider.Instance()
+                        .GetPlatCid(Convert.ToInt32(productData.Rows[j]["PCid"].ToString()));
+                    if (string.IsNullOrEmpty(productData.Rows[j]["Weight"].ToString()))
+                        productData.Rows[j]["Weight"] = 0;
+                    if (!reg.IsMatch(productData.Rows[j]["SalePrice"].ToString()))
+                    {
+                        rowNo = j + 4;
+                        MsgNo = "宝贝价格格式不正确";
+                        importTb = false;
+                    }
+                    else if (pCid == 0)
+                    {
+                        rowNo = j + 4;
+                        MsgNo = "宝贝类目系统内未维护";
+                        importTb = false;
+                    }
+                    else
+                    {
+                        if (
+                            !YanZheng(
+                                (Convert.ToDecimal(productData.Rows[j]["Weight"].ToString().Trim()) * 1000).ToString()))
+                        {
+                            rowNo = j + 4;
+                            MsgNo = "物流重量格式不正确";
+                            importTb = false;
+                        }
+                        else if (string.IsNullOrEmpty(productData.Rows[j]["Stock"].ToString()))
+                        {
+                            rowNo = j + 4;
+                            MsgNo = "宝贝数量不能为空";
+                            importTb = false;
+                        }
+                        else
+                        {
+                            if (!YanZheng(productData.Rows[j]["Stock"].ToString().Trim()))
+                            {
+                                rowNo = j + 4;
+                                MsgNo = "宝贝数量格式不正确";
+                                importTb = false;
+                            }
+                        }
+                    }
+                }
+                return importTb;
+            }
+        }
+
+        private static void ImportAfterExaming(DataRow row, int categoryId, int lineId, int? brandId,
+            ProductSaleStatus saleStatus, bool isImportFromTaobao, Guid supplierId, ref string result,
+            ref int successSum, ref int Sum, ref string Error, int pCid, CategoryInfo category, int sameCount)
+        {
+            try
+            {
+                //string[] strArray;
+                string SKUCode = GetCodeByProductCode(category.SKUPrefix,
+                    new Random(DateTime.Now.Millisecond).Next(1, 0x1869f));
+                //string SKUCode = category.SKUPrefix + new Random(DateTime.Now.Millisecond).Next(1, 0x1869f).ToString(CultureInfo.InvariantCulture).PadLeft(5, '0');
+                ProductInfo product = new ProductInfo
+                {
+                    CategoryId = categoryId,
+                    MainCategoryPath = CatalogHelper.GetCategory(categoryId).Path + "|",
+                    ProductName = (string)row["ProductName"],
+                    ProductCode = SKUCode,
+                    LineId = lineId,
+                    BrandId = brandId,
+                    SupplierId = supplierId,
+                    TypeId = pCid
+                };
+                Dictionary<string, SKUItem> dictionary3 = new Dictionary<string, SKUItem>();
+                SKUItem items = new SKUItem();
+                items.SkuId = "0";
+                items.SKU = SKUCode;
+                items.SalePrice = row["SalePrice"] != DBNull.Value ? Convert.ToDecimal(row["SalePrice"]) : 0;
+                items.CostPrice = 0;
+                items.PurchasePrice = row["SalePrice"] != DBNull.Value ? Convert.ToDecimal(row["SalePrice"]) : 0;
+                items.Stock = row["Stock"] != DBNull.Value ? (int)row["Stock"] : 0;
+                //items.Stock = 0;
+                items.AlertStock = 0;
+                items.Weight = row["Weight"] != DBNull.Value
+                    ? (int)Math.Round(Convert.ToDecimal(row["Weight"]) * 1000, 0)
+                    : 0;
+                dictionary3.Add("0", items);
+
+                if (row["Description"] != DBNull.Value)
+                {
+                    string text = DownRemotePic(row["Description"].ToString());
+                    product.Description = text;
+                }
+                if (row["SalePrice"] != DBNull.Value)
+                {
+                    product.MarketPrice = Convert.ToDecimal(row["SalePrice"]);
+                }
+                product.PenetrationStatus = PenetrationStatus.Notyet;
+                product.AddedDate = DateTime.Now;
+                product.SaleStatus = saleStatus;
+                product.HasSKU = false;
+
+                HttpContext current = HttpContext.Current;
+                if (row["ImageUrl1"] != DBNull.Value)
+                {
+                    product.ImageUrl1 = (string)row["ImageUrl1"];
+                }
+                if (row["Image"] != DBNull.Value)
+                {
+                    product.Image = (string)row["Image"];
+                }
+                if (row["ImageUrl2"] != DBNull.Value)
+                {
+                    product.ImageUrl2 = (string)row["ImageUrl2"];
+                }
+                //if (!(string.IsNullOrEmpty(product.ImageUrl2) || (product.ImageUrl2.Length <= 0)))
+                //{
+                //    strArray = ProcessImages(current, product.ImageUrl2);
+                //}
+                if (row["ImageUrl3"] != DBNull.Value)
+                {
+                    product.ImageUrl3 = (string)row["ImageUrl3"];
+                }
+                //if (!(string.IsNullOrEmpty(product.ImageUrl3) || (product.ImageUrl3.Length <= 0)))
+                //{
+                //    strArray = ProcessImages(current, product.ImageUrl3);
+                //}
+                if (row["ImageUrl4"] != DBNull.Value)
+                {
+                    product.ImageUrl4 = (string)row["ImageUrl4"];
+                }
+                //if (!(string.IsNullOrEmpty(product.ImageUrl4) || (product.ImageUrl4.Length <= 0)))
+                //{
+                //    strArray = ProcessImages(current, product.ImageUrl4);
+                //}
+                if (row["ImageUrl5"] != DBNull.Value)
+                {
+                    product.ImageUrl5 = (string)row["ImageUrl5"];
+                }
+                if (row["ThumbnailUrl40"] != DBNull.Value)
+                {
+                    product.ThumbnailUrl40 = (string)row["ThumbnailUrl40"];
+                }
+                if (row["ThumbnailUrl60"] != DBNull.Value)
+                {
+                    product.ThumbnailUrl60 = (string)row["ThumbnailUrl60"];
+                }
+                if (row["ThumbnailUrl100"] != DBNull.Value)
+                {
+                    product.ThumbnailUrl100 = (string)row["ThumbnailUrl100"];
+                }
+                if (row["ThumbnailUrl160"] != DBNull.Value)
+                {
+                    product.ThumbnailUrl160 = (string)row["ThumbnailUrl160"];
+                }
+                if (row["ThumbnailUrl180"] != DBNull.Value)
+                {
+                    product.ThumbnailUrl180 = (string)row["ThumbnailUrl180"];
+                }
+                if (row["ThumbnailUrl220"] != DBNull.Value)
+                {
+                    product.ThumbnailUrl220 = (string)row["ThumbnailUrl220"];
+                }
+                if (row["ThumbnailUrl310"] != DBNull.Value)
+                {
+                    product.ThumbnailUrl310 = (string)row["ThumbnailUrl310"];
+                }
+                if (row["ThumbnailUrl410"] != DBNull.Value)
+                {
+                    product.ThumbnailUrl410 = (string)row["ThumbnailUrl410"];
+                }
+                //if (!(string.IsNullOrEmpty(product.ImageUrl5) || (product.ImageUrl5.Length <= 0)))
+                //{
+                //    strArray = ProcessImages(current, product.ImageUrl5);
+                //}
+                //if (!(string.IsNullOrEmpty(product.ImageUrl1) || (product.ImageUrl1.Length <= 0)))
+                //{
+
+                //    strArray = ProcessImages(current, product.ImageUrl1);
+
+                //    product.ThumbnailUrl40 = strArray[0];
+                //    product.ThumbnailUrl60 = strArray[1];
+                //    product.ThumbnailUrl100 = strArray[2];
+                //    product.ThumbnailUrl160 = strArray[3];
+                //    product.ThumbnailUrl180 = strArray[4];
+                //    product.ThumbnailUrl220 = strArray[5];
+                //    product.ThumbnailUrl310 = strArray[6];
+                //    product.ThumbnailUrl410 = strArray[7];
+                //}
+                product.UserId = Users.GetUser().UserId;
+
+                product.HasCommission = false;
+
+                product.CommissionPath = null;
+                if (row["CID"] != DBNull.Value)
+                {
+                    DataTable dtCategry =
+                        ProductProvider.Instance().GetTypeIdByPostCategryID(Convert.ToInt32(row["CID"]));
+                    if (dtCategry.Rows.Count > 0)
+                    {
+                        product.TypeId = (int)dtCategry.Rows[0][0];
+                    }
+                }
+
+                #region 产品属性
+
+                //string productProperty = row["PropertyAlias"].ToString();
+                Dictionary<int, IList<Hidistro.Jobs.Attribute>> atts = GetAttrsDict(row, pCid);
+                //Dictionary<int, IList<string>> attscus;
+                #endregion
+
+                #region Sku属性
+
+                Dictionary<string, SKUItem> skus = GetSKUDict(row, pCid, SKUCode, product, dictionary3);
+
+                log.blog = false;
+                log.GetInstance().writeLog("Skus个数:" + skus.Count);
+                #endregion
+
+                //数据持久化
+                ProductActionStatus status = AddProduct(product, skus, atts, null);
+
+                Sum++; //操作行计数
+                if (status == ProductActionStatus.Success)
+                {
+                    successSum += 1;
+                }
+                else
+                {
+                    Error += Sum + ",";
+                }
+                CreateTaobaoProduct(isImportFromTaobao, row, product, status); //生成淘宝数据包--by zrr
+            }
+
+            catch (Exception ex)
+            {
+                result = ex.Message;
+            }
+        }
+        public static string DownRemotePic(string productDescrip)
+        {
+            SiteSettings siteSettings = HiContext.Current.SiteSettings;
+            //string IMAGEURL = System.Configuration.ConfigurationManager.AppSettings["ImageUrl"].ToString();
+            string str = string.Format("/Storage/master/gallery/{0}/", DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString());
+            string f2burl = ConfigurationManager.AppSettings["ImageUrl"].ToString().TrimEnd('/');
+            string path = HttpContext.Current.Request.MapPath(Globals.ApplicationPath + str);
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            IList<string> outsiteLinkImgs = GetOutsiteLinkImgs(productDescrip);
+            if (outsiteLinkImgs.Count > 0)
+            {
+                foreach (string str3 in outsiteLinkImgs)
+                {
+                    WebClient client = new WebClient();
+                    string str4 = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+                    string str5 = str3.Substring(str3.LastIndexOf('.'));
+                    try
+                    {
+                        client.DownloadFile(str3, path + str4 + str5);
+                        productDescrip = productDescrip.Replace(str3, f2burl + str + str4 + str5);
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+            return productDescrip;
+        }
+        public static IList<string> GetOutsiteLinkImgs(string html)
+        {
+            SiteSettings siteSettings = HiContext.Current.SiteSettings;
+            SiteSettings masterSettings = SettingsManager.GetMasterSettings(false);
+            IList<string> list = new List<string>();
+            MatchCollection matchs = new Regex("(src)[^>]*[^/].(?:jpg|bmp|webp|gif|png)(?:\"|') ", RegexOptions.IgnoreCase).Matches(html);
+            string item = "";
+            for (int i = 0; i < matchs.Count; i++)
+            {
+                item = matchs[i].Value.Replace(@"\", "").Replace("\"", "").Replace("'", "").Trim().Substring(4);
+                if ((item.ToLower(CultureInfo.InvariantCulture).IndexOf(siteSettings.SiteUrl.ToLower(CultureInfo.InvariantCulture)) == -1) && (item.ToLower(CultureInfo.InvariantCulture).IndexOf(masterSettings.SiteUrl.ToLower(CultureInfo.InvariantCulture)) == -1))
+                {
+                    list.Add(item);
+                }
+            }
+            return list;
+        }
+
+        public static string CreateSkuCode(string str, string productcode)
+        {
+
+            if (str.Length + productcode.Length > 13)
+            {
+                return productcode + str.Substring(str.Length - 13 + productcode.Length);
+            }
+            else
+            {
+                str = str.PadLeft(13 - productcode.Length, '0');
+                return productcode + str;
+            }
+
+        }
+
+
+        private static Dictionary<string, SKUItem> GetSKUDict(DataRow row, int pCid, string SKUCode, ProductInfo product,
+            Dictionary<string, SKUItem> dictionary3)
+        {
+            Dictionary<string, SKUItem> skus = new Dictionary<string, SKUItem>();
+            try
+            {
+                string skuproperty = row["SkuProperties"].ToString();
+                int weight = row["Weight"] != DBNull.Value ? (int)Math.Round(Convert.ToDecimal(row["Weight"]) * 1000, 0) : 0;
+                string propAlias = row["propAlias"].ToString();//别名
+                string cpv_memo = row["cpv_memo"].ToString();//备注
+                string input_custom_cpv = row["input_custom_cpv"].ToString();//自定义
+                int stock = row["Stock"] != DBNull.Value && row["Stock"].ToString()!="" ? int.Parse(row["Stock"].ToString()) : 0;
+                //if (row["Weight"] != DBNull.Value)
+                //{
+                //    weight = row["Weight"] != DBNull.Value ? (int)Math.Round(Convert.ToDecimal(row["Weight"]) * 1000, 0) : 0;
+                //}
+                if (skuproperty != string.Empty)
+                {
+                    List<string> listAlisa = new List<string>();
+                    List<string> listMemo = new List<string>();
+                    List<string> listCustom = new List<string>();
+                    if (propAlias != string.Empty)
+                    {
+                        listAlisa.AddRange(propAlias.Split(new char[] { ';' }));
+                        if (listAlisa[listAlisa.Count - 1].Length == 0)
+                        {
+                            listAlisa.RemoveAt(listAlisa.Count - 1);
+                        }
+                    }
+                    if (cpv_memo != string.Empty)
+                    {
+                        listMemo.AddRange(cpv_memo.Split(new char[] { ';' }));
+                        if (listMemo[listMemo.Count - 1].Length == 0)
+                        {
+                            listMemo.RemoveAt(listMemo.Count - 1);
+                        }
+                    }
+                    if (input_custom_cpv != string.Empty)
+                    {
+                        listCustom.AddRange(input_custom_cpv.Split(new char[] { ';' }));
+                        if (listCustom[listCustom.Count - 1].Length == 0)
+                        {
+                            listCustom.RemoveAt(listCustom.Count - 1);
+                        }
+                    }
+                    product.HasSKU = true;
+                    string str = skuproperty;
+                    List<SKUItemTrans> skuList = GetSKUItemTransList(str); //获取转换SKU模型列表
+                    log.blog = false;
+                    log.GetInstance().writeLog("skuList个数:" + skuList.Count);
+                    if (skuList.Count > 0)
+                    {
+                        for (int jm = 0; jm < skuList.Count; jm++)
+                        {
+                            long skucodeend = 1;
+                            SKUItemTrans tr = skuList[jm];
+                            SKUItem skuitem = new SKUItem();
+                            Dictionary<string, List<string>> SkuTypeItems = new Dictionary<string, List<string>>();
+<<<<<<< HEAD
+                            //skuitem.SKU = SKUCode + "_" + jm.ToString(); 老SKUCode算法
+=======
+                            skuitem.SKU = SKUCode + "_" + jm.ToString();
+                            skuitem.Stock = stock;
+>>>>>>> 0616375c4df1b4c95c824ceb63e025e611bc1d00
+                            skuitem.SalePrice = product.MarketPrice.HasValue
+                                ? product.MarketPrice.Value
+                                : Convert.ToDecimal("0");
+                            string skuid = "0";
+                            Dictionary<int, int> SkuItems = new Dictionary<int, int>();
+                            string Temp_skuid="";
+                            for (int i = 0; i < tr.skus.Count; i++)
+                            {
+                                string name = tr.skus[i].Split(':')[0];
+                                string val = tr.skus[i].Split(':')[1];
+                                
+                                AttributeInfo attr = ProductProvider.Instance()
+                                    .GetAttributeByDefId(Convert.ToInt32(name), 2, pCid);
+                                if (attr != null && attr.AttributeId != 0)
+                                {
+                                    DataTable dtValue = ProductProvider.Instance()
+                                        .GetAttriDefValueByName(val.ToString(), 2, pCid);
+                                    if (dtValue != null && dtValue.Rows.Count > 0)
+                                    {
+                                        SkuItems.Add(attr.AttributeId, Convert.ToInt32(dtValue.Rows[0]["ValueId"]));
+                                        Temp_skuid = dtValue.Rows[0]["ValueId"].ToString();
+                                        skucodeend = skucodeend * long.Parse(dtValue.Rows[0]["ValueId"].ToString());
+                                        if (listAlisa.Count > 0)
+                                        {
+                                            for (int m = 0; m < listAlisa.Count; m++)
+                                            {
+                                                if (name == listAlisa[m].Split(':')[0] && val == listAlisa[m].Split(':')[1])
+                                                {
+                                                    List<string> temp = new List<string>();
+                                                    temp.Add("1");
+                                                    temp.Add(listAlisa[m].Split(':')[2]);
+                                                    SkuTypeItems.Add(attr.AttributeId + "_" + Convert.ToInt32(dtValue.Rows[0]["ValueId"]), temp);
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            //备注
+                                            if (listMemo.Count > 0)
+                                            {
+                                                for (int n = 0; n < listMemo.Count; n++)
+                                                {
+                                                    if (name == listMemo[n].Split(':')[0] && val == listMemo[n].Split(':')[1])
+                                                    {
+                                                        List<string> temp = new List<string>();
+                                                        temp.Add("2");
+                                                        //temp.Add(listMemo[n].Split(':')[2]);
+                                                        /*适应其备注格式：值(备注)*/
+                                                        string MemoName = dtValue.Rows[0]["ValueStr"].ToString() + "(" + listMemo[n].Split(':')[2] + ")";
+                                                        temp.Add(MemoName);
+                                                        SkuTypeItems.Add(attr.AttributeId + "_" + Convert.ToInt32(dtValue.Rows[0]["ValueId"]), temp);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else if (dtValue.Rows.Count == 0 && listCustom.Count > 0)
+                                    {
+                                        Random sj = new Random();
+                                        int id = sj.Next(100000, 999999);
+                                        //自定义属性
+                                        for (int t = 0; t < listCustom.Count; t++)
+                                        {
+                                            if (name == listCustom[t].Split(':')[0] && val == listCustom[t].Split(':')[1])
+                                            {
+                                                List<string> temp = new List<string>();
+                                                temp.Add("3");
+                                                temp.Add(listCustom[t].Split(':')[2]);
+                                                if(skus.Count>0)
+                                                {
+                                                    foreach(string sks in skus.Keys)
+                                                    {
+                                                        foreach(string ski in skus[sks].SkuTypeItems.Keys)
+                                                        {
+                                                            if(skus[sks].SkuTypeItems[ski].Contains(listCustom[t].Split(':')[2]))
+                                                            {
+                                                                if(ski.Split(new char[]{'_'})[0]==attr.AttributeId.ToString())
+                                                                {
+                                                                    id=Convert.ToInt32(ski.Split(new char[]{'_'})[1]);
+                                                                }
+                                                            }
+                                                        }                                                        
+                                                    }
+                                                }
+
+                                                SkuItems.Add(attr.AttributeId, id);
+                                                skucodeend = skucodeend * long.Parse(attr.AttributeId.ToString());
+                                                Temp_skuid = id.ToString();
+                                                SkuTypeItems.Add(attr.AttributeId + "_" + id, temp);
+                                            }
+                                        }
+                                    }
+                                }
+                                skuid += Temp_skuid + "_";
+                            }
+                            if (skuid != "0")
+                            {
+                                skuitem.SkuId = skuid + jm;
+                                skuitem.SkuItems = SkuItems;
+                                skuitem.SkuTypeItems = SkuTypeItems;
+                                skuitem.SKU =CreateSkuCode(SKUCode, skucodeend.ToString());
+                                skuitem.Weight = weight;
+                                if (!skus.ContainsKey(skuitem.SkuId))
+                                {
+                                    skus.Add(skuitem.SkuId, skuitem);
+                                }
+                                else
+                                {
+                                    log.blog = true;
+                                    log.GetInstance().writeLog("没有添加到sku中，skuitem.SkuId：" + skuitem.SkuId);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        skus.Add("0", new SKUItem());
+                    }
+                }
+                else
+                {
+                    skus = dictionary3;
+                }
+                if (skus.Count == 0)
+                    skus = dictionary3;
+            }
+            catch (Exception e)
+            {
+                log.blog = true;
+                log.GetInstance().writeLog("SKU属性报错：" + e.Message);
+            }
+            return skus;
+        }
+
+
+        private static List<SKUItemTrans> GetSKUItemTransList(string str)
+        {
+            List<string> list = new List<string>();
+            list.AddRange(str.Split(new char[] { ';' }));
+
+            if (list[list.Count - 1].Length == 0)
+            {
+                list.RemoveAt(list.Count - 1);
+            }
+
+            bool bhead = true;
+
+            List<SKUItemTrans> skuList = new List<SKUItemTrans>();
+            SKUItemTrans sku = new SKUItemTrans();
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (!bhead)
+                {
+                    if (list[i].Split(':').Length == 2)
+                    {
+                        sku.skus.Add(list[i]);
+                    }
+                    else
+                    {
+                        skuList.Add(sku);
+                        bhead = true;
+                    }
+                }
+
+                if (bhead)
+                {
+                    sku = new SKUItemTrans();
+                    StringBuilder skuHead = new StringBuilder("");
+                    StringBuilder skuProp = new StringBuilder("");
+                    string[] skuPart = list[i].Split(':');
+                    for (int jt = 0; jt < skuPart.Length; jt++)
+                    {
+                        if (jt < 3)
+                        {
+                            skuHead.Append(skuPart[jt]);
+                            if (jt < 2)
+                            {
+                                skuHead.Append(":");
+                            }
+                        }
+                        else
+                        {
+                            skuProp.Append(skuPart[jt]);
+                            if (jt < (skuPart.Length - 1))
+                            {
+                                skuProp.Append(":");
+                            }
+                        }
+                    }
+
+                    sku.line = skuHead.ToString();
+                    sku.skus.Add(skuProp.ToString());
+
+                    bhead = false;
+                    continue;
+                }
+            }
+            if (skuList.Count == 0)
+            {
+                skuList.Add(sku);
+            }
+            else if ((skuList.Count > 0) && (!skuList[skuList.Count - 1].Equals(sku)))
+            {
+                skuList.Add(sku);
+            }
+            return skuList;
+        }
+        //商品属性
+        private static Dictionary<int, IList<Hidistro.Jobs.Attribute>> GetAttrsDict(DataRow row, int pCid)
+        {
+            string productProperty = row["cateProps"].ToString();
+            string propAlias = row["propAlias"].ToString();//别名
+            string cpv_memo = row["cpv_memo"].ToString();//备注
+            string input_custom_cpv = row["input_custom_cpv"].ToString();//自定义
+            string inputPids = row["inputPids"].ToString();//用户输入ID串
+            string inputValues = row["inputValues"].ToString();//用户输入名-值对
+            Dictionary<int, IList<Hidistro.Jobs.Attribute>> atts = new Dictionary<int, IList<Hidistro.Jobs.Attribute>>();
+
+            if (productProperty != string.Empty)
+            {
+                List<string> list = new List<string>();
+                List<string> listAlisa = new List<string>();
+                List<string> listMemo = new List<string>();
+                List<string> listCustom = new List<string>();
+                list.AddRange(productProperty.Split(new char[] { ';' }));
+                if (list[list.Count - 1].Length == 0)
+                {
+                    list.RemoveAt(list.Count - 1);
+                }
+                if (propAlias != string.Empty)
+                {
+                    listAlisa.AddRange(propAlias.Split(new char[] { ';' }));
+                    if (listAlisa[listAlisa.Count - 1].Length == 0)
+                    {
+                        listAlisa.RemoveAt(listAlisa.Count - 1);
+                    }
+                }
+                if (cpv_memo != string.Empty)
+                {
+                    listMemo.AddRange(cpv_memo.Split(new char[] { ';' }));
+                    if (listMemo[listMemo.Count - 1].Length == 0)
+                    {
+                        listMemo.RemoveAt(listMemo.Count - 1);
+                    }
+                }
+                if (input_custom_cpv != string.Empty)
+                {
+                    listCustom.AddRange(input_custom_cpv.Split(new char[] { ';' }));
+                    if (listCustom[listCustom.Count - 1].Length == 0)
+                    {
+                        listCustom.RemoveAt(listCustom.Count - 1);
+                    }
+                }
+                for (int i = 0; i < list.Count; i++)
+                {
+                    string name = list[i].Split(':')[0];
+                    string val = list[i].Split(':')[1];
+                    AttributeInfo attr = ProductProvider.Instance().GetAttributeByDefId(Convert.ToInt32(name), 1, pCid);
+                    IList<Hidistro.Jobs.Attribute> valueids = new List<Hidistro.Jobs.Attribute>();
+                    if (attr != null && attr.AttributeId != 0)
+                    {
+                        Jobs.Attribute Attri = new Jobs.Attribute();
+                        DataTable dtValue = ProductProvider.Instance().GetAttriDefValueByName(val.ToString(), 1, pCid);
+                        //别名
+                        if (dtValue != null && dtValue.Rows.Count > 0)
+                        {
+                            if (listAlisa.Count > 0)
+                            {
+                                for (int m = 0; m < listAlisa.Count; m++)
+                                {
+                                    if (name == listAlisa[m].Split(':')[0] && val == listAlisa[m].Split(':')[1])
+                                    {
+                                        Attri.CusValue = listAlisa[m].Split(':')[2].ToString();
+                                        Attri.NameType = 1;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                //备注
+                                if (listMemo.Count > 0)
+                                {
+                                    for (int n = 0; n < listMemo.Count; n++)
+                                    {
+                                        if (name == listMemo[n].Split(':')[0] && val == listMemo[n].Split(':')[1])
+                                        {
+                                            Attri.CusValue = listMemo[n].Split(':')[2].ToString();
+                                            Attri.NameType = 2;
+                                        }
+                                    }
+                                }
+                            }
+                            Attri.AttrId = attr.AttributeId;
+                            Attri.ValueId = Convert.ToInt32(dtValue.Rows[0]["ValueId"]);
+                            Attri.usageMode = 1;
+                            valueids.Add(Attri);
+                        }
+                        if (!atts.ContainsKey(attr.AttributeId))
+                            atts.Add(attr.AttributeId, valueids);
+                    }
+                }
+            }
+            /*自定义属性值获取*/
+            if (!string.IsNullOrEmpty(inputPids) && !string.IsNullOrEmpty(inputValues))
+            {
+                List<string> list_Pids = new List<string>();
+                List<string> list_Values = new List<string>();
+                list_Pids.AddRange(inputPids.Split(new char[] { ',' }));
+                if (list_Pids[list_Pids.Count - 1].Length == 0)
+                {
+                    list_Pids.RemoveAt(list_Pids.Count - 1);
+                }
+                list_Values.AddRange(inputValues.Split(new char[] { ',' }));
+                if (list_Values[list_Values.Count - 1].Length == 0)
+                {
+                    list_Values.RemoveAt(list_Values.Count - 1);
+                }
+                for (int t = 0; t < list_Pids.Count; t++)
+                {
+                    if (!string.IsNullOrEmpty(list_Pids[t]))
+                    {
+                        Jobs.Attribute Attri = new Jobs.Attribute();
+                        IList<Hidistro.Jobs.Attribute> valueids = new List<Hidistro.Jobs.Attribute>();
+                        AttributeInfo attr = ProductProvider.Instance().GetAttributeByDefId(Convert.ToInt32(list_Pids[t]), 1, pCid);
+                        Random Rand = new Random();
+                        int VauleId = Rand.Next(100000, 999999);
+                        Attri.CusValue = list_Values[t];
+                        Attri.NameType = 3;
+                        Attri.AttrId = attr.AttributeId;
+                        Attri.ValueId = VauleId;
+                        Attri.usageMode = 1;
+                        valueids.Add(Attri);
+                        if (!atts.ContainsKey(Attri.AttrId))
+                            atts.Add(Attri.AttrId, valueids);
+                    }
+                }
+            }
+            return atts;
+        }
+
+        private static void CreateTaobaoProduct(bool isImportFromTaobao, DataRow row, ProductInfo product,
+            ProductActionStatus status)
+        {
+            if (isImportFromTaobao && (status == ProductActionStatus.Success))
+            {
+                TaobaoProductInfo taobaoProduct = new TaobaoProductInfo
+                {
+                    ProductId = product.ProductId,
+                    ProTitle = product.ProductName
+                };
+                if (row["Cid"] != DBNull.Value)
+                {
+                    taobaoProduct.Cid = (long)row["Cid"];
+                }
+                if (row["StuffStatus"] != DBNull.Value)
+                {
+                    taobaoProduct.StuffStatus = (string)row["StuffStatus"];
+                }
+                if (row["Num"] != DBNull.Value)
+                {
+                    taobaoProduct.Num = (long)row["Num"];
+                }
+                else
+                {
+                    taobaoProduct.Num = 0;
+                }
+                if (row["LocationState"] != DBNull.Value)
+                {
+                    taobaoProduct.LocationState = (string)row["LocationState"];
+                }
+                else
+                {
+                    taobaoProduct.LocationState = "浙江省";
+                }
+                if (row["LocationCity"] != DBNull.Value)
+                {
+                    taobaoProduct.LocationCity = (string)row["LocationCity"];
+                }
+                else
+                {
+                    taobaoProduct.LocationCity = "杭州市";
+                }
+                if (row["FreightPayer"] != DBNull.Value)
+                {
+                    taobaoProduct.FreightPayer = (string)row["FreightPayer"];
+                }
+                else
+                {
+                    taobaoProduct.FreightPayer = "买家";
+                }
+                if (row["PostFee"] != DBNull.Value)
+                {
+                    taobaoProduct.PostFee = (decimal)row["PostFee"];
+                }
+                if (row["ExpressFee"] != DBNull.Value)
+                {
+                    taobaoProduct.ExpressFee = (decimal)row["ExpressFee"];
+                }
+                if (row["EMSFee"] != DBNull.Value)
+                {
+                    taobaoProduct.EMSFee = (decimal)row["EMSFee"];
+                }
+                if (row["HasInvoice"] != DBNull.Value)
+                {
+                    taobaoProduct.HasInvoice = (bool)row["HasInvoice"];
+                }
+                else
+                {
+                    taobaoProduct.HasInvoice = false;
+                }
+
+                if (row["HasWarranty"] != DBNull.Value)
+                {
+                    taobaoProduct.HasWarranty = (bool)row["HasWarranty"];
+                }
+                else
+                {
+                    taobaoProduct.HasWarranty = false;
+                }
+                if (row["HasDiscount"] != DBNull.Value)
+                {
+                    taobaoProduct.HasDiscount = (bool)row["HasDiscount"];
+                }
+                else
+                {
+                    taobaoProduct.HasDiscount = false;
+                }
+                if (row["ValidThru"] != DBNull.Value)
+                {
+                    taobaoProduct.ValidThru = (long)row["ValidThru"];
+                }
+                else
+                {
+                    taobaoProduct.ValidThru = 0;
+                }
+                if (row["ListTime"] != DBNull.Value)
+                {
+                    taobaoProduct.ListTime = (DateTime)row["ListTime"];
+                }
+                else
+                {
+                    taobaoProduct.ListTime = DateTime.Now;
+                }
+                if (row["PropertyAlias"] != DBNull.Value)
+                {
+                    taobaoProduct.PropertyAlias = (string)row["PropertyAlias"];
+                }
+                if (row["InputPids"] != DBNull.Value)
+                {
+                    taobaoProduct.InputPids = (string)row["InputPids"];
+                }
+                if (row["InputStr"] != DBNull.Value)
+                {
+                    taobaoProduct.InputStr = (string)row["InputStr"];
+                }
+                if (row["SkuProperties"] != DBNull.Value)
+                {
+                    taobaoProduct.SkuProperties = (string)row["SkuProperties"];
+                }
+                if (row["SkuQuantities"] != DBNull.Value)
+                {
+                    taobaoProduct.SkuQuantities = (string)row["SkuQuantities"];
+                }
+                if (row["SkuPrices"] != DBNull.Value)
+                {
+                    taobaoProduct.SkuPrices = (string)row["SkuPrices"];
+                }
+                if (row["SkuOuterIds"] != DBNull.Value)
+                {
+                    taobaoProduct.SkuOuterIds = (string)row["SkuOuterIds"];
+                }
+                UpdateToaobProduct(taobaoProduct);
+            }
+        }
+
+        #endregion
+
+        #region Json 字符串 转换为 DataTable数据集合
+
+        /// <summary>
+        /// Json 字符串 转换为 DataTable数据集合
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public static DataTable ToDataTable(this string json)
+        {
+            DataTable dataTable = new DataTable(); //实例化
+            DataTable result;
+            try
+            {
+                System.Web.Script.Serialization.JavaScriptSerializer javaScriptSerializer =
+                    new System.Web.Script.Serialization.JavaScriptSerializer();
+                javaScriptSerializer.MaxJsonLength = Int32.MaxValue; //取得最大数值
+                ArrayList arrayList = javaScriptSerializer.Deserialize<ArrayList>(json);
+                if (arrayList.Count > 0)
+                {
+                    foreach (Dictionary<string, object> dictionary in arrayList)
+                    {
+                        if (dictionary.Keys.Count == 0)
+                        {
+                            result = dataTable;
+                            return result;
+                        }
+                        if (dataTable.Columns.Count == 0)
+                        {
+                            foreach (string current in dictionary.Keys)
+                            {
+                                dataTable.Columns.Add(current, dictionary[current].GetType());
+                            }
+                        }
+                        DataRow dataRow = dataTable.NewRow();
+                        foreach (string current in dictionary.Keys)
+                        {
+                            dataRow[current] = dictionary[current];
+                        }
+
+                        dataTable.Rows.Add(dataRow); //循环添加行到DataTable中
+                    }
+                }
+            }
+            catch
+            {
+            }
+            result = dataTable;
+            return result;
+        }
+
+        #endregion
+
+        public static void ImportProducts(DataSet productData, int categoryId, int lineId, int? bandId,
+            ProductSaleStatus saleStatus, bool includeCostPrice, bool includeStock, bool includeImages)
+        {
+            foreach (DataRow row in productData.Tables["products"].Rows)
+            {
+                int mappedProductId = (int)row["ProductId"];
+                ProductInfo product = ConverToProduct(row, categoryId, lineId, bandId, saleStatus, includeImages);
+                Dictionary<string, SKUItem> skus = ConverToSkus(mappedProductId, productData, includeCostPrice,
+                    includeStock);
+                log.blog = true;
+                log.GetInstance().writeLog("SKU总数：" + skus.Count);
+                Dictionary<int, IList<int>> attrs = ConvertToAttributes(mappedProductId, productData);
+                Dictionary<int, IList<Hidistro.Jobs.Attribute>> Atts = IntToAttribute(attrs);
+                ProductActionStatus status = AddProduct(product, skus, Atts, null);
+            }
+        }
+
+        public static int InStock(string productIds)
+        {
+            ManagerHelper.CheckPrivilege(Privilege.InStockProduct);
+            if (string.IsNullOrEmpty(productIds))
+            {
+                return 0;
+            }
+            int num = ProductProvider.Instance().UpdateProductSaleStatus(productIds, ProductSaleStatus.OnStock);
+            if (num > 0)
+            {
+                EventLogs.WriteOperationLog(Privilege.OffShelfProducts,
+                    string.Format(CultureInfo.InvariantCulture, "批量入库了 “{0}” 件商品", new object[] { num }));
+            }
+            return num;
+        }
+
+        public static int OffShelf(int productId)
+        {
+            if (productId <= 0)
+            {
+                return 0;
+            }
+            int num = ProductProvider.Instance().UpdateProductSaleStatus(productId.ToString(), ProductSaleStatus.UnSale);
+            if (num > 0)
+            {
+                EventLogs.WriteOperationLog(Privilege.OffShelfProducts,
+                    string.Format(CultureInfo.InvariantCulture, "批量下架了 “{0}” 件商品", new object[] { num }));
+            }
+            return num;
+        }
+
+        public static int OffShelf(string productIds)
+        {
+            ManagerHelper.CheckPrivilege(Privilege.OffShelfProducts);
+            if (string.IsNullOrEmpty(productIds))
+            {
+                return 0;
+            }
+            int num = ProductProvider.Instance().UpdateProductSaleStatus(productIds, ProductSaleStatus.UnSale);
+            if (num > 0)
+            {
+                EventLogs.WriteOperationLog(Privilege.OffShelfProducts,
+                    string.Format(CultureInfo.InvariantCulture, "批量下架了 “{0}” 件商品", new object[] { num }));
+            }
+            return num;
+        }
+
+        public static int PenetrationProducts(IList<int> productIds)
+        {
+            ManagerHelper.CheckPrivilege(Privilege.PackProduct);
+            int num = ProductProvider.Instance().PenetrationProducts(productIds);
+            if (num > 0)
+            {
+                EventLogs.WriteOperationLog(Privilege.PackProduct,
+                    string.Format(CultureInfo.InvariantCulture, "对 “{0}” 件商品进行了铺货", new object[] { productIds.Count }));
+            }
+            return num;
+        }
+
+        private static string[] ProcessImages(HttpContext context, string originalSavePath)
+        {
+            string fileName = Path.GetFileName(originalSavePath);
+            string str2 = "/Storage/master/product/thumbs40/40_" + fileName;
+            string str3 = "/Storage/master/product/thumbs60/60_" + fileName;
+            string str4 = "/Storage/master/product/thumbs100/100_" + fileName;
+            string str5 = "/Storage/master/product/thumbs160/160_" + fileName;
+            string str6 = "/Storage/master/product/thumbs180/180_" + fileName;
+            string str7 = "/Storage/master/product/thumbs220/220_" + fileName;
+            string str8 = "/Storage/master/product/thumbs310/310_" + fileName;
+            string str9 = "/Storage/master/product/thumbs410/410_" + fileName;
+            string url = originalSavePath;
+            if (url.IndexOf("http://") > -1)
+            {
+                url = url.Replace("http://", "");
+                url = url.Substring(url.IndexOf("/"));
+            }
+            string path = HttpContext.Current.Request.MapPath("~" + url);
+            //string path = context.Request.MapPath(Globals.ApplicationPath + originalSavePath);
+            if (File.Exists(path))
+            {
+                try
+                {
+                    ResourcesHelper.CreateThumbnail(path, context.Request.MapPath(Globals.ApplicationPath + str2), 40,
+                        40);
+                    ResourcesHelper.CreateThumbnail(path, context.Request.MapPath(Globals.ApplicationPath + str3), 60,
+                        60);
+                    ResourcesHelper.CreateThumbnail(path, context.Request.MapPath(Globals.ApplicationPath + str4), 100,
+                        100);
+                    ResourcesHelper.CreateThumbnail(path, context.Request.MapPath(Globals.ApplicationPath + str5), 160,
+                        160);
+                    ResourcesHelper.CreateThumbnail(path, context.Request.MapPath(Globals.ApplicationPath + str6), 180,
+                        180);
+                    ResourcesHelper.CreateThumbnail(path, context.Request.MapPath(Globals.ApplicationPath + str7), 220,
+                        220);
+                    ResourcesHelper.CreateThumbnail(path, context.Request.MapPath(Globals.ApplicationPath + str8), 310,
+                        310);
+                    ResourcesHelper.CreateThumbnail(path, context.Request.MapPath(Globals.ApplicationPath + str9), 410,
+                        410);
+                }
+                catch
+                {
+                }
+            }
+            return new string[] { str2, str3, str4, str5, str6, str7, str8, str9 };
+        }
+
+        public static int RemoveProduct(string productIds)
+        {
+            ManagerHelper.CheckPrivilege(Privilege.DeleteProducts);
+            if (string.IsNullOrEmpty(productIds))
+            {
+                return 0;
+            }
+            int num = ProductProvider.Instance().UpdateProductSaleStatus(productIds, ProductSaleStatus.Delete);
+            if (num > 0)
+            {
+                EventLogs.WriteOperationLog(Privilege.OffShelfProducts,
+                    string.Format(CultureInfo.InvariantCulture, "批量删除了 “{0}” 件商品到回收站", new object[] { num }));
+            }
+            return num;
+        }
+
+        public static DataTable GetProductXg(string pid)
+        {
+            return ProductProvider.Instance().GetProductXg(pid);
+        }
+
+        public static DataTable GetProductStock(string pid)
+        {
+            return ProductProvider.Instance().GetProductStock(pid);
+        }
+
+        public static bool RemoveRelatedProduct(int productId, int relatedProductId)
+        {
+            return ProductProvider.Instance().RemoveRelatedProduct(productId, relatedProductId);
+        }
+
+        public static bool RemoveSubjectProduct(int tagId, int productId)
+        {
+            return ProductProvider.Instance().RemoveSubjectProduct(tagId, productId);
+        }
+
+        public static bool ReplaceProductNames(string productIds, string oldWord, string newWord)
+        {
+            return ProductProvider.Instance().ReplaceProductNames(productIds, oldWord, newWord);
+        }
+
+        public static ProductActionStatus UpdateProduct(ProductInfo product, Dictionary<string, SKUItem> skus,
+            Dictionary<int, IList<int>> attrs, Dictionary<int, IList<Hidistro.Jobs.Attribute>> attrscus, IList<int> distributorUserIds, IList<int> tagIds)
+        {
+            if (null == product)
+            {
+                return ProductActionStatus.UnknowError;
+            }
+            Globals.EntityCoding(product, true);
+            int decimalLength = HiContext.Current.SiteSettings.DecimalLength;
+            if (product.MarketPrice.HasValue)
+            {
+                product.MarketPrice = new decimal?(Math.Round(product.MarketPrice.Value, decimalLength));
+            }
+            product.LowestSalePrice = Math.Round(product.LowestSalePrice, decimalLength);
+            ProductActionStatus unknowError = ProductActionStatus.UnknowError;
+            using (DbConnection connection = DatabaseFactory.CreateDatabase().CreateConnection())
+            {
+                connection.Open();
+                DbTransaction dbTran = connection.BeginTransaction();
+                try
+                {
+                    ProductProvider provider = ProductProvider.Instance();
+                    if (!provider.UpdateProduct(product, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return ProductActionStatus.DuplicateSKU;
+                    }
+                    if (!provider.DeleteProductSKUS(product.ProductId, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return ProductActionStatus.SKUError;
+                    }
+                    if (((skus != null) && (skus.Count > 0)) &&
+                        !provider.AddProductSKUs(product.ProductId, skus, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return ProductActionStatus.SKUError;
+                    }
+                    if (!provider.AddProductAttributes(product.ProductId, attrscus, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return ProductActionStatus.AttributeError;
+                    }
+                    if (!provider.AddCustomProductAttributes(product.ProductId, attrscus, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return ProductActionStatus.AttributeError;
+                    }
+                    if (!provider.OffShelfProductExcludedSalePrice(product.ProductId, product.LowestSalePrice, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return ProductActionStatus.OffShelfError;
+                    }
+                    if (!provider.DeleteProductTags(product.ProductId, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return ProductActionStatus.ProductTagEroor;
+                    }
+                    if ((tagIds.Count > 0) && !provider.AddProductTags(product.ProductId, tagIds, dbTran))
+                    {
+                        dbTran.Rollback();
+                        return ProductActionStatus.ProductTagEroor;
+                    }
+                    dbTran.Commit();
+                    unknowError = ProductActionStatus.Success;
+                    
+                }
+                catch (Exception ex)
+                {
+                    EventLogs.WriteOperationLog(Privilege.EditProducts, string.Format("异常信息：{0}", ex.Message));
+                    dbTran.Rollback();
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            if (unknowError == ProductActionStatus.Success)
+            {
+                ProductProvider.Instance().DeleteSkuUnderlingPrice();
+                if (product.PenetrationStatus == PenetrationStatus.Notyet)
+                {
+                    DeleteCanclePenetrationProducts(new List<int> { product.ProductId }, null);
+                }
+                if ((distributorUserIds != null) && (distributorUserIds.Count != 0))
+                {
+                    foreach (int num2 in distributorUserIds)
+                    {
+                        DeleteNotinProductLines(num2);
+                    }
+                }
+                EventLogs.WriteOperationLog(Privilege.EditProducts,
+                    string.Format(CultureInfo.InvariantCulture, "修改了编号为 “{0}” 的商品", new object[] { product.ProductId }));
+            }
+            return unknowError;
+        }
+
+        public static bool UpdateProductBaseInfo(DataTable dt)
+        {
+            if ((dt == null) || (dt.Rows.Count <= 0))
+            {
+                return false;
+            }
+            return ProductProvider.Instance().UpdateProductBaseInfo(dt);
+        }
+
+        public static bool UpdateProductCategory(int productId, int newCategoryId)
+        {
+            bool flag;
+            if (newCategoryId != 0)
+            {
+                flag = ProductProvider.Instance()
+                    .UpdateProductCategory(productId, newCategoryId, CatalogHelper.GetCategory(newCategoryId).Path + "|");
+            }
+            else
+            {
+                flag = ProductProvider.Instance().UpdateProductCategory(productId, newCategoryId, null);
+            }
+            if (flag)
+            {
+                EventLogs.WriteOperationLog(Privilege.EditProducts,
+                    string.Format(CultureInfo.InvariantCulture, "修改编号 “{0}” 的商品类目为 “{1}”",
+                        new object[] { productId, newCategoryId }));
+            }
+            return flag;
+        }
+
+        public static bool UpdateProductNames(string productIds, string prefix, string suffix)
+        {
+            return ProductProvider.Instance().UpdateProductNames(productIds, prefix, suffix);
+        }
+
+        public static ApiErrorCode UpdateProductStock(int productId, string skuId, string sku, int type, int stock)
+        {
+            DataRow[] rowArray;
+            if ((productId <= 0) || ((type == 1) && (stock <= 0)))
+            {
+                return ApiErrorCode.Format_Eroor;
+            }
+            skuId = DataHelper.CleanSearchString(skuId);
+            sku = DataHelper.CleanSearchString(sku);
+            DataTable skuStocks = ProductProvider.Instance().GetSkuStocks(productId.ToString());
+            int num = 0;
+            string key = "";
+            bool flag = false;
+            bool flag2 = false;
+            if (skuStocks.Rows.Count <= 0)
+            {
+                return ApiErrorCode.Exists_Error;
+            }
+            num = Convert.ToInt32(skuStocks.Rows[0]["Stock"]);
+            if (!string.IsNullOrEmpty(skuId))
+            {
+                rowArray = skuStocks.Select("SkuId='" + skuId + "'");
+                if (rowArray.Length <= 0)
+                {
+                    return ApiErrorCode.Exists_Error;
+                }
+                num = Convert.ToInt32(rowArray[0]["Stock"]);
+                key = skuId;
+                flag2 = true;
+            }
+            if (!string.IsNullOrEmpty(sku) && string.IsNullOrEmpty(skuId))
+            {
+                rowArray = skuStocks.Select("SKU='" + sku + "'");
+                if (rowArray.Length <= 0)
+                {
+                    return ApiErrorCode.Exists_Error;
+                }
+                num = Convert.ToInt32(rowArray[0]["Stock"]);
+                key = rowArray[0]["SkuId"].ToString();
+                flag2 = true;
+            }
+            if (type != 1)
+            {
+                if ((num + stock) <= 0)
+                {
+                    stock = 0;
+                }
+                else
+                {
+                    stock += num;
+                }
+            }
+            if (!flag2)
+            {
+                flag = ProductProvider.Instance().UpdateSkuStock(productId.ToString(), stock);
+            }
+            else
+            {
+                Dictionary<string, int> dictionary = new Dictionary<string, int>();
+                dictionary.Add(key, stock);
+                flag = ProductProvider.Instance().UpdateSkuStock(dictionary);
+            }
+            if (flag)
+            {
+                return ApiErrorCode.Success;
+            }
+            return ApiErrorCode.Unknown_Error;
+        }
+
+        public static bool UpdateShowSaleCounts(DataTable dt)
+        {
+            if ((dt == null) || (dt.Rows.Count <= 0))
+            {
+                return false;
+            }
+            return ProductProvider.Instance().UpdateShowSaleCounts(dt);
+        }
+
+        public static bool UpdateShowSaleCounts(string productIds, int showSaleCounts)
+        {
+            return ProductProvider.Instance().UpdateShowSaleCounts(productIds, showSaleCounts);
+        }
+
+        public static bool UpdateShowSaleCounts(string productIds, int showSaleCounts, string operation)
+        {
+            return ProductProvider.Instance().UpdateShowSaleCounts(productIds, showSaleCounts, operation);
+        }
+
+        public static bool UpdateSkuDistributorPrices(DataSet ds)
+        {
+            return ProductProvider.Instance().UpdateSkuDistributorPrices(ds);
+        }
+
+        public static bool UpdateSkuDistributorPrices(string productIds, int gradeId, decimal price)
+        {
+            return ProductProvider.Instance().UpdateSkuDistributorPrices(productIds, gradeId, price);
+        }
+
+        public static bool UpdateSkuDistributorPrices(string productIds, int gradeId, string basePriceName,
+            string operation, decimal price)
+        {
+            return ProductProvider.Instance()
+                .UpdateSkuDistributorPrices(productIds, gradeId, basePriceName, operation, price);
+        }
+
+        public static bool UpdateSkuMemberPrices(DataSet ds)
+        {
+            return ProductProvider.Instance().UpdateSkuMemberPrices(ds);
+        }
+
+        public static bool UpdateSkuMemberPrices(string productIds, int gradeId, decimal price)
+        {
+            return ProductProvider.Instance().UpdateSkuMemberPrices(productIds, gradeId, price);
+        }
+
+        public static bool UpdateSkuMemberPrices(string productIds, int gradeId, string basePriceName, string operation,
+            decimal price)
+        {
+            return ProductProvider.Instance()
+                .UpdateSkuMemberPrices(productIds, gradeId, basePriceName, operation, price);
+        }
+
+        public static string GetCodeByProductCode4(string precode, int endcode)
+        {
+            return ProductProvider.Instance().GetCodeByProductCode4(precode, endcode);
+        }
+
+        public static int IsRepCode(string currentcode)
+        {
+            return ProductProvider.Instance().IsRepCode(currentcode);
+        }
+
+        public static bool UpdateSkuStock(Dictionary<string, int> skuStocks)
+        {
+            return ProductProvider.Instance().UpdateSkuStock(skuStocks);
+        }
+
+        public static bool UpdateSkuStock(string productIds, int stock)
+        {
+            return ProductProvider.Instance().UpdateSkuStock(productIds, stock);
+        }
+
+        public static bool UpdateToaobProduct(TaobaoProductInfo taobaoProduct)
+        {
+            return ProductProvider.Instance().UpdateToaobProduct(taobaoProduct);
+        }
+
+        public static bool UpdateF2BUserId(string UserId)
+        {
+            return ProductProvider.Instance().UpdateF2BUserId(UserId);
+        }
+
+        public static string UploadDefaltProductImage(HttpPostedFile postedFile)
+        {
+            if (!ResourcesHelper.CheckPostedFile(postedFile))
+            {
+                return string.Empty;
+            }
+            string str = HiContext.Current.GetStoragePath() +
+                         ResourcesHelper.GenerateFilename(Path.GetExtension(postedFile.FileName));
+            postedFile.SaveAs(HiContext.Current.Context.Request.MapPath(Globals.ApplicationPath + str));
+            return str;
+        }
+
+        public static int UpShelf(int productId)
+        {
+            if (productId <= 0)
+            {
+                return 0;
+            }
+            int num = ProductProvider.Instance().UpdateProductSaleStatus(productId.ToString(), ProductSaleStatus.OnSale);
+            if (num > 0)
+            {
+                EventLogs.WriteOperationLog(Privilege.UpShelfProducts,
+                    string.Format(CultureInfo.InvariantCulture, "批量上架了 “{0}” 件商品", new object[] { num }));
+            }
+            return num;
+        }
+
+        public static string ValEmail(string Email)
+        {
+            return ProductProvider.Instance().ValEmail(Email);
+        }
+
+        public static string ValSupplierUserName(string UserName)
+        {
+            return ProductProvider.Instance().ValSupplierUserName(UserName);
+        }
+
+        public static int UpShelf(string productIds)
+        {
+            ManagerHelper.CheckPrivilege(Privilege.UpShelfProducts);
+            if (string.IsNullOrEmpty(productIds))
+            {
+                return 0;
+            }
+            int num = ProductProvider.Instance().UpdateProductSaleStatus(productIds, ProductSaleStatus.OnSale);
+            if (num > 0)
+            {
+                EventLogs.WriteOperationLog(Privilege.UpShelfProducts,
+                    string.Format(CultureInfo.InvariantCulture, "批量上架了 “{0}” 件商品", new object[] { num }));
+            }
+            return num;
+        }
+
+        public static DataSet GetSkuBySkuID(string skuId)
+        {
+            return ProductProvider.Instance().GetSkuBySkuID(skuId);
+        }
+
+        public static DataTable GetSupplierList()
+        {
+            return ProductProvider.Instance().GetSupplierList();
+        }
+        public static int CheckCateHas(int ParentCategoryId)
+        {
+            return ProductProvider.Instance().CheckCateHas(ParentCategoryId);
+        }
+
+        public static bool CheckProductName(string productname, string productcode, string productid)
+        {
+            return ProductProvider.Instance().CheckProductName(productname, productcode, productid);
+        }
+
+        public static bool CheckBarCode(string barcode, string productid)
+        {
+            return ProductProvider.Instance().CheckBarCode(barcode, productid);
+        }
+
+        public static bool CheckGBCode(string GBCode, string productid)
+        {
+            return ProductProvider.Instance().CheckGBCode(GBCode, productid);
+        }
+        /// <summary>
+        /// 检查订单里是否有商品已经下架
+        /// </summary>
+        /// <param name="orderid"></param>
+        /// <returns></returns>
+        public static bool CheckProductIsDown(string orderid)
+        {
+            return ProductProvider.Instance().CheckProductIsDown(orderid);
+        }
+
+        public static string ImportProductsjd(DataTable productData, int categoryId, int lineId, int? brandId,
+            ProductSaleStatus saleStatus, bool isImportFromTaobao, Guid supplierId)
+        {
+            string result = ""; //输出内容
+            int successSum = 0; //导入商品成功条数
+            int Sum = 3;
+            string Error = ""; //导入数据失败具体行
+            CategoryInfo category = CatalogHelper.GetCategory(categoryId);
+            if ((productData != null) && (productData.Rows.Count > 0))
+            {
+                bool importTb = true;
+                string MsgNo = ""; //提示信息
+                int rowNo = 0; //第几行
+                int sameCount = 0; //sameCount:数据包中存在与已存在商品重复数
+                //校验数据包内数据重复
+                int z = 1; //数据包内重复数据条数                
+
+
+                for (int j = 0; j < productData.Rows.Count; j++)
+                {
+                    if (string.IsNullOrEmpty(productData.Rows[j]["ProductName"].ToString()))
+                    {
+                        rowNo = j + 4;
+                        MsgNo = "商品名称不能为空";
+                        importTb = false;
+                    }
+                    else if (!string.IsNullOrEmpty(productData.Rows[j]["ProductName"].ToString()))
+                    {
+                        if (string.IsNullOrEmpty(productData.Rows[j]["SalePrice"].ToString()))
+                        {
+                            rowNo = j + 4;
+                            MsgNo = "宝贝价格不能为空";
+                            importTb = false;
+                        }
+                        else
+                        {
+                            Regex reg = new Regex(@"^\d{1,12}(?:\.\d{1,4})?$");
+                            if (!reg.IsMatch(productData.Rows[j]["SalePrice"].ToString()))
+                            {
+                                rowNo = j + 4;
+                                MsgNo = "宝贝价格格式不正确";
+                                importTb = false;
+                            }
+                            else if (string.IsNullOrEmpty(productData.Rows[j]["Weight"].ToString()))
+                            {
+                                rowNo = j + 4;
+                                MsgNo = "物流重量不能为空";
+                                importTb = false;
+                            }
+                            else
+                            {
+                                if (
+                                    !YanZheng(
+                                        (Convert.ToDecimal(productData.Rows[j]["Weight"].ToString().Trim()) * 1000)
+                                            .ToString()))
+                                {
+                                    rowNo = j + 4;
+                                    MsgNo = "物流重量格式不正确";
+                                    importTb = false;
+                                }
+                                else if (string.IsNullOrEmpty(productData.Rows[j]["Stock"].ToString()))
+                                {
+                                    rowNo = j + 4;
+                                    MsgNo = "宝贝数量不能为空";
+                                    importTb = false;
+                                }
+                                else
+                                {
+                                    if (!YanZheng(productData.Rows[j]["Stock"].ToString().Trim()))
+                                    {
+                                        rowNo = j + 4;
+                                        MsgNo = "宝贝数量格式不正确";
+                                        importTb = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (j > 1)
+                    {
+                        if (productData.Rows[j]["ProductName"].Equals(productData.Rows[j - 1]["ProductName"]))
+                        {
+                            z++;
+                        }
+                    }
+                    if (ProductProvider.Instance().ProductSum(productData.Rows[j]["ProductName"].ToString()) > 0)
+                    {
+                        sameCount++;
+                    }
+                }
+
+                #region   导入数据
+
+                try
+                {
+                    if (sameCount < productData.Rows.Count)
+                    {
+                        foreach (DataRow row in productData.Rows)
+                        {
+                            string[] strArray;
+                            string SKUCode = category.SKUPrefix +
+                                             new Random(DateTime.Now.Millisecond).Next(1, 0x1869f)
+                                                 .ToString(CultureInfo.InvariantCulture)
+                                                 .PadLeft(5, '0');
+                            ProductInfo product = new ProductInfo
+                            {
+                                CategoryId = categoryId,
+                                MainCategoryPath = CatalogHelper.GetCategory(categoryId).Path + "|",
+                                ProductName = (string)row["ProductName"],
+                                ProductCode = SKUCode,
+                                LineId = lineId,
+                                BrandId = brandId,
+                                SupplierId = supplierId,
+                                TypeId = 8
+                            };
+                            Dictionary<string, SKUItem> dictionary3 = new Dictionary<string, SKUItem>();
+                            SKUItem items = new SKUItem();
+                            items.SkuId = "0";
+                            items.SKU = SKUCode;
+                            items.SalePrice = row["SalePrice"] != DBNull.Value ? Convert.ToDecimal(row["SalePrice"]) : 0;
+                            items.CostPrice = 0;
+                            items.PurchasePrice = row["SalePrice"] != DBNull.Value
+                                ? Convert.ToDecimal(row["SalePrice"])
+                                : 0;
+                            items.Stock = 0;
+                            items.AlertStock = 0;
+                            items.Weight = row["Weight"] != DBNull.Value
+                                ? (int)Math.Round(Convert.ToDecimal(row["Weight"]) * 1000, 0)
+                                : 0;
+                            dictionary3.Add("0", items);
+
+                            if (row["Description"] != DBNull.Value)
+                            {
+                                product.Description = (string)row["Description"];
+                            }
+                            if (row["SalePrice"] != DBNull.Value)
+                            {
+                                product.MarketPrice = Convert.ToDecimal(row["SalePrice"]);
+                            }
+
+                            product.PenetrationStatus = PenetrationStatus.Notyet;
+                            product.AddedDate = DateTime.Now;
+                            product.SaleStatus = saleStatus;
+                            product.HasSKU = false;
+
+                            HttpContext current = HttpContext.Current;
+                            if (row["ImageUrl1"] != DBNull.Value)
+                            {
+                                product.ImageUrl1 = (string)row["ImageUrl1"];
+                            }
+                            if (!(string.IsNullOrEmpty(product.ImageUrl1) || (product.ImageUrl1.Length <= 0)))
+                            {
+                                strArray = ProcessImages(current, product.ImageUrl1);
+
+                                product.ThumbnailUrl40 = strArray[0];
+                                product.ThumbnailUrl60 = strArray[1];
+                                product.ThumbnailUrl100 = strArray[2];
+                                product.ThumbnailUrl160 = strArray[3];
+                                product.ThumbnailUrl180 = strArray[4];
+                                product.ThumbnailUrl220 = strArray[5];
+                                product.ThumbnailUrl310 = strArray[6];
+                                product.ThumbnailUrl410 = strArray[7];
+                            }
+                            product.UserId = Users.GetUser().UserId;
+
+                            product.HasCommission = false;
+
+                            product.CommissionPath = null;
+                            if (row["CID"] != DBNull.Value)
+                            {
+                                DataTable dtCategry =
+                                    ProductProvider.Instance()
+                                        .GetTypeIdByPostCategryID(Convert.ToInt32(row["CID"].ToString()));
+                                if (dtCategry.Rows.Count > 0)
+                                {
+                                    product.TypeId = (int)dtCategry.Rows[0][0];
+                                }
+                            }
+                            if (row["Image"] != DBNull.Value)
+                            {
+                                product.Image = (string)row["Image"];
+                            }
+                            if (row["ImageUrl2"] != DBNull.Value)
+                            {
+                                product.ImageUrl2 = (string)row["ImageUrl2"];
+                            }
+                            if (!(string.IsNullOrEmpty(product.ImageUrl2) || (product.ImageUrl2.Length <= 0)))
+                            {
+                                strArray = ProcessImages(current, product.ImageUrl2);
+                            }
+                            if (row["ImageUrl3"] != DBNull.Value)
+                            {
+                                product.ImageUrl3 = (string)row["ImageUrl3"];
+                            }
+                            if (!(string.IsNullOrEmpty(product.ImageUrl3) || (product.ImageUrl3.Length <= 0)))
+                            {
+                                strArray = ProcessImages(current, product.ImageUrl3);
+                            }
+                            if (row["ImageUrl4"] != DBNull.Value)
+                            {
+                                product.ImageUrl4 = (string)row["ImageUrl4"];
+                            }
+                            if (!(string.IsNullOrEmpty(product.ImageUrl4) || (product.ImageUrl4.Length <= 0)))
+                            {
+                                strArray = ProcessImages(current, product.ImageUrl4);
+                            }
+                            if (row["ImageUrl5"] != DBNull.Value)
+                            {
+                                product.ImageUrl5 = (string)row["ImageUrl5"];
+                            }
+                            if (!(string.IsNullOrEmpty(product.ImageUrl5) || (product.ImageUrl5.Length <= 0)))
+                            {
+                                strArray = ProcessImages(current, product.ImageUrl5);
+                            }
+
+                            #region 产品属性
+
+                            string productProperty;
+                            if (row["PropertyAlias"] == DBNull.Value)
+                                productProperty = "";
+                            else
+                                productProperty = row["PropertyAlias"].ToString();
+
+                            Dictionary<int, IList<int>> atts = new Dictionary<int, IList<int>>();
+
+                            DataTable dtProduct = ToDataTable("[" + productProperty + "]");
+                            for (int i = 0; i < dtProduct.Columns.Count; i++)
+                            {
+                                int attrid = 0;
+                                if (int.TryParse(dtProduct.Columns[i].ColumnName, out attrid))
+                                {
+                                    string valueName = dtProduct.Rows[0][i].ToString();
+                                    AttributeInfo attr = ProductProvider.Instance().GetAttributeByDefId(attrid, 0, 8);
+                                    //临时
+                                    if (attr != null && attr.AttributeId != 0)
+                                    {
+                                        IList<int> valueids = new List<int>();
+                                        if (valueName.IndexOf('|') > 0)
+                                        {
+                                            string[] arr = valueName.Split('|');
+                                            foreach (string item in arr)
+                                            {
+                                                foreach (AttributeValueInfo valueinfo in attr.AttributeValues)
+                                                {
+                                                    if (item.Trim() == valueinfo.ValueStr.Trim())
+                                                    {
+                                                        valueids.Add(valueinfo.ValueId);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (attr.AttributeValues.Count > 0)
+                                                valueids.Add(attr.AttributeValues[0].ValueId);
+                                        }
+                                        if (!atts.ContainsKey(attr.AttributeId))
+                                            atts.Add(attr.AttributeId, valueids);
+                                    }
+                                }
+                            }
+
+                            #endregion
+
+                            #region Sku属性
+
+                            Dictionary<string, SKUItem> skus = new Dictionary<string, SKUItem>();
+                            string skuproperty;
+                            if (row["SkuProperties"] == DBNull.Value)
+                                skuproperty = "";
+                            else
+                                skuproperty = row["SkuProperties"].ToString();
+                            if (skuproperty != string.Empty)
+                            {
+                                JsonData jd = JsonMapper.ToObject(skuproperty);
+
+
+                                foreach (JsonData item in jd)
+                                {
+                                    Dictionary<int, int> SkuItems = new Dictionary<int, int>();
+                                    SKUItem skuitem = new SKUItem();
+
+                                    #region 价格、重量
+
+                                    if (row["SalePrice"] != DBNull.Value)
+                                    {
+                                        product.LowestSalePrice =
+                                            skuitem.PurchasePrice =
+                                                skuitem.SalePrice = Convert.ToDecimal(row["SalePrice"]);
+                                    }
+                                    if (row["Stock"] != DBNull.Value)
+                                    {
+                                        skuitem.Stock = (int)row["Stock"];
+                                    }
+                                    if (row["Weight"] != DBNull.Value)
+                                    {
+                                        skuitem.Weight = (int)row["Weight"];
+                                    }
+
+                                    #endregion
+
+                                    string skuid = "0";
+                                    JsonData jsd = item["specAttributes"];
+                                    string[] arr =
+                                        jsd.ToJson().Replace("\"", "").Replace("{", "").Replace("}", "").Split(',');
+                                    for (int i = 0; i < arr.Length; i++)
+                                    {
+                                        string name = arr[i].Split(':')[0];
+                                        string val = arr[i].Split(':')[1];
+                                        AttributeInfo attr =
+                                            ProductProvider.Instance().GetAttributeByDefId(Convert.ToInt32(name), 2, 8);
+                                        //lins
+                                        if (attr != null && attr.AttributeId != 0)
+                                        {
+                                            DataTable dtValue =
+                                                ProductProvider.Instance().GetAttriDefValueByName(val.ToString(), 2, 8);
+                                            if (dtValue != null && dtValue.Rows.Count > 0)
+                                            {
+                                                SkuItems.Add(attr.AttributeId,
+                                                    Convert.ToInt32(dtValue.Rows[0]["ValueId"]));
+                                                skuid += dtValue.Rows[0]["ValueId"] + "_";
+                                            }
+                                        }
+                                    }
+                                    skuitem.SkuId = skuid.TrimEnd('_');
+                                    skuitem.SkuItems = SkuItems;
+                                    if (!skus.ContainsKey(skuitem.SkuId))
+                                    {
+                                        skus.Add(skuitem.SkuId, skuitem);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                skus = dictionary3;
+                            }
+
+                            #endregion
+                            Dictionary<int, IList<Hidistro.Jobs.Attribute>> Atts = IntToAttribute(atts);
+                            ProductActionStatus status = AddProduct(product, skus, Atts, null);
+                            Sum++;
+                            if (status == ProductActionStatus.Success)
+                            {
+                                successSum += 1;
+                            }
+                            else
+                            {
+                                Error += Sum + ",";
+                            }
+                        }
+                    }
+
+                #endregion
+
+                    if (successSum > 0)
+                    {
+                        result = "导入商品共" + successSum + "条。";
+                        result = result + "true";
+                    }
+
+                    if (z > 1)
+                    {
+                        result = result + "数据包内部重复" + z + "条。";
+                    }
+                    if (sameCount > 0)
+                    {
+                        result = result + sameCount + "行商品已存在。";
+                    }
+                    if (successSum < productData.Rows.Count)
+                    {
+                        result = result + "导入失败" + (productData.Rows.Count - successSum) + "条。";
+                    }
+                    if (!string.IsNullOrEmpty(Error))
+                    {
+                        for (int a = Error.Length - 1; a > 0; a--)
+                        {
+                            if (Error[a] == ',')
+                            {
+                                Error = Error.Substring(0, a);
+                                break;
+                            }
+                        }
+                        result = result + "第(" + Error + ")行导入失败";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    result = "上传数据包操作已完成";
+                    //result = ex.Message;
+                }
+            }
+            else
+            {
+                result = "数据包没数据或者格式错误。";
+            }
+            return result;
+        }
+
+
+        /*Dictionary<int, IList<int>>与Dictionary<int, IList<Hidistro.Jobs.Attribute>>之间的相互转化*/
+        private static Dictionary<int, IList<Hidistro.Jobs.Attribute>> IntToAttribute(Dictionary<int, IList<int>> temp)
+        {
+            Dictionary<int, IList<Hidistro.Jobs.Attribute>> Atts = new Dictionary<int, IList<Hidistro.Jobs.Attribute>>();
+            IList<Hidistro.Jobs.Attribute> valueids = new List<Hidistro.Jobs.Attribute>();
+            Jobs.Attribute Attri = new Jobs.Attribute();
+            if (temp != null)
+            {
+                foreach (int num2 in temp.Keys)
+                {
+                    foreach (int num3 in temp[num2])
+                    {
+                        Attri.AttrId = num2;
+                        Attri.ValueId = num3;
+                        valueids.Add(Attri);
+                    }
+                    if (!Atts.ContainsKey(num2))
+                        Atts.Add(num2, valueids);
+                }
+            }
+            return Atts;
+        }
+    }
+
+    public class SKUItemTrans
+    {
+        public string line;
+
+        public System.Collections.Generic.List<string> skus = new List<string>();
+    }
+    
+
+}

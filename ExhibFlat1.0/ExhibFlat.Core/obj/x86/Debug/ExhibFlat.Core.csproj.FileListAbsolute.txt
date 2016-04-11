@@ -1,0 +1,7 @@
+C:\offices\enterprise\ExhibFlat1.0\Flat.Web\bin\ExhibFlat.Core.dll
+C:\offices\enterprise\ExhibFlat1.0\Flat.Web\bin\ExhibFlat.Core.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Core\bin\Debug\ExhibFlat.Core.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Core\bin\Debug\ExhibFlat.Core.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Core\obj\x86\Debug\ExhibFlat.Core.dll
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Core\obj\x86\Debug\ExhibFlat.Core.pdb
+C:\offices\enterprise\ExhibFlat1.0\ExhibFlat.Core\obj\x86\Debug\ExhibFlat.Core.csprojResolveAssemblyReference.cache

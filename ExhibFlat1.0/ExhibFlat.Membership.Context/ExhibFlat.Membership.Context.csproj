@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectType>local</ProjectType>
+    <ProjectVersion>7.10.377</ProjectVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{267181AB-9CCA-47E6-9F51-3C31DA010945}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <AssemblyName>ExhibFlat.Membership.Context</AssemblyName>
+    <OutputType>Library</OutputType>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="loghelper.cs" />
+    <Compile Include="Supplier.cs" />
+    <Compile Include="SupplierFactory.cs" />
+    <Reference Include="ExhibFlat.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Flat.Web\bin\ExhibFlat.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ExhibFlat.Membership.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Flat.Web\bin\ExhibFlat.Membership.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=4.1.0.0, Culture=neutral, PublicKeyToken=e44a2bc38ed2c13c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ExhibFlat.Core\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=4.1.0.0, Culture=neutral, PublicKeyToken=7f2f4d7aece0749d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Flat.Web\bin\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Flat.Web\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Distributor.cs" />
+    <Compile Include="UserEventArgs.cs" />
+    <Compile Include="ExtensionContainer.cs" />
+    <Compile Include="IExtension.cs" />
+    <Compile Include="UserFactory.cs" />
+    <Compile Include="DistributorFactory.cs" />
+    <Compile Include="MemberFactory.cs" />
+    <Compile Include="ManagerFactory.cs" />
+    <Compile Include="UnderlingFactory.cs" />
+    <Compile Include="UrlReWriterDelegate.cs" />
+    <Compile Include="HiContext.cs" />
+    <Compile Include="HiHttpModule.cs" />
+    <Compile Include="LicenseChecker.cs" />
+    <Compile Include="SiteSettingsProvider.cs" />
+    <Compile Include="BizActorProvider.cs" />
+    <Compile Include="SettingsManager.cs" />
+    <Compile Include="SiteSettings.cs" />
+    <Compile Include="Member.cs" />
+    <Compile Include="SiteManager.cs" />
+    <Compile Include="UserCookie.cs" />
+    <Compile Include="Users.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExhibFlat.Components.Validation\ExhibFlat.Components.Validation.csproj">
+      <Project>{36187FD3-554C-4495-91DC-066945F1D285}</Project>
+      <Name>ExhibFlat.Components.Validation</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

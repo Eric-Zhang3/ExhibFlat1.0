@@ -1,0 +1,43 @@
+/*订单成功页面*/
+.wrap {
+	width: 1000px;
+	margin: 15px auto;
+	border: 1px solid #ccc;
+}
+.paySucc {
+	width: 500px;
+	margin: 100px auto;
+}
+.paySucc dl {
+	overflow: hidden;
+}
+.paySucc dl dt {
+	width: 55px;
+	height: 50px;
+	background: url(../images/add/order.png) 0 -309px no-repeat;
+	float: left;
+	margin-right: 10px;
+}
+.paySucc dl dd {
+	float: left;
+	padding-top: 15px;
+}
+.paySucc dl dd strong {
+	font-size: 22px;
+	color: #e81250;
+	font-weight: normal;
+}
+.paySucc dl dd p {
+	font-size: 14px;
+	color: #797b7a;
+	margin-top: 8px;
+}
+.paySucc dl dd a {
+	color: #e81250;
+	text-decoration: underline;
+	margin-left: 20px;
+}
+.lSearch{
+	width: 1000px;
+	margin: 20px auto;
+}

@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <%
+    <Hi:HeadContainer ID="HeadContainer1" runat="server" />%>
+    <%
+    <hi:pagetitle runat="server" />%>
+    <link href="/style/common.css" rel="stylesheet" type="text/css" />
+    <link href="/style/index.css" rel="stylesheet" type="text/css" />
+    <link href="/style/other.css" rel="stylesheet" type="text/css" />
+    <link href="/style/login.css" rel="stylesheet" type="text/css" />
+    <script src="/script/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script src="/utility/jquery.cookie.js" type="text/javascript"></script>
+    <script src="/utility/validate/pagevalidator.js" type="text/javascript"></script>
+    <script src="/utility/globals.js" type="text/javascript"></script>
+    <script src="/script/web_qq.js" type="text/javascript"></script>
+    <script src="/script/jquery.flexslider-min.js" type="text/javascript"></script>
+    <script src="/utility/LoginForm.js" type="text/javascript"></script>
+    <script src="/Utility/FunctionJS.js"></script>
+    <title></title>
+</head>
+<body>
+    <form runat="server" id="form1">
+        <div class="loginWp" id="tblogin">
+            <ul class="Form">
+                <li>
+                    <!--<asp:textbox id="txtUserName" runat="server" cssclass="cInput"></asp:textbox>-->
+                    <input type="text" id="txtUserName" value="system" class="cInput" />
+                </li>
+                <li>
+                    <!--<asp:TextBox ID="txtUserPwd" runat="server" TextMode="Password" cssclass="cInput"></asp:TextBox>-->
+                    <input type="password" id="txtUserPwd" value="system" class="cInput"/>
+                </li>
+                
+                <li>
+                    <!--<asp:Button ID="submit" runat="server" cssclass="sign" Text="" />-->
+                    <input id="submit" type="button" class="sign" onclick="return CheckUserDataValid();" value="登    录" />
+                </li>
+            </ul>
+        </div>
+        
+    </form>
+    <script type="text/javascript">
+        function LoginBtn() {
+            var name = $("#txtUserName").val();
+            var pwd = $("#txtUserPwd").val();
+            
+           
+            if (name == "") {
+                $("#txtUserName").focus();
+                alert("账户不能为空");
+                return false;
+            } else if (pwd == "") {
+                $("#txtUserPwd").focus();
+                alert("密码不能为空");
+                return false;
+            } else {
+                return true;
+            }
+        }
+        function CheckUserDataValid() {
+            if (!LoginBtn()) {
+                return false;
+            }
+            else {
+                
+                var userName = $("#txtUserName").val();
+                var userPwd = $("#txtUserPwd").val();
+                var parm = 'action=login&user_Account=' + escape(userName) + '&userPwd=' + escape(userPwd);
+                getAjax('/API/Frame.ashx', parm, function (rs) {
+                    if (parseInt(rs) == 1) {
+                        $("#txtCode").focus();
+                        $("#errorMsg2").html("验证码输入不正确");
+                        CheckingLogin(0);
+                        ToggleCode("Verify_codeImag", '/Ajax/Verify_code.ashx');
+                        return false;
+                    } else if (parseInt(rs) == 2) {
+                        $("#txtUserName").focus();
+                        $("#errorMsg0").html("账户被锁,联系管理员");
+                        CheckingLogin(0);
+                        return false;
+                    } else if (parseInt(rs) == 4) {
+                        $("#txtUserName").focus();
+                        $("#errorMsg0").html("账户或密码有错误");
+                        CheckingLogin(0);
+                        return false;
+                    } else if (parseInt(rs) == 6) {
+                        $("#txtUserName").focus();
+                        $("#errorMsg0").html("该用户已经登录");
+                        CheckingLogin(0);
+                        return false;
+                    } else if (parseInt(rs) == 3) {
+                        setInterval(Load, 1000);
+                    } else {
+                        CheckingLogin(0);
+                        alert('服务器连接不上,联系管理员！');
+                        window.location.href = window.location.href.replace('#', '');
+                        return false;
+                    }
+                });
+            }
+        }
+        //登陆加载
+        function Load() {
+            window.location.href = '/Admin/default.html';
+            return false;
+        }
+    </script>
+</body>
+</html>

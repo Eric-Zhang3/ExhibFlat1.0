@@ -1,0 +1,105 @@
+/*退款详情*/
+.juTitle {
+    overflow: hidden;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #ccc;
+}
+
+.refundWp {
+    border: none;
+    width: 530px;
+    float: left;
+}
+
+.juTitleR {
+    float: right;
+    width: 90%;
+}
+
+.juTitle dl {
+    width: 210px;
+    position: relative;
+    float: left;
+    height: 62px;
+    background: url(../images/addImg/orange.png) 0 11px no-repeat;
+    z-index: 3;
+}
+
+.juTitle .jGrey { background: url(../images/addImg/grey.png) 0 11px no-repeat; }
+
+.juTitle .jGrey dt { display: none; }
+
+.juTitle .jLast dt,
+.juTitle .jLast .grey1 { width: 0px; }
+
+.juTitle dl dt {
+    position: absolute;
+    z-index: 2;
+    left: 26px;
+    top: 23px;
+}
+
+.juTitle dl dd { z-index: 1; }
+
+.juTitle dl .red1 {
+    width: 50%;
+    background: #f48726;
+    height: 3px;
+}
+
+.juTitle dl .grey1 {
+    background: #cfcfcf;
+    height: 3px;
+    width: 100%;
+    position: absolute;
+    left: 26px;
+    top: 23px;
+}
+
+.juTitle dl .t {
+    color: #6d6868;
+    margin: 45px 0 0 -20px;
+    font-size: 12px;
+}
+
+.juTitle .jGrey .t { color: #999a9a; }
+
+.juTitle .jLast { width: 50px; }
+
+.refundWp .msg {
+    border: 1px dashed #ccc;
+    border-left: none;
+    border-right: none;
+    padding: 15px 0;
+    min-height: 80px;
+}
+
+.refundInfo {
+    float: left;
+    margin: 113px 0 0 30px;
+    padding: 25px 15px;
+    border: 1px solid #ccc;
+    width: 305px;
+}
+
+.refundInfo h2 {
+    font-size: 14px;
+    color: #626262;
+    border-bottom: 1px solid #ccc;
+    font-weight: normal;
+    padding-bottom: 6px;
+}
+
+.refundInfo ul li { margin: 15px 0; }
+
+.refundInfo ul li span { display: inline-block; }
+
+.refundInfo ul li .sL {
+    width: 70px;
+    text-align: right;
+}
+
+.refundInfo ul li .sR {
+    color: #929292;
+    margin-left: 40px;
+}
